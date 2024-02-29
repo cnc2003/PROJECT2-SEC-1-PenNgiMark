@@ -1,0 +1,20 @@
+{
+  "name": "project2-sec-1-penngimark",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "backend": "json-server --watch ./data/db.json --port 5000"
+  },
+  "dependencies": {
+    "json-server": "^1.0.0-alpha.23",
+    "vue": "^3.4.19"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.1.4"
+  }
+}
