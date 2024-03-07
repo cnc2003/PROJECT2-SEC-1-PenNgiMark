@@ -1,21 +1,14 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
 
 <template>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
+  <h1 class="text-3xl font-bold underline flex justify-center">
+    Header Najaaaaaaa
   </h1>
-
-  <div class="dropdown dropdown-bottom">
-  <div tabindex="0" role="button" class="btn m-1">Click</div>
-  <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-    <li><a>Item 1</a></li>
-    <li><a>Item 2</a></li>
-  </ul>
-</div>
+  <div class="flex justify-center">
+    <router-link to="/add-menu" class="pr-1 pl-1" active-class="text-blue-500">Addmenu</router-link> |
+    <router-link to="/list-order" class="pr-1 pl-1" active-class="text-blue-500">Listorder</router-link>|
+    <router-link to="/manegement" class="pr-1 pl-1" active-class="text-blue-500">Listorder</router-link>
+  </div>
+  <router-view/>
 </template>
 
-<style scoped>
 
-</style>
