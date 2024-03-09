@@ -6,7 +6,7 @@
   <div class="flex justify-center">
     <router-link to="/add-menu" class="pr-1 pl-1" active-class="text-blue-500">Addmenu</router-link> |
     <router-link to="/list-order" class="pr-1 pl-1" active-class="text-blue-500">Listorder</router-link>|
-    <router-link to="/manegement" class="pr-1 pl-1" active-class="text-blue-500">Listorder</router-link>
+    <router-link to="/manegement" class="pr-1 pl-1" active-class="text-blue-500">manegement</router-link>
   </div>
   <router-view/>
 </template>
