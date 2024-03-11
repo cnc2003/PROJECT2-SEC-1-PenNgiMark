@@ -1,0 +1,28 @@
+[
+      {
+        "menu_name": "Espresso",
+        "quantity": 1,
+        "details": "Unsweet"
+      },
+      {
+        "menu_name": "Cappuccino",
+        "quantity": 1,
+        "details": "Lightly sweet"
+      },
+      {
+        "menu_name": "Latte",
+        "quantity": 2,
+        "details": "Sweetened"
+      },
+      {
+        "menu_name": "Mocha",
+        "quantity": 1,
+        "details": "Extra sweet"
+      },
+      {
+        "menu_name": "Americano",
+        "quantity": 1,
+        "details": "Very sweet"
+      }
+    ]
+  

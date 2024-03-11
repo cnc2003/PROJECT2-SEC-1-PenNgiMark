@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AddMenu from '../components/Addmenu.vue'
-import Listorder from '../components/Listorder.vue'
-import Manegement from '../components/Manegement.vue'
+import AddMenu from '../components/page/Addmenu.vue'
+import Listorder from '../components/page/Listorder.vue'
+import Manegement from '../components/page/Manegement.vue'
 
 
 const routes = [
