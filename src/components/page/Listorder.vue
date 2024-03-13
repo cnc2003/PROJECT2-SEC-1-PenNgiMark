@@ -20,8 +20,6 @@ function deleteOrder(order_ID) {
     }
 }
 
-
-
 function serveOrder(order_ID) {
     console.log("Serve button clicked:", order_ID)
     const orders = order_ID.orders
@@ -35,9 +33,8 @@ function serveOrder(order_ID) {
 
 </script>
 
-<template>
+<template class="">
     <h1 class="text-3xl bg-green-400 w-1/6">This is the List Order page</h1>
-
     <BaseList :Order_menu_list="Orderlist">
         <template v-slot:Order_ID="order_ID">
             <div>{{ order_ID.order_id }}</div>

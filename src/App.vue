@@ -1,14 +1,17 @@
+<script setup >
+import Navbar from './components/Navbar.vue';
+import { RouterView } from 'vue-router';
+</script>
 
 <template>
-  <h1 class="text-3xl font-bold underline flex justify-center">
-    Header Najaaaaaaa
-  </h1>
-  <div class="flex justify-center">
-    <router-link to="/add-menu" class="pr-1 pl-1" active-class="text-blue-500">Addmenu</router-link> |
-    <router-link to="/list-order" class="pr-1 pl-1" active-class="text-blue-500">Listorder</router-link>|
-    <router-link to="/manegement" class="pr-1 pl-1" active-class="text-blue-500">manegement</router-link>
+  <div class="flex h-screen">
+    <div class="w-1/6">
+      <Navbar/>
+    </div>
+    <div class="flex flex-col w-full">
+      <router-view/>
+    </div>
   </div>
-  <router-view/>
 </template>
 
 
