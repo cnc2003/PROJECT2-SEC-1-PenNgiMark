@@ -6,7 +6,7 @@ import Manegement from '../components/page/Manegement.vue'
 
 const routes = [
     {
-        path: '/add-Menu',
+        path: '/',
         component: AddMenu
     },
     {
