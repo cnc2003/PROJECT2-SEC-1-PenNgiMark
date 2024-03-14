@@ -4,11 +4,11 @@ import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <div class="flex h-screen">
+  <div class="flex h-screen ">
     <div class="w-1/6">
       <Navbar/>
     </div>
-    <div class="flex flex-col w-full">
+    <div class="flex flex-col w-full overflow-auto">
       <router-view/>
     </div>
   </div>
