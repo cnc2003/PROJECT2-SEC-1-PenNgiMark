@@ -58,12 +58,14 @@
       },
       {
         "menu_name": "Americano",
-        "quantity": 360,
+        "quantity": 4,
+        "price": 360,
         "details": "sweet"
       },
       {
         "menu_name": "Americano",
-        "quantity": 270,
+        "quantity": 3,
+        "price": 270,
         "details": "Extra sweet"
       }
     ]

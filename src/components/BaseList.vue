@@ -1,28 +1,16 @@
 <script setup>
-import { defineProps, ref } from "vue"
+import { ref } from "vue";
+import { getOrderlist } from "../lib/fetch.js"
+const orderLists = ref(await getOrderlist())
 
-const props = defineProps({
-    
-    Order_menu_list: {
-        type: Array,
-        required: true
-    },
-    // Lists: {
-    //     type: Array,
-    //     // required: true,
-    // }
-})
-console.log("import :", props.Order_menu_list)
+console.log("Get orderlist :", orderLists.value)
+
 </script>
 
 <template>
-    <div v-for="(order_ID, index) in props.Order_menu_list" :key="index">
-        <slot name="Order_ID" :="{ order_ID, index }"></slot>
+    <div v-for="(order, index) in orderLists" :key="index">
+        <slot name="Order" :="{ order, index }"></slot>
     </div>
-
-    <!-- <div v-for="(list, index) in Lists" :key="index">
-        <slot name="ListBase" :="list"> </slot>
-    </div> -->
 </template>
 
 <style scoped></style>
