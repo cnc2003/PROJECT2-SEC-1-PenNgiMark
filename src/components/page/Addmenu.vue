@@ -1,4 +1,7 @@
+<script setup>
+</script>
 <template>
+
     <div class="flex h-full w-full">
         <div class="border-2 border-white h-full w-3/4">
             this must be menus list

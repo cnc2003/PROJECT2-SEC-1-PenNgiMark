@@ -1,41 +1,17 @@
 <script setup>
-import { defineProps, ref } from "vue"
-
+import {ref, watch } from "vue"
+import { getOrderlist } from "../lib/fetch.js"
 
 const props = defineProps({
-    lists: {
-        type: Array,
-        // required: true,
-    },
-    Order_menu_list: {
-        type: Array,
-        required: true,
-    },
+    orderlist_data: Array,
 })
-console.log("import :", props.Order_menu_list)
-
-
+console.log(props.orderlist_data)
 
 </script>
 
 <template>
-    <div v-for="(order_ID, index) in props.Order_menu_list" :key="index">
-        <div class="p-5">
-            <p class="font-bold">Order_ID</p>
-            <slot name="Order_ID" :="order_ID"></slot>
-        </div>
-
-        <div v-for="(order_menu, orderIndex) in order_ID.orders" :key="orderIndex" >
-            <!-- pass data to parent component -->
-            <slot name="Order_menu" :="order_menu"></slot>
-        </div>
-
-        <!-- <button class="bg-green-600" @click="serveOrder(order_ID),deleteorder(order_ID)">
-            Serve
-        </button> -->
-    </div>
-    <div v-for="(list, index) in lists" :key="index">
-        <slot name="list" :="list"> </slot>
+    <div v-for="(order, index) in orderlist_data" :key="index">
+        <slot name="Order" :="{ order }"></slot>
     </div>
 </template>
 

@@ -1,55 +1,111 @@
 <script setup>
+import { ref, watch } from "vue"
 import BaseList from "../BaseList.vue"
-import orderlist from "../../../public/data/orderlist.json"
-import sales_data from "../../../public/data/sales_data.json"
-import { ref } from "vue"
+import {  getOrderlist ,DeleteMenu ,DeleteOrder } from "../../lib/fetch.js"
 
-const Orderlist = ref(orderlist)
-const Order_menu = ref(orderlist)
-const Sales_data = ref(sales_data)
+let datas = ref(null)
+let t = ref(null)
+let couter = ref(true)
+// console.log("Get orderlist :", orderLists)
 
-function deleteOrder(order_ID) {
-    const orders = order_ID.orders
-    for (const menu of orders) {
-        if (menu.selected === true) {
-            const orderIndex = orders.findIndex(order => order === menu)
-                orders.splice(orderIndex, 1)
-                console.log("total list :",Order_menu.value)
+const reload = async () => {
+    datas.value = await getOrderlist()
+}
+watch(couter, () => {
+    reload()
+})
+reload()
 
-        }
+//ลบ menu ที่เลือกไว้โดยการเอาเมนูที่ไม่ได้เลือก put เข้าไปในdb.js
+function serveOrder(order) {
+    const order_ID = order.order_id
+    let deleteMenu = { }
+    console.log(deleteMenu);
+    t.value = order.id
+    // const deleteMenu = {order_id :order_ID, orders:[JSON.parse(JSON.stringify(notSelectedMenus))], id : order.id}
+
+    const notSelectedMenus = order.orders.filter((menu) => !menu.selected)
+    if (notSelectedMenus.length === 0) {
+        console.log("เมนูที่เหลือ", notSelectedMenus.length)
+        DeleteOrder(t.value).then(() => {
+            couter.value = !couter.value
+        })
+       
+        
+       
+    } else {
+        deleteMenu = {order_id: order_ID,orders: notSelectedMenus,id: order.id,}
+        console.log(notSelectedMenus, order_ID)
+        console.log(deleteMenu)
+        DeleteMenu(deleteMenu, t.value).then(() => {
+            couter.value = !couter.value
+        })
+
+        //ส่งไปที่ fetch.js
+        
     }
+    
+    
 }
 
-function serveOrder(order_ID) {
-    console.log("Serve button clicked:", order_ID)
-    const orders = order_ID.orders
-    for (const menu of orders) {
-        if (menu.selected === true) {
-            Sales_data.value.push(menu)
-            console.log("Selected menu:", Sales_data.value)
-        }
-    }
+function tuggleSelection(order_menu) {
+    // check menuที่ ถูกเลือกอยู่
+    order_menu.selected = !order_menu.selected
+    console.log(order_menu.selected)
 }
-
 </script>
 
-<template class="">
-    <h1 class="text-3xl bg-green-400 w-1/6">This is the List Order page</h1>
-    <BaseList :Order_menu_list="Orderlist">
-        <template v-slot:Order_ID="order_ID">
-            <div>{{ order_ID.order_id }}</div>
-            <template v-for="(order_menu, orderIndex) in order_ID.orders" :key="orderIndex">
-                <div>{{ order_menu.menu_name }}</div>
-                <div>{{ order_menu.quantity }}</div>
-                <div>{{ order_menu.details }}</div>
-                <input type="checkbox" v-model="order_menu.selected" />
+<template>
+    <Suspense>
+        <BaseList :orderlist_data="datas">
+            <template #Order="{ order }">
+                <div
+                    class="w-full flex justify-between border-4 border-[#FFF3CF] bg-[#FFF3CF] shadow-lg mt-12 ml-4"
+                >
+                    <div
+                        class="flex flex-col justify-center items-center bg-green-200 w-1/4"
+                    >
+                        <p class="font-bold">Order_ID</p>
+                        <!-- ดึง ordermenu มาแสดง ผ่านตัวแปร Objec order_ID -->
+                        <div>{{ order.order_id }}</div>
+                    </div>
+                    <div class="flex w-full">
+                        <div class="flex flex-wrap">
+                            <div
+                                v-for="(order_menu, menuIndex) in order.orders"
+                                :key="menuIndex"
+                            >
+                                <div
+                                    class="p-4 m-2 h-40 w-48"
+                                    @click="tuggleSelection(order_menu)"
+                                    :style="{
+                                        backgroundColor: order_menu.selected
+                                            ? '#EEEEEE'
+                                            : '#E8C872',
+                                    }"
+                                >
+                                    <div>Menu : {{ order_menu.menu_name }}</div>
+                                    <div>
+                                        quantity : {{ order_menu.quantity }}
+                                    </div>
+                                    <div>details :{{ order_menu.details }}</div>
+                                    <input
+                                        type="checkbox"
+                                        v-model="order_menu.selected"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        class="bg-[#5cdb5c] w-1/4"
+                        @click="serveOrder(order, index)"
+                    >
+                        Serve
+                    </button>
+                </div>
             </template>
-            <button class="bg-green-600" @click="serveOrder(order_ID), deleteOrder(order_ID)">
-                Serve
-            </button>
-        </template>
-    </BaseList>
+        </BaseList>
+    </Suspense>
 </template>
-
-
-
+<style scoped></style>
