@@ -1,3 +1,4 @@
+import Listorder from "../components/page/Listorder.vue"
 async function getOrderlist() {
     // let dat = null
     // await fetch("http://localhost:5000/OrderLists").then((res)=>res.json()).then(data => dat = data)
@@ -8,16 +9,19 @@ async function getOrderlist() {
     return data
 }
 
-async function AddManement() {
-    const resID = await fetch("http://localhost:5000/Management", {
-        // method: "POST",
-        // body: JSON.stringify()
-    })
-    let data = await resID.json()
-    console.log(data)
-    return data
-    
+async function DeleteMenu(deleteMenu,t) {
+    await fetch(`http://localhost:5000/OrderLists/${t}`, {
+       method: "PUT",
+       headers: {
+           "Content-Type": "application/json",
+       },
+       body: JSON.stringify(deleteMenu),
+   })
 }
 
- AddManement()
-export { getOrderlist, AddManement }
+async function DeleteOrder(t) {
+    await fetch(`http://localhost:5000/OrderLists/${t}`, {
+       method: "DELETE"     
+   })
+}
+export { getOrderlist ,DeleteMenu,DeleteOrder}

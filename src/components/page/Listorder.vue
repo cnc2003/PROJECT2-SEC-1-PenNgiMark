@@ -1,38 +1,64 @@
 <script setup>
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import BaseList from "../BaseList.vue"
-import { AddManement } from "../../lib/fetch.js"
+import {  getOrderlist ,DeleteMenu ,DeleteOrder } from "../../lib/fetch.js"
 
-const manement = ref(null)
-async function getManement() {
-    manement.value = await AddManement()
-    console.log("getManement :", manement.value)
+let datas = ref(null)
+let t = ref(null)
+let couter = ref(true)
+// console.log("Get orderlist :", orderLists)
+
+const reload = async () => {
+    datas.value = await getOrderlist()
 }
-getManement()
+watch(couter, () => {
+    reload()
+})
+reload()
 
-const post = ref([])
-function serveOrder(order, index) {
+//ลบ menu ที่เลือกไว้โดยการเอาเมนูที่ไม่ได้เลือก put เข้าไปในdb.js
+function serveOrder(order) {
     const order_ID = order.order_id
-    // const order_ID = "0012435"
-    console.log(order_ID)
-    const selectedMenus = order.orders.filter((menu) => menu.selected)
-    for (let i = 0; i < manement.value.length; i++) {
-        console.log(manement.value[i].order_id, order_ID)
-        if (order_ID != manement.value[i].order_id) {
-            post.value.push({ order_id: order.order_id })
-        } else {
-            console.log(manement.value[i].order_id)
-            post.value.push(...selectedMenus)
-        }
+    let deleteMenu = { }
+    console.log(deleteMenu);
+    t.value = order.id
+    // const deleteMenu = {order_id :order_ID, orders:[JSON.parse(JSON.stringify(notSelectedMenus))], id : order.id}
+
+    const notSelectedMenus = order.orders.filter((menu) => !menu.selected)
+    if (notSelectedMenus.length === 0) {
+        console.log("เมนูที่เหลือ", notSelectedMenus.length)
+        DeleteOrder(t.value).then(() => {
+            couter.value = !couter.value
+        })
+       
+        
+       
+    } else {
+        deleteMenu = {order_id: order_ID,orders: notSelectedMenus,id: order.id,}
+        console.log(notSelectedMenus, order_ID)
+        console.log(deleteMenu)
+        DeleteMenu(deleteMenu, t.value).then(() => {
+            couter.value = !couter.value
+        })
+
+        //ส่งไปที่ fetch.js
+        
     }
-    console.log("After Push Manement :", post.value)
+    
+    
+}
+
+function tuggleSelection(order_menu) {
+    // check menuที่ ถูกเลือกอยู่
+    order_menu.selected = !order_menu.selected
+    console.log(order_menu.selected)
 }
 </script>
 
 <template>
     <Suspense>
-        <BaseList>
-            <template #Order="{ order, index }">
+        <BaseList :orderlist_data="datas">
+            <template #Order="{ order }">
                 <div
                     class="w-full flex justify-between border-4 border-[#FFF3CF] bg-[#FFF3CF] shadow-lg mt-12 ml-4"
                 >
@@ -45,8 +71,19 @@ function serveOrder(order, index) {
                     </div>
                     <div class="flex w-full">
                         <div class="flex flex-wrap">
-                            <div v-for="order_menu in order.orders">
-                                <div class="bg-[#E8C872] p-4 m-2 h-40 w-48">
+                            <div
+                                v-for="(order_menu, menuIndex) in order.orders"
+                                :key="menuIndex"
+                            >
+                                <div
+                                    class="p-4 m-2 h-40 w-48"
+                                    @click="tuggleSelection(order_menu)"
+                                    :style="{
+                                        backgroundColor: order_menu.selected
+                                            ? '#EEEEEE'
+                                            : '#E8C872',
+                                    }"
+                                >
                                     <div>Menu : {{ order_menu.menu_name }}</div>
                                     <div>
                                         quantity : {{ order_menu.quantity }}
@@ -62,10 +99,7 @@ function serveOrder(order, index) {
                     </div>
                     <button
                         class="bg-[#5cdb5c] w-1/4"
-                        @click="
-                            serveOrder(order, index)
-                            // deleteOrder(order, index)
-                        "
+                        @click="serveOrder(order, index)"
                     >
                         Serve
                     </button>
@@ -74,5 +108,4 @@ function serveOrder(order, index) {
         </BaseList>
     </Suspense>
 </template>
-
 <style scoped></style>

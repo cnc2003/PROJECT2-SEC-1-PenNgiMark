@@ -1,15 +1,17 @@
 <script setup>
-import { ref } from "vue";
+import {ref, watch } from "vue"
 import { getOrderlist } from "../lib/fetch.js"
-const orderLists = ref(await getOrderlist())
 
-console.log("Get orderlist :", orderLists.value)
+const props = defineProps({
+    orderlist_data: Array,
+})
+console.log(props.orderlist_data)
 
 </script>
 
 <template>
-    <div v-for="(order, index) in orderLists" :key="index">
-        <slot name="Order" :="{ order, index }"></slot>
+    <div v-for="(order, index) in orderlist_data" :key="index">
+        <slot name="Order" :="{ order }"></slot>
     </div>
 </template>
 
