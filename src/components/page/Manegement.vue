@@ -1,31 +1,34 @@
 <script setup>
 // Import necessary modules
-import { ref } from "vue"
-// Import JSON data
-import menuList from "../../../public/data/menulist.json"
+import { ref, ssrContextKey } from "vue"
 import orderList from "../../../public/data/orderlist.json"
+import { getMenulist } from "../../lib/fetch.js"
 
 // Define reactive variables
 const totalMenu = ref(0)
 const totalSold = ref(0)
 const totalOrder = ref(orderList.length)
-
 // Filter variables
 const selectFilter = ref("")
-const filterResult = ref(menuList)
+const filterResult = ref(null)
+const afterFilterResult = ref(null) // default value
+
+async function fetchMenuData() {
+  filterResult.value = await getMenulist() // is array
+  for (const key in filterResult.value) {
+    console.log(key)
+  }
+  
+}
 
 // Function to filter categories
 function filterCategory(category) {
-  if (menuList.hasOwnProperty(category)) {
-    filterResult.value = { [category]: menuList[category] }
+  if (filterResult.value.hasOwnProperty(category)) {
+    afterFilterResult.value = { [category]: filterResult.value[category] }
+    console.log(afterFilterResult.value)
   } else {
-    filterResult.value = menuList
+    afterFilterResult.value = filterResult.value
   }
-}
-
-// Calculate total menu items
-for (const category in menuList) {
-  totalMenu.value += menuList[category].length
 }
 
 // Calculate total sold items
@@ -35,12 +38,21 @@ orderList.forEach((order) =>
   })
 )
 
+fetchMenuData()
+// Calculate total menu items
+console.log("ssssss");
+for (const category in filterResult.value) {
+  totalMenu.value += filterResult.value[category].length
+  console.log(filterResult.value['Coffee']);
+}
+
 // Set HR style class
 const hr = ref("mb-2 border-gray-300 border-1 rounded")
 </script>
 
 <template>
-  <div class="flex flex-col w-full h-lvh items-center">
+  <Suspense>
+    <div class="flex flex-col w-full h-lvh items-center">
     <!-- Analysis Section -->
     <div
       name="analysis"
@@ -86,8 +98,8 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
             <option value="">All</option>
             <!-- Generate options for each category -->
             <option
-              v-for="(category, key) in menuList"
-              :key="key"
+              v-for="(category,key) in filterResult"
+              :key="category"
             >
               {{ key }}
             </option>
@@ -102,7 +114,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
       >
         <!-- Dynamic rendering of menu items based on selected category -->
         <div
-          v-for="(itemList, category) in filterResult"
+          v-for="(itemList, category) in afterFilterResult === null ? filterResult : afterFilterResult"
           :name="category"
           :key="category"
           class="flex flex-col w-full h-auto gap-4"
@@ -121,7 +133,9 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
               :key="item"
               class="w-[23%] h-32 p-4 border border-gray-300 rounded-md"
             >
-              <p>{{ item.menuName }}</p>
+              <p>{{ item.menu_name }}</p>
+              <p>{{ item.price }}</p>
+              <p>{{ category }}</p>
             </div>
           </div>
         </div>
@@ -144,7 +158,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
       >
         <!-- Dynamic rendering of menu items based on selected category (filterResult) -->
         <div
-          v-for="(itemList, category) in filterResult"
+          v-for="(itemList, category) in afterFilterResult === null ? filterResult : afterFilterResult"
           :name="category"
           :key="category"
           class="flex flex-col w-full gap-4"
@@ -170,4 +184,8 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
       </div>
     </div>
   </div>
-</template>
+  </Suspense>
+
+  </template>
+
+

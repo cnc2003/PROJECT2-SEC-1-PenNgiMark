@@ -1,6 +1,6 @@
 {
-  "Menus": [
-    {
+  "Menus": {
+    
       "Coffee": [
         {
           "menu_name": "Espresso",
@@ -39,9 +39,8 @@
           "description": "Cold coffee served over ice cubes."
         }
       ],
-      "id": "e976"
-    },
-    {
+    
+    
       "Tea": [
         {
           "menu_name": "Chai Latte",
@@ -80,9 +79,8 @@
           "description": "Iced tea flavored with lemon, often served with sugar or sweetener."
         }
       ],
-      "id": "3ce5"
-    },
-    {
+     
+    
       "Soda": [
         {
           "menu_name": "Cola",
@@ -109,9 +107,8 @@
           "description": "A sweet carbonated soft drink traditionally made using the root bark of the sassafras tree as the primary flavoring."
         }
       ],
-      "id": "3ba3"
-    },
-    {
+   
+    
       "Juice": [
         {
           "menu_name": "Fruit Punch",
@@ -126,9 +123,8 @@
           "description": "A beverage made from squeezed or pressed oranges."
         }
       ],
-      "id": "4fc4"
-    },
-    {
+   
+    
       "Other": [
         {
           "menu_name": "Hot Chocolate",
@@ -148,32 +144,19 @@
           "img_src": "water.jpg",
           "description": "Clear, colorless, odorless, and tasteless liquid that is essential for most living organisms."
         }
-      ],
-      "id": "7cf4"
-    }
-  ],
+      ]
+   
+},
   "OrderLists": [
     {
       "order_id": "012001",
       "orders": [
         {
-          
-          "menu_name": "Espresso",
-          "quantity": 1,
-          "price": 75,
-          "details": "Unsweet"
-        },
-        {
-          "menu_name": "Cappuccino",
-          "quantity": 1,
-          "price": 105,
-          "details": "Lightly sweet"
-        },
-        {
           "menu_name": "Latte",
           "quantity": 2,
           "price": 240,
-          "details": "Sweetened"
+          "details": "Sweetened",
+          "selected": false
         }
       ],
       "id": "8202"
