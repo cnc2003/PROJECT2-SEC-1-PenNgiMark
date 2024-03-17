@@ -8,7 +8,7 @@ import { RouterView } from 'vue-router';
     <div class="w-1/6">
       <Navbar/>
     </div>
-    <div class="flex flex-col w-full overflow-auto">
+    <div class="flex flex-col w-full h-screen overflow-auto">
       <router-view/>
     </div>
   </div>
