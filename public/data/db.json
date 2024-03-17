@@ -151,6 +151,18 @@
     {
       "order_id": "012001",
       "orders": [
+        { 
+          "menu_name": "Espresso",
+          "quantity": 1,
+          "price": 75,
+          "details": "Unsweet"
+        },
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
+        },
         {
           "menu_name": "Latte",
           "quantity": 2,
