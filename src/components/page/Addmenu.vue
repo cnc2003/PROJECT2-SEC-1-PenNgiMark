@@ -2,7 +2,9 @@
 import { ref } from "vue"
 import { getMenulist } from "../../lib/fetch.js"
 
+
 const filterResult = ref(null) //default data
+const afterFilterResult = ref(null) // default value
 
 async function fetchMenuData() {
     filterResult.value = await getMenulist() // is array
@@ -11,15 +13,25 @@ async function fetchMenuData() {
     }
 }
 fetchMenuData()
+
+function filterCategory(category) {
+  if (filterResult.value.hasOwnProperty(category)) {
+    afterFilterResult.value = { [category]: filterResult.value[category] }
+    console.log(afterFilterResult.value)
+  } else {
+    afterFilterResult.value = filterResult.value
+  }
+}
+
 </script>
 <template>
     <div class="flex h-full w-full">
         <div class="border-2 border-white w-3/4">
             this must be category list
             <div class="flex border-2 w-1/2">
-                <div v-for="(category, key) in filterResult" :key="category"
+                <div  v-for="(category, key) in filterResult" :key="category"
                 class="p-3 rounded-md">
-                    <div class="bg-slate-300 p-2 rounded-md">{{ key }}</div>
+                    <div @click="filterCategory(key)" class="bg-slate-300 p-2 rounded-md">{{ key }}</div>
                 </div>
             </div>
 
@@ -27,7 +39,9 @@ fetchMenuData()
             this must be menus list
             <div>
               <!-- loop category -->
-              <div v-for="(category, key) in filterResult" :key="key" 
+
+              <div v-for="(category, key) in afterFilterResult === null ? filterResult : afterFilterResult" 
+              :key="key" 
                 class="p-3 rounded-md">
 
                 <!-- loop menulist in category  -->
