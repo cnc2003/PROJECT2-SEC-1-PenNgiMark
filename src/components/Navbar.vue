@@ -1,33 +1,38 @@
 <script setup>
 import { ref } from "vue"
 
-const li = ref("rounded-md w-full p-4 my-4")
-const active = ref("rounded-md p-4 bg-gray-300")
-const hover = ref("")
+const li = ref("rounded-md w-full p-4 text-gray-500 font-semibold")
+const action = ref("bg-gray-200 text-gray-800 ")
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-4 p-4 w-full h-screen bg-base-200 text-base-content"
-  >
+  <div class="flex flex-col p-4 gap-2 w-full h-screen bg-base-200 text-base-content">
     <!-- Sidebar content here -->
-    <p
+
+    <router-link
+      to="/"
+      class="hover:bg-gray-200 hover:text-gray-800"
       :class="li"
-      :active-class="active"
+      :active-class="action"
+      :hover="action"
     >
-      <router-link to="/">Addmenu</router-link>
-    </p>
-    <p
+      Addmenu
+    </router-link>
+    <router-link
+      to="/list-order"
+      class="hover:bg-gray-200 hover:text-gray-800"
       :class="li"
-      :active-class="active"
+      :active-class="action"
     >
-      <router-link to="/list-order">Listorder</router-link>
-    </p>
-    <p
+      Listorder
+    </router-link>
+    <router-link
+      to="/manegement"
+      class="hover:bg-gray-200 hover:text-gray-800"
       :class="li"
-      :active-class="active"
+      :active-class="action"
     >
-      <router-link to="/manegement">manegement</router-link>
-    </p>
+      Management
+    </router-link>
   </div>
 </template>

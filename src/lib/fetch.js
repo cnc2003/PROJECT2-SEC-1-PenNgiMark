@@ -1,14 +1,5 @@
-import Listorder from "../components/page/Listorder.vue"
-async function getOrderlist() {
-  // let dat = null
-  // await fetch("http://localhost:5000/OrderLists").then((res)=>res.json()).then(data => dat = data)
-  // return dat
 
-  const res = await fetch("http://localhost:5000/OrderLists")
-  let data = await res.json()
-  return data
-}
-
+// ======= Menu list fetch ======= 
 async function getMenulist() {
   let data = null
   try {
@@ -21,7 +12,7 @@ async function getMenulist() {
   return data
 }
 
-async function DeleteMenu(restMenu, id) {
+async function DeleteMenuInOrder(restMenu, id) {
   await fetch(`http://localhost:5000/OrderLists/${id}`, {
     method: "PUT",
     headers: {
@@ -36,5 +27,4 @@ async function DeleteOrder(id) {
     method: "DELETE",
   })
 }
-
-export { getMenulist , getOrderlist, DeleteMenu, DeleteOrder }
+export { getMenulist , getOrderlist, DeleteMenuInOrder, DeleteOrder }

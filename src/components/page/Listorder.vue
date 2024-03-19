@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue"
-import { getOrderlist, DeleteMenu, DeleteOrder } from "../../lib/fetch.js"
+import { getOrderlist, DeleteMenuInOrder, DeleteOrder } from "../../lib/fetch.js"
 import Notification from "../Notification.vue"
+
 
 // defind variable
 let datas = ref([])
@@ -44,7 +45,7 @@ function serveOrder(order) {
         }
         console.log(notSelectedMenus, order.id)
         console.log("restMenu :", restMenu)
-        DeleteMenu(restMenu, order.id).then(() => {
+        DeleteMenuInOrder(restMenu, order.id).then(() => {
             const updatedOrderIndex = datas.value.findIndex(
                 (item) => item.id === order.id
             )
