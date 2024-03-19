@@ -21,19 +21,20 @@ async function getMenulist() {
   return data
 }
 
-async function DeleteMenu(deleteMenu, t) {
-  await fetch(`http://localhost:5000/OrderLists/${t}`, {
+async function DeleteMenu(restMenu, id) {
+  await fetch(`http://localhost:5000/OrderLists/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(deleteMenu),
+    body: JSON.stringify(restMenu),
   })
 }
 
-async function DeleteOrder(t) {
-  await fetch(`http://localhost:5000/OrderLists/${t}`, {
+async function DeleteOrder(id) {
+  await fetch(`http://localhost:5000/OrderLists/${id}`, {
     method: "DELETE",
   })
 }
+
 export { getMenulist , getOrderlist, DeleteMenu, DeleteOrder }
