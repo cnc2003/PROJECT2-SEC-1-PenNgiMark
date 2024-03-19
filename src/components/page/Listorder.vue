@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from "vue"
 import BaseList from "../BaseList.vue"
-import { getOrderlist, DeleteMenu, DeleteOrder } from "../../lib/fetch.js"
+import { getOrderlist, DeleteMenuInOrder, DeleteOrder } from "../../lib/fetch.js"
 
 let datas = ref(null)
 let t = ref(null)
@@ -13,7 +13,7 @@ const reload = async () => {
 }
 watch(couter, () => {
   reload()
-}) // couter change by  DeleteOrder() and DeleteMenu()
+}) // couter change by  DeleteOrder() and DeleteMenuInOrder()
 reload()
 
 //ลบ menu ที่เลือกไว้โดยการเอาเมนูที่ไม่ได้เลือก put เข้าไปในdb.js
@@ -40,7 +40,7 @@ function serveOrder(order) {
     console.log(deleteMenu)
 
     //ส่งไปที่ fetch.js
-    DeleteMenu(deleteMenu, t.value).then(() => {
+    DeleteMenuInOrder(deleteMenu, t.value).then(() => {
       couter.value = !couter.value
     })
   }

@@ -32,7 +32,7 @@ const action = ref("bg-gray-200 text-gray-800 ")
       :class="li"
       :active-class="action"
     >
-      manegement
+      Management
     </router-link>
   </div>
 </template>
