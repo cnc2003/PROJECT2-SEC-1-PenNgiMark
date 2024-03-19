@@ -1,5 +1,13 @@
 
-// ======= Menu list fetch ======= 
+async function getOrderlist() {
+  // let dat = null
+  // await fetch("http://localhost:5000/OrderLists").then((res)=>res.json()).then(data => dat = data)
+  // return dat
+
+  const res = await fetch("http://localhost:5000/OrderLists")
+  let data = await res.json()
+  return data
+}
 async function getMenulist() {
   let data = null
   try {
