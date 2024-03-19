@@ -1,0 +1,293 @@
+{
+  "Menus": {
+    
+      "Coffee": [
+        {
+          "menu_name": "Espresso",
+          "price": 75,
+          "img_src": "espresso.jpg",
+          "description": "A strong black coffee made by forcing steam through finely-ground coffee beans."
+        },
+        {
+          "menu_name": "Cappuccino",
+          "price": 105,
+          "img_src": "cappuccino.jpg",
+          "description": "An espresso-based coffee drink that is typically prepared with equal parts double espresso, steamed milk, and milk foam."
+        },
+        {
+          "menu_name": "Latte",
+          "price": 120,
+          "img_src": "latte.jpg",
+          "description": "A coffee drink made with espresso and steamed milk."
+        },
+        {
+          "menu_name": "Mocha",
+          "price": 135,
+          "img_src": "mocha.jpg",
+          "description": "A variant of a latte with chocolate added."
+        },
+        {
+          "menu_name": "Americano",
+          "price": 90,
+          "img_src": "americano.jpg",
+          "description": "A coffee drink prepared by diluting an espresso with hot water."
+        },
+        {
+          "menu_name": "Iced Coffee",
+          "price": 110,
+          "img_src": "iced_coffee.jpg",
+          "description": "Cold coffee served over ice cubes."
+        }
+      ],
+    
+    
+      "Tea": [
+        {
+          "menu_name": "Chai Latte",
+          "price": 120,
+          "img_src": "chai_latte.jpg",
+          "description": "A spiced tea concentrate with steamed milk."
+        },
+        {
+          "menu_name": "Matcha Latte",
+          "price": 135,
+          "img_src": "matcha_latte.jpg",
+          "description": "A latte made with matcha powder and steamed milk."
+        },
+        {
+          "menu_name": "Iced Tea",
+          "price": 55,
+          "img_src": "iced_tea.jpg",
+          "description": "Tea that has been cooled down and served over ice."
+        },
+        {
+          "menu_name": "Iced Matcha",
+          "price": 140,
+          "img_src": "iced_matcha.jpg",
+          "description": "A refreshing iced beverage made with matcha powder and sweetened milk."
+        },
+        {
+          "menu_name": "Green Tea",
+          "price": 80,
+          "img_src": "green_tea.jpg",
+          "description": "A type of tea made from Camellia sinensis leaves and buds that have not undergone the same withering and oxidation process used to make oolong teas and black teas."
+        },
+        {
+          "menu_name": "Lemon Iced Tea",
+          "price": 65,
+          "img_src": "lemon_iced_tea.jpg",
+          "description": "Iced tea flavored with lemon, often served with sugar or sweetener."
+        }
+      ],
+     
+    
+      "Soda": [
+        {
+          "menu_name": "Cola",
+          "price": 45,
+          "img_src": "cola.jpg",
+          "description": "A carbonated soft drink containing caffeine and usually flavored with vanilla, cinnamon, lemon, or lime."
+        },
+        {
+          "menu_name": "Lemonade",
+          "price": 50,
+          "img_src": "lemonade.jpg",
+          "description": "A sweetened lemon-flavored beverage."
+        },
+        {
+          "menu_name": "Ginger Beer",
+          "price": 65,
+          "img_src": "ginger_beer.jpg",
+          "description": "A carbonated soft drink flavored with ginger."
+        },
+        {
+          "menu_name": "Root Beer",
+          "price": 55,
+          "img_src": "root_beer.jpg",
+          "description": "A sweet carbonated soft drink traditionally made using the root bark of the sassafras tree as the primary flavoring."
+        }
+      ],
+   
+    
+      "Juice": [
+        {
+          "menu_name": "Fruit Punch",
+          "price": 60,
+          "img_src": "fruit_punch.jpg",
+          "description": "A beverage consisting of various fruit juices mixed with soda or water."
+        },
+        {
+          "menu_name": "Orange Juice",
+          "price": 70,
+          "img_src": "orange_juice.jpg",
+          "description": "A beverage made from squeezed or pressed oranges."
+        }
+      ],
+   
+    
+      "Other": [
+        {
+          "menu_name": "Hot Chocolate",
+          "price": 100,
+          "img_src": "hot_chocolate.jpg",
+          "description": "A heated drink consisting of shaved chocolate, melted chocolate, or cocoa powder, heated milk or water, and usually a sweetener."
+        },
+        {
+          "menu_name": "Milkshake",
+          "price": 130,
+          "img_src": "milkshake.jpg",
+          "description": "A sweet, cold beverage that is usually made from milk, ice cream, and/or flavorings or sweeteners such as fruit syrup or chocolate sauce."
+        },
+        {
+          "menu_name": "Water",
+          "price": 20,
+          "img_src": "water.jpg",
+          "description": "Clear, colorless, odorless, and tasteless liquid that is essential for most living organisms."
+        }
+      ]
+   
+},
+  "OrderLists": [
+    {
+      "order_id": "012001",
+      "orders": [
+        {
+          "menu_name": "Latte",
+          "quantity": 2,
+          "price": 240,
+          "details": "Sweetened",
+          "selected": false
+        }
+      ],
+      "id": "8202"
+    },
+    {
+      "order_id": "012002",
+      "orders": [
+        {
+          "menu_name": "Espresso",
+          "quantity": 1,
+          "price": 75,
+          "details": "Unsweet"
+        },
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
+        },
+        {
+          "menu_name": "Latte",
+          "quantity": 2,
+          "price": 240,
+          "details": "Sweetened"
+        },
+        {
+          "menu_name": "Mocha",
+          "quantity": 1,
+          "price": 135,
+          "details": "Extra sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 1,
+          "price": 90,
+          "details": "Very sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 4,
+          "price": 360,
+          "details": "sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 3,
+          "price": 270,
+          "details": "Extra sweet"
+        }
+      ],
+      "id": "0357"
+    }
+  ],
+  "Management": [
+    {
+      "order_id": "012001",
+      "payment": "QR",
+      "orders": [
+        {
+          "menu_name": "Espresso",
+          "quantity": 1,
+          "price": 75,
+          "details": "Unsweet"
+        },
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
+        },
+        {
+          "menu_name": "Latte",
+          "quantity": 2,
+          "price": 240,
+          "details": "Sweetened"
+        }
+      ],
+      "id": "4aac"
+    },
+    {
+      "order_id": "012002",
+      "payment": "Cash",
+      "orders": [
+        {
+          "menu_name": "Espresso",
+          "quantity": 1,
+          "price": 75,
+          "details": "Unsweet"
+        },
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
+        },
+        {
+          "menu_name": "Latte",
+          "quantity": 2,
+          "price": 240,
+          "details": "Sweetened"
+        },
+        {
+          "menu_name": "Mocha",
+          "quantity": 1,
+          "price": 135,
+          "details": "Extra sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 1,
+          "price": 90,
+          "details": "Very sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 4,
+          "price": 360,
+          "details": "sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 3,
+          "price": 270,
+          "details": "Extra sweet"
+        }
+      ],
+      "id": "2000"
+    },
+    {
+      "id": "7961"
+    }
+  ],
+  "Setting": ""
+}
