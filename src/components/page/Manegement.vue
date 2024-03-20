@@ -26,14 +26,14 @@ async function fetchMenuData() {
   for (const cate in filterResult.value) {
     tt.value += cate.length
   }
-  console.log(tt.value);
+  console.log(tt.value)
 }
 fetchMenuData()
 
 // Function to filter categories
 function filterCategory(category) {
   if (filterResult.value.hasOwnProperty(category)) {
-    afterFilterResult.value = { [category] : filterResult.value[category] }
+    afterFilterResult.value = { [category]: filterResult.value[category] }
     console.log(afterFilterResult.value)
   } else {
     afterFilterResult.value = filterResult.value
@@ -46,7 +46,6 @@ orderList.forEach((order) =>
     totalSold.value += item.quantity
   })
 )
-
 
 // Calculate total menu items
 for (const category in filterResult.value) {
@@ -118,28 +117,38 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
         class="h-[40%] shrink-0 w-11/12 rounded-md p-4 bg-slate-100"
       >
         <div class="h-[10%] mb-2">
-          <div class="flex flex-row justify-between items-center w-full h-full mb-2">    
-            <h1
-              class="text-2xl font-mono font-semibold"
-              @click="menuModalHandle(`addNewMenu`)"
-            >
-              Management
-            </h1>
-            <!-- Dropdown for filtering -->
-            <select
-              class="select select-bordered select-sm w-1/6 max-w-xs"
-              v-model="selectFilter"
-              @change="filterCategory(selectFilter)"
-            >
-              <option value="">All</option>
-              <!-- Generate options for each category -->
-              <option
-                v-for="(category, key) in filterResult"
-                :key="category"
+          <div
+            class="flex flex-row justify-between items-center w-full h-full mb-2"
+          >
+            <h1 class="text-2xl font-mono font-semibold">Management</h1>
+            <div class="flex flex-row gap-2 w-2/5 justify-end">
+              <button
+                class="btn btn-sm"
+                @click="menuModalHandle(`addNewMenu`)"
               >
-                {{ key }}
-              </option>
-            </select>
+                Add new menu
+                <img
+                  src="/src/assets/icon/plus.svg"
+                  alt="plus"
+                  class="size-4"
+                />
+              </button>
+              <!-- Dropdown for filtering -->
+              <select
+                class="select select-bordered select-sm w-1/6 max-w-s"
+                v-model="selectFilter"
+                @change="filterCategory(selectFilter)"
+              >
+                <option value="">All</option>
+                <!-- Generate options for each category -->
+                <option
+                  v-for="(category, key) in filterResult"
+                  :key="category"
+                >
+                  {{ key }}
+                </option>
+              </select>
+            </div>
           </div>
           <hr :class="hr" />
         </div>
@@ -195,10 +204,10 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
           name="modal"
           class="fixed w-2/4 h-3/4 bg-white rounded-xl"
         >
+          <img src="/src/assets/icon/cross.svg" alt="">
           <h1 name="Header">{{ isEditMode ? "Edit Menu" : "Add new Menu" }}</h1>
           {{ isEditMode ? currentItem.menu_name : "add new===menu" }}
           <!-- cate, menuname, price, picture, description -->
-          
         </div>
       </div>
 
