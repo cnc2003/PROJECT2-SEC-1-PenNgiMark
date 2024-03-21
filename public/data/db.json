@@ -142,12 +142,6 @@
       "order_id": "012001",
       "orders": [
         {
-          "menu_name": "Espresso",
-          "quantity": 1,
-          "price": 75,
-          "details": "Unsweet"
-        },
-        {
           "menu_name": "Latte",
           "quantity": 2,
           "price": 240,
@@ -176,12 +170,6 @@
           "quantity": 2,
           "price": 240,
           "details": "Sweetened"
-        },
-        {
-          "menu_name": "Mocha",
-          "quantity": 1,
-          "price": 135,
-          "details": "Extra sweet"
         },
         {
           "menu_name": "Americano",
