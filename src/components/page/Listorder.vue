@@ -82,7 +82,7 @@ function tuggleSelection(order_menu) {
 
     <!-- ModalComfirm -->
     <div v-show="showModalConfirem">
-        <ModalConfirm :data="History_data" @close="showModalHistory = false"/>    
+        <ModalConfirm @close="showModalHistory = false"/>    
     </div>
     
     <!-- main -->

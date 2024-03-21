@@ -1,15 +1,15 @@
 <script setup>
 import { defineProps, defineEmits, ref } from "vue"
-let menuConfirm = ref([])
-const emits = defineEmits(["close"])
+// let menuConfirm = ref([])
+// const emits = defineEmits(["close"])
 
-const props = defineProps({
-    data: Array,
-})
-console.log(props.data)
+// const props = defineProps({
+//     data: Array,
+// })
+// console.log(props.data)
 
-menuConfirm.value.push(...props.data) //reactive objects
-menuConfirm.value = menuConfirm.value.slice().reverse()
+// menuConfirm.value.push(...props.data) //reactive objects
+// menuConfirm.value = menuConfirm.value.slice().reverse()
 </script>
 
 <template>
@@ -28,24 +28,6 @@ menuConfirm.value = menuConfirm.value.slice().reverse()
             <div>
                 <p class="text-xl border-b-4 mb-4">This is History Order</p>
 
-                <div
-                    v-if="menuConfirm.length > 0"
-                    v-for="(order, index) in menuConfirm"
-                    :key="index"
-                    class="flex border-2 shadow-lg m-3 w-auto"
-                >
-                    <p class="pl-3 pr-3">{{ order.Time }}</p>
-                    <p class="pl-3 pr-3">{{ order.order_id }}</p>
-                    <p class="pl-3 pr-3">{{ order.menu_name }}</p>
-                    <p class="pl-3 pr-3">{{ order.quantity }}</p>
-                    <p class="pl-3 pr-3">{{ order.details }}</p>
-                </div>
-                <div v-else>
-                    <p class="flex justify-center text-base">
-                        Don't Have order ??
-                    </p>
-                </div>
-            </div>
             <!-- close button -->
             <img
                 class="flex items-startw-4 h-4 hover:cursor-pointer"
@@ -53,6 +35,7 @@ menuConfirm.value = menuConfirm.value.slice().reverse()
                 src="/src/assets/icon/cross.svg"
             />
         </div>
+    </div>
     </div>
 </template>
 
