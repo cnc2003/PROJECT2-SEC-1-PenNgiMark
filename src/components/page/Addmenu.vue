@@ -2,6 +2,7 @@
 import { ref } from "vue"
 import { getMenulist } from "../../lib/fetch.js"
 import CartList from "../CartList.vue"
+import JsxIconBase from "../JsxIconBase.vue"
 
 const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
@@ -51,10 +52,12 @@ const mocDrinks = [
 ]
 const menusInCart = ref(mocDrinks)
 
+const paymentMethod = ref("")
+
 </script>
 <template>
     <div class="flex h-full w-full">
-        <div class="border-2 border-white w-3/4">
+        <section class="border-2 border-white w-3/4">
             this must be category list
             <div class="flex border-2 w-1/2">
                 <div
@@ -91,22 +94,49 @@ const menusInCart = ref(mocDrinks)
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="flex flex-col border-2 border-black h-dvh w-1/4">
-            <div class="border-2 border-white m-3 h-16">
-                <button class="border-2 border-white">Dine in</button>
-                <button class="border-2 border-white">Take away</button>
+        </section>
+
+        <section class="flex flex-col border-2 border-black h-dvh w-1/4">
+            <div
+                class="flex justify-evenly border-2 border-black my-1 mx-2 h-20 p-1"
+            >
+                <button class="border-2 border-black rounded-md h-full">
+                    Dine in
+                </button>
+                <button class="border-2 border-black rounded-md h-full">
+                    Take away
+                </button>
             </div>
             <CartList :menusInCart="menusInCart" />
-            <div class="border-2 border-white m-3 h-1/5">Payment Summary</div>
-            <div class="border-2 border-white m-3 h-28">
-                <button class="border-2 border-white">Cash</button>
-                <button class="border-2 border-white">Card</button>
-                <button class="border-2 border-white">QR</button>
+            <div class="border-2 border-black m-2 h-1/5">Payment Summary</div>
+            <div
+                class="flex flex-col justify-evenly border-2 border-black h-28 mx-2 px-2 pb-2"
+            >
+                Payment Method
+                <div class="flex justify-evenly mt-3 h-12">
+                    <button
+                        class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
+                        @click="paymentMethod = 'cash'"
+                    >
+                        <JsxIconBase iconName="Cash"/>
+                    </button>
+                    <button
+                        class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
+                        @click="paymentMethod = 'card'"
+                    >
+                        <JsxIconBase iconName="Card" />
+                    </button>
+                    <button
+                        class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
+                        @click="paymentMethod = 'QR'"
+                    >
+                        <JsxIconBase iconName="QR" />
+                    </button>
+                </div>
             </div>
-            <button class="border-2 border-white h-20 m-3 mb-6">
+            <button class="border-2 border-black h-20 m-2 mb-6">
                 Place Order
             </button>
-        </div>
+        </section>
     </div>
 </template>
