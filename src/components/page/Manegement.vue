@@ -1,8 +1,8 @@
 <script setup>
 // Import necessary modules
-import { ref, ssrContextKey } from "vue"
+import { computed, ref, ssrContextKey } from "vue"
 import orderList from "../../../public/data/orderlist.json"
-import { getMenulist } from "../../lib/fetch.js"
+import { getMenulist, getOrderlist } from "../../lib/fetch.js"
 
 // Define reactive variables
 const totalMenu = ref(0)
@@ -12,22 +12,23 @@ const totalOrder = ref(orderList.length)
 // Edit variable
 const isMenuModal = ref(false)
 const isEditMode = ref(false)
-const currentItem = ref(null)
-const tempItem = ref(null)
+const currentItem = ref({})
+const editingItem = ref({})
 // Filter variables
 const selectFilter = ref("")
 const filterResult = ref(null)
 const afterFilterResult = ref(null) // default value
-const tt = ref(0)
+
 //fetch GET menulist
 async function fetchMenuData() {
   filterResult.value = await getMenulist() // is array
-  console.log(filterResult.value)
+  // console.log(filterResult.value)
   for (const cate in filterResult.value) {
-    tt.value += cate.length
+    totalMenu.value += cate.length
   }
-  console.log(tt.value)
+  console.log(filterResult.value)
 }
+
 fetchMenuData()
 
 // Function to filter categories
@@ -50,23 +51,26 @@ orderList.forEach((order) =>
 // Calculate total menu items
 for (const category in filterResult.value) {
   totalMenu.value += filterResult.value[category].length
-  console.log(filterResult.value["Coffee"])
+  console.log(filterResult.value)
 }
 
+// Menu modal handlerer
 function menuModalHandle(input) {
   if (input == "clearModal") {
-    currentItem.value = ref(null)
+    editingItem.value = ref(null)
     isEditMode.value = false
     isMenuModal.value = false
+    console.log(editingItem)
     console.log("CLEARRRRRR")
   } else if (input == "addNewMenu") {
     isMenuModal.value = true
     console.log("ADDDDDDDDDD")
   } else if (typeof input == "object") {
-    currentItem.value = input
+    editingItem.value = input
     isMenuModal.value = true
     isEditMode.value = true
-    console.log(`work : ${input.menu_name}`)
+    // console.log(`work`)
+    console.log(editingItem.value)
     console.log("EDITTTTTTTTTTTTT")
   }
 }
@@ -78,9 +82,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
 <template>
   <Suspense>
     <div class="flex flex-col w-full h-lvh items-center">
-      <!---------------------->
-      <!-- Analysis Section -->
-      <!---------------------->
+      <!---->
       <div
         name="analysis"
         class="my-6 h-[20%] w-11/12 shrink-0 rounded-md p-4 bg-slate-100"
@@ -202,12 +204,156 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
         <!-- modal content -->
         <div
           name="modal"
-          class="fixed w-2/4 h-3/4 bg-white rounded-xl"
+          class="fixed w-3/4 h-3/4 bg-white rounded-xl flex flex-col items-center justify-center indicator"
         >
-          <img src="/src/assets/icon/cross.svg" alt="">
+          <button
+            class="btn btn-square absolute top-2 right-2"
+            @click="menuModalHandle(`clearModal`)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
           <h1 name="Header">{{ isEditMode ? "Edit Menu" : "Add new Menu" }}</h1>
-          {{ isEditMode ? currentItem.menu_name : "add new===menu" }}
+          {{ isEditMode ? editingItem.menu_name : "add new===menu" }}
           <!-- cate, menuname, price, picture, description -->
+          <div
+            name="modalcontainer"
+            class="flex flex-row justify-around gap-20 items-center"
+          >
+            <div
+              name="formfield"
+              class="w-3/6"
+            >
+              <label class="form-control w-full max-w-sm">
+                <div class="flex flex-row gap-4">
+                  <div>
+                    <div class="label">
+                      <span class="label-text">Menu name</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      class="input input-bordered w-full max-w-sm"
+                      v-model="editingItem.menu_name"
+                    />
+                  </div>
+                  <div>
+                    <div class="label">
+                      <span class="label-text">Category</span>
+                    </div>
+                    <select
+                      class="select select-bordered w-full max-w-sm"
+                      v-model="editingItem.category"
+                    >
+                      <option
+                        disabled
+                        selected
+                      >
+                        Select category
+                      </option>
+                      <option
+                        v-for="(object, category) in filterResult"
+                        :key="object"
+                      >
+                        {{ category }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div v-if="editingItem.category == 'Other'">
+                  <div class="label">
+                    <span class="label-text">New category</span>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Type here"
+                    class="input input-bordered w-full max-w-sm"
+                    v-model="editingItem.new_category"
+                  />
+                </div>
+
+                <div class="label">
+                  <span class="label-text">Menu diescription</span>
+                </div>
+                <textarea
+                  type="text"
+                  placeholder="Type here"
+                  class="textarea textarea-bordered textarea-sm w-full max-w-sm max-h-20"
+                  v-model="editingItem.description"
+                ></textarea>
+                <div class="label">
+                  <span class="label-text">Price</span>
+                </div>
+                <input
+                  type="number"
+                  placeholder="Type here"
+                  class="input input-bordered w-full max-w-xs"
+                  v-model="editingItem.price"
+                />
+                <div class="label">
+                  <span class="label-text">Image URL</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Type here"
+                  class="input input-bordered w-full max-w-xs"
+                  v-model="editingItem.img_src"
+                />
+              </label>
+            </div>
+            <div name="card">
+              <div class="card card-compact w-96 bg-base-100 shadow-xl">
+                <figure>
+                  <img
+                    :src="editingItem.img_src"
+                    @error="
+                      editingItem.img_src = '/src/assets/menuimage/pain.jpg'
+                    "
+                    alt="Menu Image"
+                  />
+                </figure>
+                <div class="card-body">
+                  <h2
+                    class="card-title"
+                    v-text="editingItem.menu_name"
+                  ></h2>
+                  <span
+                    class="badge"
+                    v-show="editingItem.category"
+                    v-text="editingItem.category"
+                  ></span>
+                  <p class="overflow-auto">{{ currentItem.description }}</p>
+                  <p v-text="editingItem.price"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="absolute bottom-4 right-4 flex flex-row gap-4">
+            <button
+              class="btn btn-outline btn-error"
+              @click="menuModalHandle(`clearModal`)"
+            >
+              Cancel
+            </button>
+            <button
+              class="btn btn-success"
+              @click="console.log(editingItem)"
+            >
+              {{ isEditMode ? "Update" : "Create" }}
+            </button>
+          </div>
         </div>
       </div>
 
