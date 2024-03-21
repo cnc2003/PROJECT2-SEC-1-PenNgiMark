@@ -2,7 +2,6 @@
 import { ref } from "vue"
 import { getMenulist } from "../../lib/fetch.js"
 
-
 const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
 
@@ -15,45 +14,51 @@ async function fetchMenuData() {
 fetchMenuData()
 
 function filterCategory(category) {
-  if (filterResult.value.hasOwnProperty(category)) {
-    afterFilterResult.value = { [category]: filterResult.value[category] }
-    console.log(afterFilterResult.value)
-  } else {
-    afterFilterResult.value = filterResult.value
-  }
+    if (filterResult.value.hasOwnProperty(category)) {
+        afterFilterResult.value = { [category]: filterResult.value[category] }
+        console.log(afterFilterResult.value)
+    } else {
+        afterFilterResult.value = filterResult.value
+    }
 }
-
 </script>
 <template>
- <div class="flex h-full w-full">
+    <div class="flex h-full w-full">
         <div class="border-2 border-white w-3/4">
             this must be category list
             <div class="flex border-2 w-1/2">
-                <div  v-for="(category, key) in filterResult" :key="category"
-                class="p-3 rounded-md">
-                    <div @click="filterCategory(key)" class="bg-slate-300 p-2 rounded-md">{{ key }}</div>
+                <div
+                    v-for="(category, key) in filterResult"
+                    :key="category"
+                    class="p-3 rounded-md"
+                >
+                    <div
+                        @click="filterCategory(key)"
+                        class="bg-slate-300 p-2 rounded-md"
+                    >
+                        {{ key }}
+                    </div>
                 </div>
             </div>
 
-
             this must be menus list
             <div>
-              <!-- loop category -->
+                <!-- loop category -->
 
-              <div v-for="(category, key) in afterFilterResult === null ? filterResult : afterFilterResult" 
-              :key="key" 
-                class="p-3 rounded-md">
-
-                <!-- loop menulist in category  -->
-                <div v-for="menus in category"
-                class="border-2 p-2 m-1">
-                
-                    <!-- loop menu in menulist  -->
-                    <div v-for="menu in menus">
-                      <div>{{ menu }}</div>
+                <div
+                    v-for="(category, key) in afterFilterResult === null
+                        ? filterResult
+                        : afterFilterResult"
+                    :key="key"
+                    class="p-3 rounded-md"
+                >
+                    <!-- loop menulist in category  -->
+                    <div v-for="menus in category" class="border-2 p-2 m-1">
+                        <!-- loop menu in menulist  -->
+                        <div v-for="menu in menus">
+                            <div>{{ menu }}</div>
+                        </div>
                     </div>
-                </div>
-                    
                 </div>
             </div>
         </div>
