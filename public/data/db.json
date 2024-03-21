@@ -193,6 +193,28 @@
       "id": "0357"
     }
   ],
+  "HistoryOrder": [
+    {
+      "id": "af29",
+      "menu_name": "Espresso",
+      "quantity": 1,
+      "price": 75,
+      "details": "Unsweet",
+      "selected": true,
+      "Time": "3/21/2024 9:19:00 PM",
+      "order_id": "012003"
+    },
+    {
+      "id": "b16c",
+      "menu_name": "Latte",
+      "quantity": 2,
+      "price": 240,
+      "details": "Sweetened",
+      "selected": true,
+      "Time": "3/21/2024 9:19:18 PM",
+      "order_id": "012003"
+    }
+  ],
   "Management": [
     {
       "order_id": "012001",

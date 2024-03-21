@@ -1,13 +1,16 @@
 
 async function getOrderlist() {
-  // let dat = null
-  // await fetch("http://localhost:5000/OrderLists").then((res)=>res.json()).then(data => dat = data)
-  // return dat
-
   const res = await fetch("http://localhost:5000/OrderLists")
   let data = await res.json()
   return data
 }
+
+async function getHistoryOrder() {
+  const res = await fetch("http://localhost:5000/HistoryOrder")
+  let data = await res.json()
+  return data
+}
+
 async function getMenulist() {
   let data = null
   try {
@@ -18,6 +21,15 @@ async function getMenulist() {
     console.log(error)
   }
   return data
+}
+async function PostHistoryOrder(SelectedMenusWithTime) {
+  await fetch("http://localhost:5000/HistoryOrder", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(SelectedMenusWithTime),
+  })
 }
 
 async function DeleteMenuInOrder(restMenu, id) {
@@ -35,4 +47,4 @@ async function DeleteOrder(id) {
     method: "DELETE",
   })
 }
-export { getMenulist , getOrderlist, DeleteMenuInOrder, DeleteOrder }
+export { getMenulist , getOrderlist, DeleteMenuInOrder, DeleteOrder,getHistoryOrder,PostHistoryOrder }
