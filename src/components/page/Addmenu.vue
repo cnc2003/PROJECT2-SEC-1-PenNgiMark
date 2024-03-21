@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue"
 import { getMenulist } from "../../lib/fetch.js"
+import CartList from "../CartList.vue"
 
 const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
@@ -21,6 +22,35 @@ function filterCategory(category) {
         afterFilterResult.value = filterResult.value
     }
 }
+
+const mocDrinks = [
+    {
+        menu_name: "Espresso",
+        price: 75,
+        quantity: 1,
+        sweetnessLevel: 0,
+        isDineIn: true,
+        category: "Drinks",
+    },
+    {
+        menu_name: "Americano",
+        price: 75,
+        quantity: 3,
+        sweetnessLevel: 0,
+        isDineIn: false,
+        category: "Drinks",
+    },
+    {
+        menu_name: "Cappuccino",
+        price: 75,
+        quantity: 1,
+        sweetnessLevel: 0,
+        isDineIn: false,
+        category: "Drinks",
+    },
+]
+const menusInCart = ref(mocDrinks)
+
 </script>
 <template>
     <div class="flex h-full w-full">
@@ -67,7 +97,7 @@ function filterCategory(category) {
                 <button class="border-2 border-white">Dine in</button>
                 <button class="border-2 border-white">Take away</button>
             </div>
-            <div class="border-2 border-white m-3 h-full">Total Items</div>
+            <CartList :menusInCart="menusInCart" />
             <div class="border-2 border-white m-3 h-1/5">Payment Summary</div>
             <div class="border-2 border-white m-3 h-28">
                 <button class="border-2 border-white">Cash</button>
