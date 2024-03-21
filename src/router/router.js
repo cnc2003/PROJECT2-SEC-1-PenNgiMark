@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 import AddMenu from "../components/page/Addmenu.vue"
 import Listorder from "../components/page/Listorder.vue"
-import Manegement from "../components/page/Manegement.vue"
+import Management from "../components/page/Management.vue"
 
 const routes = [
   {
@@ -14,7 +14,7 @@ const routes = [
   },
   {
     path: "/manegement",
-    component: Manegement,
+    component: Management,
   }
 ]
 
