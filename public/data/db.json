@@ -45,7 +45,7 @@
         {
           "menu_name": "Chai Latte",
           "price": 120,
-          "img_src": "chai_latte.jpg",
+          "img_src": "https://img.freepik.com/free-photo/front-view-milk-tea-concept-with-cinnamon_23-2148555190.jpg?t=st=1711011031~exp=1711014631~hmac=e9064ca88d970832bea653a2b2083dac4ef6491e8a4a2b7de92fe02e5846da72&w=740",
           "description": "A spiced tea concentrate with steamed milk."
         },
         {
@@ -155,8 +155,13 @@
           "menu_name": "Latte",
           "quantity": 2,
           "price": 240,
-          "details": "Sweetened",
-          "selected": false
+          "details": "Sweetened"
+        },
+        {
+          "menu_name": "Espresso",
+          "quantity": 1,
+          "price": 75,
+          "details": "Unsweet"
         }
       ],
       "id": "8202"
@@ -171,22 +176,10 @@
           "details": "Unsweet"
         },
         {
-          "menu_name": "Cappuccino",
-          "quantity": 1,
-          "price": 105,
-          "details": "Lightly sweet"
-        },
-        {
           "menu_name": "Latte",
           "quantity": 2,
           "price": 240,
           "details": "Sweetened"
-        },
-        {
-          "menu_name": "Mocha",
-          "quantity": 1,
-          "price": 135,
-          "details": "Extra sweet"
         },
         {
           "menu_name": "Americano",
@@ -208,6 +201,28 @@
         }
       ],
       "id": "0357"
+    }
+  ],
+  "HistoryOrder": [
+    {
+      "id": "af29",
+      "menu_name": "Espresso",
+      "quantity": 1,
+      "price": 75,
+      "details": "Unsweet",
+      "selected": true,
+      "Time": "3/21/2024 9:19:00 PM",
+      "order_id": "012003"
+    },
+    {
+      "id": "b16c",
+      "menu_name": "Latte",
+      "quantity": 2,
+      "price": 240,
+      "details": "Sweetened",
+      "selected": true,
+      "Time": "3/21/2024 9:19:18 PM",
+      "order_id": "012003"
     }
   ],
   "Management": [

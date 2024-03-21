@@ -1,6 +1,6 @@
 <script setup>
 // Import necessary modules
-import { computed, ref, ssrContextKey } from "vue"
+import { computed, ref, resolveDirective, ssrContextKey } from "vue"
 import orderList from "../../../public/data/orderlist.json"
 import { getMenulist, getOrderlist } from "../../lib/fetch.js"
 
@@ -12,8 +12,9 @@ const totalOrder = ref(orderList.length)
 // Edit variable
 const isMenuModal = ref(false)
 const isEditMode = ref(false)
-const currentItem = ref({})
+const isAddModal = ref(false)
 const editingItem = ref({})
+
 // Filter variables
 const selectFilter = ref("")
 const filterResult = ref(null)
@@ -75,6 +76,16 @@ function menuModalHandle(input) {
   }
 }
 
+function confirmModalHandle(input) {
+  console.log(editingItem.value);
+  if(input == "confirming") {
+    isAddModal.value = true
+  }
+  if(input == "clearmodal") [
+    isAddModal.value = false
+  ]
+}
+
 // Set HR style class
 const hr = ref("mb-2 border-gray-300 border-1 rounded")
 </script>
@@ -116,7 +127,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
       <!------------------------>
       <div
         name="management"
-        class="h-[40%] shrink-0 w-11/12 rounded-md p-4 bg-slate-100"
+        class="h-[70%] shrink-0 w-11/12 rounded-md p-4 bg-slate-100"
       >
         <div class="h-[10%] mb-2">
           <div
@@ -175,12 +186,12 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
             <!-- Menu items within each category -->
             <div
               name="menuContainer"
-              class="flex flex-row gap-4 flex-wrap"
+              class="flex flex-row gap-4 flex-wrap "
             >
               <div
                 v-for="item in itemList"
                 :key="item"
-                class="w-[23%] h-32 p-4 border border-gray-300 rounded-md"
+                class="w-[23%] h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
                 @click="menuModalHandle(item)"
               >
                 <p>{{ item.menu_name }}</p>
@@ -236,6 +247,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
               name="formfield"
               class="w-3/6"
             >
+              <form>
               <label class="form-control w-full max-w-sm">
                 <div class="flex flex-row gap-4">
                   <div>
@@ -285,7 +297,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                 </div>
 
                 <div class="label">
-                  <span class="label-text">Menu diescription</span>
+                  <span class="label-text">Menu description</span>
                 </div>
                 <textarea
                   type="text"
@@ -312,15 +324,22 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                   v-model="editingItem.img_src"
                 />
               </label>
+            </form>
             </div>
+
             <div name="card">
               <div class="card card-compact w-96 bg-base-100 shadow-xl">
                 <figure>
                   <img
-                    :src="editingItem.img_src"
+                    :src="
+                      editingItem.img_src != '/src/assets/menuimage/pain.jpg'
+                        ? editingItem.img_src
+                        : '/src/assets/menuimage/pain.jpg'
+                    "
                     @error="
                       editingItem.img_src = '/src/assets/menuimage/pain.jpg'
                     "
+                    class="max-h-56 object-cover"
                     alt="Menu Image"
                   />
                 </figure>
@@ -334,7 +353,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                     v-show="editingItem.category"
                     v-text="editingItem.category"
                   ></span>
-                  <p class="overflow-auto">{{ currentItem.description }}</p>
+                  <p class="overflow-auto">{{ editingItem.description }}</p>
                   <p v-text="editingItem.price"></p>
                 </div>
               </div>
@@ -349,7 +368,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
             </button>
             <button
               class="btn btn-success"
-              @click="console.log(editingItem)"
+              @click="confirmModalHandle('confirming')"
             >
               {{ isEditMode ? "Update" : "Create" }}
             </button>
@@ -357,52 +376,26 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
         </div>
       </div>
 
+      <div
+        v-if="isAddModal"
+        class="fixed w-screen h-screen top-0 left-0 flex justify-center items-center"
+      >
+        <div
+          class="w-lvw h-lvh bg-black bg-opacity-50"
+          @click="confirmModalHandle(`clearmodal`)"
+        ></div>
+        <!-- modal content -->
+        <div
+          name="modal"
+          class="fixed w-2/6 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
+        >
+          <h1>Confirmation</h1>
+          <p>Are you sure to {{ isEditMode ? " edit " : " create " }} this menu ?</p>
+        </div>
+      </div>
       <!----------------------->
       <!-- Promotion Section -->
       <!----------------------->
-
-      <div
-        name="promotion"
-        class="my-6 p-4 h-[40%] shrink w-11/12 rounded-md bg-slate-100 overflow-hidden"
-      >
-        <div class="h-[10%]">
-          <h1 class="text-2xl font-mono font-semibold">Promotion</h1>
-          <hr :class="hr" />
-        </div>
-
-        <div
-          name="container"
-          class="w-full h-[90%] mt-2 flex flex-wrap gap-4 overflow-auto"
-        >
-          <!-- Dynamic rendering of menu items based on selected category (filterResult) -->
-          <div
-            v-for="(itemList, category) in afterFilterResult === null
-              ? filterResult
-              : afterFilterResult"
-            :name="category"
-            :key="category"
-            class="flex flex-col w-full gap-4"
-          >
-            <h2
-              v-text="category"
-              class="w-full font-mono text-lg font-semibold"
-            ></h2>
-            <!-- Menu items within each category -->
-            <div
-              name="menuContainer"
-              class="flex flex-row gap-4 flex-wrap"
-            >
-              <div
-                v-for="item in itemList"
-                :key="item"
-                class="w-[23%] h-32 p-4 border border-gray-300 rounded-md"
-              >
-                <p>{{ item.menuName }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </Suspense>
 </template>
