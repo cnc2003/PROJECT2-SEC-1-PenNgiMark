@@ -1,29 +1,17 @@
 
-async function getOrderlist() {
-  const res = await fetch("http://localhost:5000/OrderLists")
+// Path URL
+const url = import.meta.env.VITE_BASE_URL
+
+// GetData (All page)
+async function getList(path) {
+  const res = await fetch(`${url}${path}`)
   let data = await res.json()
   return data
 }
 
-async function getHistoryOrder() {
-  const res = await fetch("http://localhost:5000/HistoryOrder")
-  let data = await res.json()
-  return data
-}
-
-async function getMenulist() {
-  let data = null
-  try {
-    await fetch("http://localhost:5000/Menus")
-      .then((response) => response.json())
-      .then((dataResponse) => (data = dataResponse))
-  } catch (error) {
-    console.log(error)
-  }
-  return data
-}
-async function PostHistoryOrder(SelectedMenusWithTime) {
-  await fetch("http://localhost:5000/HistoryOrder", {
+// AddHistory (ListOrder Page)
+async function PostHistoryOrder(SelectedMenusWithTime,path) {
+  await fetch(`${url}${path}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -32,8 +20,9 @@ async function PostHistoryOrder(SelectedMenusWithTime) {
   })
 }
 
+// DeleteMenuInOrder (ListOrder Page)
 async function DeleteMenuInOrder(restMenu, id) {
-  await fetch(`http://localhost:5000/OrderLists/${id}`, {
+  await fetch(`${url}OrderLists/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -42,9 +31,12 @@ async function DeleteMenuInOrder(restMenu, id) {
   })
 }
 
+// DeleteOrder (ListOrder Page)
 async function DeleteOrder(id) {
-  await fetch(`http://localhost:5000/OrderLists/${id}`, {
+  await fetch(`${url}OrderLists/${id}`, {
     method: "DELETE",
   })
 }
-export { getMenulist , getOrderlist, DeleteMenuInOrder, DeleteOrder,getHistoryOrder,PostHistoryOrder }
+
+
+export { getList ,PostHistoryOrder, DeleteMenuInOrder, DeleteOrder}

@@ -2,7 +2,7 @@
 // Import necessary modules
 import { computed, ref, resolveDirective, ssrContextKey } from "vue"
 import orderList from "../../../public/data/orderlist.json"
-import { getMenulist, getOrderlist } from "../../lib/fetch.js"
+import { getList } from "../../lib/fetch.js"
 
 // Define reactive variables
 const totalMenu = ref(0)
@@ -22,7 +22,7 @@ const afterFilterResult = ref(null) // default value
 
 //fetch GET menulist
 async function fetchMenuData() {
-  filterResult.value = await getMenulist() // is array
+  filterResult.value = await getList("Menus") // is array
   // console.log(filterResult.value)
   for (const cate in filterResult.value) {
     totalMenu.value += cate.length

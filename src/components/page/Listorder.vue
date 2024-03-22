@@ -1,24 +1,22 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import {
-    getOrderlist,
     DeleteMenuInOrder,
     DeleteOrder,
-    PostHistoryOrder
+    PostHistoryOrder,
+    getList
 } from "../../lib/fetch.js"
 import ModalHistory from "../ModalHistory.vue"
 
-// defind variable
+// define variable
 let orderListBefore = ref([])
 let showModalHistory = ref(false)
 let showModalConfirm = ref(false)
 let confirmStatus = ref(false)
 let ReloadHistory = ref(false)
 
-
-// ReloadFetch
 async function fetchData() {
-    orderListBefore.value = await getOrderlist()
+    orderListBefore.value = await getList("OrderLists")
     console.log(orderListBefore.value)
 }
 onMounted(fetchData)
@@ -33,7 +31,7 @@ function serveOrder(order) {
     const SelectedMenusWithTime = order.orders
         .filter((menu) => menu.selected)
         .map((menu) => ({ ...menu, Time: serveTime, order_id: order_ID }))
-    PostHistoryOrder(...SelectedMenusWithTime)
+    PostHistoryOrder(...SelectedMenusWithTime,"HistoryOrder")
     // console.log(...SelectedMenusWithTime)
 
     // filter MenusNotSelected
@@ -84,7 +82,7 @@ function opernModalConfirm(order) {
             if (confirmStatus.value === true) {
                 clearInterval(interval) // stop setInterval
                 serveOrder(order)
-                confirmStatus.value = false //
+                confirmStatus.value = false 
                 console.log(confirmStatus.value)
             }
         }, 100) // ตรวจสอบทุก 100 milliseconds
