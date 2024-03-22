@@ -1,56 +1,45 @@
-async function getOrderlist() {
-    const res = await fetch("http://localhost:5000/OrderLists")
-    let data = await res.json()
-    return data
+
+
+// Path URL
+const url = import.meta.env.VITE_BASE_URL
+
+// GetData (All page)
+async function getList(path) {
+  const res = await fetch(`${url}${path}`)
+  let data = await res.json()
+  return data
 }
 
-async function getHistoryOrder() {
-    const res = await fetch("http://localhost:5000/HistoryOrder")
-    let data = await res.json()
-    return data
+// AddHistory (ListOrder Page)
+async function PostHistoryOrder(SelectedMenusWithTime,path) {
+  await fetch(`${url}${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(SelectedMenusWithTime),
+  })
+
 }
 
-async function getMenulist() {
-    let data = null
-    try {
-        await fetch("http://localhost:5000/Menus")
-            .then((response) => response.json())
-            .then((dataResponse) => (data = dataResponse))
-    } catch (error) {
-        console.log(error)
-    }
-    return data
-}
-async function PostHistoryOrder(SelectedMenusWithTime) {
-    await fetch("http://localhost:5000/HistoryOrder", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(SelectedMenusWithTime),
-    })
-}
-
+// DeleteMenuInOrder (ListOrder Page)
 async function DeleteMenuInOrder(restMenu, id) {
-    await fetch(`http://localhost:5000/OrderLists/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(restMenu),
-    })
+  await fetch(`${url}OrderLists/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(restMenu),
+  })
+
 }
 
+// DeleteOrder (ListOrder Page)
 async function DeleteOrder(id) {
-    await fetch(`http://localhost:5000/OrderLists/${id}`, {
-        method: "DELETE",
-    })
+  await fetch(`${url}OrderLists/${id}`, {
+    method: "DELETE",
+  })
 }
-export {
-    getMenulist,
-    getOrderlist,
-    DeleteMenuInOrder,
-    DeleteOrder,
-    getHistoryOrder,
-    PostHistoryOrder,
-}
+
+export { getList ,PostHistoryOrder, DeleteMenuInOrder, DeleteOrder}
+

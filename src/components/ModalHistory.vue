@@ -1,30 +1,28 @@
 <script setup>
 import { defineProps, defineEmits, ref,watch } from "vue"
-import {getHistoryOrder} from '../lib/fetch.js'
+import {getList} from '../lib/fetch.js'
+
+// define variable
 let HistoryOrder =ref([])
-
-
+const emits = defineEmits(["close"])
 const props = defineProps({
     data: Boolean,
-    
 })
 let datas = ref(props.data)
+console.log(datas.value)
 
-console.log(datas)
+
 async function fetchData() {
-    HistoryOrder.value = await getHistoryOrder()
+    HistoryOrder.value = await getList("HistoryOrder")
     HistoryOrder.value = HistoryOrder.value.slice().reverse()
 }
-
 fetchData()
 
-watch(datas, () => {
-    fetchData()
-})
 
-const emits = defineEmits(["close"])
-console.log(HistoryOrder.value);
-setInterval(fetchData, 5000);
+watch(() => props.data, () => {
+    fetchData()
+    // console.log("HistoryOrder :" ,HistoryOrder.value);
+})
 
 
 </script>
