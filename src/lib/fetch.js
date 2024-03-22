@@ -1,4 +1,5 @@
 
+
 // Path URL
 const url = import.meta.env.VITE_BASE_URL
 
@@ -18,6 +19,7 @@ async function PostHistoryOrder(SelectedMenusWithTime,path) {
     },
     body: JSON.stringify(SelectedMenusWithTime),
   })
+
 }
 
 // DeleteMenuInOrder (ListOrder Page)
@@ -29,6 +31,7 @@ async function DeleteMenuInOrder(restMenu, id) {
     },
     body: JSON.stringify(restMenu),
   })
+
 }
 
 // DeleteOrder (ListOrder Page)
@@ -38,5 +41,5 @@ async function DeleteOrder(id) {
   })
 }
 
-
 export { getList ,PostHistoryOrder, DeleteMenuInOrder, DeleteOrder}
+
