@@ -7,18 +7,31 @@ import { getList } from "../../lib/fetch.js"
 // Define reactive variables
 const totalMenu = ref(0)
 const totalSold = ref(0)
-const totalOrder = ref(orderList.length)
-
-// Edit variable
+const totalOrder = ref(0)
+const orderData = ref(null)
+// Edit variable - Modal
+const editingItem = ref({})
 const isMenuModal = ref(false)
 const isEditMode = ref(false)
 const isAddModal = ref(false)
-const editingItem = ref({})
-
+const isAddComplete = ref(false)
+const isConfirming = ref(false)
 // Filter variables
 const selectFilter = ref("")
 const filterResult = ref(null)
 const afterFilterResult = ref(null) // default value
+
+// Temp data for update
+// INPROGRESS
+const tempMenu = {
+  menu_name: editingItem.menu_name,
+  category: editingItem.new_category
+    ? editingItem.new_category
+    : editingItem.category,
+  description: editingItem.description,
+  price: editingItem.price,
+  img_src: editingItem.img_src,
+}
 
 //fetch GET menulist
 async function fetchMenuData() {
@@ -30,7 +43,19 @@ async function fetchMenuData() {
   console.log(filterResult.value)
 }
 
+async function fetchOrderData() {
+  orderData.value = await getOrderlist()
+  totalOrder.value = orderData.value.length
+  console.log(totalSold.value)
+  calTotalOrder()
+  // console.log("----------")
+  // console.log(totalSold.value)
+  // console.log(totalOrder.value)
+  // console.log(orderData.value)
+}
+
 fetchMenuData()
+fetchOrderData()
 
 // Function to filter categories
 function filterCategory(category) {
@@ -42,17 +67,23 @@ function filterCategory(category) {
   }
 }
 
-// Calculate total sold items
-orderList.forEach((order) =>
-  order.orders.forEach((item) => {
-    totalSold.value += item.quantity
+function calTotalOrder() {
+  const orderQuantities = orderData.value.map((order) => {
+    const totalQuantity = order.orders.reduce(
+      (acc, curr) => acc + curr.quantity,
+      0
+    )
+    return totalQuantity
   })
-)
+  const totalQuantities = [...orderQuantities]
+  totalSold.value = totalQuantities.reduce((acc, curr) => acc + curr, 0)
+
+  console.log(totalSold.value)
+}
 
 // Calculate total menu items
 for (const category in filterResult.value) {
   totalMenu.value += filterResult.value[category].length
-  console.log(filterResult.value)
 }
 
 // Menu modal handlerer
@@ -61,29 +92,32 @@ function menuModalHandle(input) {
     editingItem.value = ref(null)
     isEditMode.value = false
     isMenuModal.value = false
-    console.log(editingItem)
-    console.log("CLEARRRRRR")
   } else if (input == "addNewMenu") {
     isMenuModal.value = true
-    console.log("ADDDDDDDDDD")
   } else if (typeof input == "object") {
     editingItem.value = input
     isMenuModal.value = true
     isEditMode.value = true
-    // console.log(`work`)
-    console.log(editingItem.value)
-    console.log("EDITTTTTTTTTTTTT")
   }
 }
 
 function confirmModalHandle(input) {
-  console.log(editingItem.value);
-  if(input == "confirming") {
+  if (input == "confirming") {
     isAddModal.value = true
+    isConfirming.value = true
   }
-  if(input == "clearmodal") [
+  if (input == "clearmodal") {
     isAddModal.value = false
-  ]
+    if (!isConfirming.value) {
+      isMenuModal.value = false
+    }
+    isConfirming.value = false
+    isAddComplete.value = false
+  }
+  if (input == "addMenu") {
+    isConfirming.value = false
+    isAddComplete.value = true
+  }
 }
 
 // Set HR style class
@@ -186,7 +220,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
             <!-- Menu items within each category -->
             <div
               name="menuContainer"
-              class="flex flex-row gap-4 flex-wrap "
+              class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
             >
               <div
                 v-for="item in itemList"
@@ -205,7 +239,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
 
       <!-- Management Modal -->
       <div
-        v-if="isMenuModal"
+        v-show="isMenuModal"
         class="fixed w-screen h-screen top-0 left-0 flex justify-center items-center"
       >
         <div
@@ -248,83 +282,83 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
               class="w-3/6"
             >
               <form>
-              <label class="form-control w-full max-w-sm">
-                <div class="flex flex-row gap-4">
-                  <div>
+                <label class="form-control w-full max-w-sm">
+                  <div class="flex flex-row gap-4">
+                    <div>
+                      <div class="label">
+                        <span class="label-text">Menu name</span>
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Type here"
+                        class="input input-bordered w-full max-w-sm"
+                        v-model="editingItem.menu_name"
+                      />
+                    </div>
+                    <div>
+                      <div class="label">
+                        <span class="label-text">Category</span>
+                      </div>
+                      <select
+                        class="select select-bordered w-full max-w-sm"
+                        v-model="editingItem.category"
+                      >
+                        <option
+                          disabled
+                          selected
+                        >
+                          Select category
+                        </option>
+                        <option
+                          v-for="(object, category) in filterResult"
+                          :key="object"
+                        >
+                          {{ category }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div v-if="editingItem.category == 'Other'">
                     <div class="label">
-                      <span class="label-text">Menu name</span>
+                      <span class="label-text">New category</span>
                     </div>
                     <input
                       type="text"
                       placeholder="Type here"
                       class="input input-bordered w-full max-w-sm"
-                      v-model="editingItem.menu_name"
+                      v-model="editingItem.new_category"
                     />
                   </div>
-                  <div>
-                    <div class="label">
-                      <span class="label-text">Category</span>
-                    </div>
-                    <select
-                      class="select select-bordered w-full max-w-sm"
-                      v-model="editingItem.category"
-                    >
-                      <option
-                        disabled
-                        selected
-                      >
-                        Select category
-                      </option>
-                      <option
-                        v-for="(object, category) in filterResult"
-                        :key="object"
-                      >
-                        {{ category }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div v-if="editingItem.category == 'Other'">
+
                   <div class="label">
-                    <span class="label-text">New category</span>
+                    <span class="label-text">Menu description</span>
+                  </div>
+                  <textarea
+                    type="text"
+                    placeholder="Type here"
+                    class="textarea textarea-bordered textarea-sm w-full max-w-sm max-h-20"
+                    v-model="editingItem.description"
+                  ></textarea>
+                  <div class="label">
+                    <span class="label-text">Price</span>
+                  </div>
+                  <input
+                    type="number"
+                    placeholder="Type here"
+                    class="input input-bordered w-full max-w-xs"
+                    v-model="editingItem.price"
+                  />
+                  <div class="label">
+                    <span class="label-text">Image URL</span>
                   </div>
                   <input
                     type="text"
                     placeholder="Type here"
-                    class="input input-bordered w-full max-w-sm"
-                    v-model="editingItem.new_category"
+                    class="input input-bordered w-full max-w-xs"
+                    v-model="editingItem.img_src"
                   />
-                </div>
-
-                <div class="label">
-                  <span class="label-text">Menu description</span>
-                </div>
-                <textarea
-                  type="text"
-                  placeholder="Type here"
-                  class="textarea textarea-bordered textarea-sm w-full max-w-sm max-h-20"
-                  v-model="editingItem.description"
-                ></textarea>
-                <div class="label">
-                  <span class="label-text">Price</span>
-                </div>
-                <input
-                  type="number"
-                  placeholder="Type here"
-                  class="input input-bordered w-full max-w-xs"
-                  v-model="editingItem.price"
-                />
-                <div class="label">
-                  <span class="label-text">Image URL</span>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Type here"
-                  class="input input-bordered w-full max-w-xs"
-                  v-model="editingItem.img_src"
-                />
-              </label>
-            </form>
+                </label>
+              </form>
             </div>
 
             <div name="card">
@@ -339,7 +373,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                     @error="
                       editingItem.img_src = '/src/assets/menuimage/pain.jpg'
                     "
-                    class="max-h-56 object-cover"
+                    class="max-h-56 object-cover overflow-clip"
                     alt="Menu Image"
                   />
                 </figure>
@@ -351,7 +385,11 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                   <span
                     class="badge"
                     v-show="editingItem.category"
-                    v-text="editingItem.category"
+                    v-text="
+                      editingItem.category == 'Other'
+                        ? editingItem.new_category
+                        : editingItem.category
+                    "
                   ></span>
                   <p class="overflow-auto">{{ editingItem.description }}</p>
                   <p v-text="editingItem.price"></p>
@@ -376,21 +414,65 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
         </div>
       </div>
 
-      <div
-        v-if="isAddModal"
-        class="fixed w-screen h-screen top-0 left-0 flex justify-center items-center"
-      >
+      <div v-show="isAddModal">
         <div
-          class="w-lvw h-lvh bg-black bg-opacity-50"
-          @click="confirmModalHandle(`clearmodal`)"
-        ></div>
-        <!-- modal content -->
-        <div
-          name="modal"
-          class="fixed w-2/6 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
+          v-if="isConfirming"
+          class="fixed w-screen h-screen top-0 left-0 flex justify-center items-center"
         >
-          <h1>Confirmation</h1>
-          <p>Are you sure to {{ isEditMode ? " edit " : " create " }} this menu ?</p>
+          <div
+            class="w-lvw h-lvh bg-black bg-opacity-50"
+            @click="confirmModalHandle(`clearmodal`)"
+          ></div>
+          <!-- modal content -->
+          <div
+            name="modal"
+            class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
+          >
+            <h1>Confirmation</h1>
+            <p>
+              Are you sure to {{ isEditMode ? " edit " : " create " }} this menu
+              ?
+            </p>
+            <div class="flex flex-row gap-4">
+              <button
+                class="btn btn-outline btn-warning"
+                @click="confirmModalHandle(`clearmodal`)"
+              >
+                Back
+              </button>
+              <button
+                class="btn btn-success"
+                @click="confirmModalHandle(`addMenu`)"
+              >
+                Success
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          v-show="isAddComplete"
+          class="fixed w-screen h-screen top-0 left-0 flex justify-center items-center"
+        >
+          <div
+            class="w-lvw h-lvh bg-black bg-opacity-50"
+            @click="confirmModalHandle(`clearmodal`)"
+          ></div>
+          <!-- modal content -->
+          <div
+            name="modal"
+            class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
+          >
+            <h1>Complete</h1>
+            <p>Are you</p>
+            <div class="flex flex-row gap-4">
+              <button
+                class="btn btn-success"
+                @click="confirmModalHandle(`clearmodal`)"
+              >
+                O K !
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <!----------------------->
