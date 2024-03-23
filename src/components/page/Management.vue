@@ -48,10 +48,10 @@ async function fetchOrderData() {
   totalOrder.value = orderData.value.length
   console.log(totalSold.value)
   calTotalOrder()
-  console.log("----------")
-  console.log(totalSold.value)
-  console.log(totalOrder.value)
-  console.log(orderData.value)
+  // console.log("----------")
+  // console.log(totalSold.value)
+  // console.log(totalOrder.value)
+  // console.log(orderData.value)
 }
 
 fetchMenuData()
@@ -68,7 +68,17 @@ function filterCategory(category) {
 }
 
 function calTotalOrder() {
-  
+  const orderQuantities = orderData.value.map((order) => {
+    const totalQuantity = order.orders.reduce(
+      (acc, curr) => acc + curr.quantity,
+      0
+    )
+    return totalQuantity
+  })
+  const totalQuantities = [...orderQuantities]
+  totalSold.value = totalQuantities.reduce((acc, curr) => acc + curr, 0)
+
+  console.log(totalSold.value)
 }
 
 // Calculate total menu items
@@ -82,18 +92,12 @@ function menuModalHandle(input) {
     editingItem.value = ref(null)
     isEditMode.value = false
     isMenuModal.value = false
-    console.log(editingItem)
-    console.log("CLEARRRRRR")
   } else if (input == "addNewMenu") {
     isMenuModal.value = true
-    console.log("ADDDDDDDDDD")
   } else if (typeof input == "object") {
     editingItem.value = input
     isMenuModal.value = true
     isEditMode.value = true
-    // console.log(`work`)
-    console.log(editingItem.value)
-    console.log("EDITTTTTTTTTTTTT")
   }
 }
 
@@ -101,25 +105,18 @@ function confirmModalHandle(input) {
   if (input == "confirming") {
     isAddModal.value = true
     isConfirming.value = true
-    console.log("AAA")
   }
   if (input == "clearmodal") {
     isAddModal.value = false
     if (!isConfirming.value) {
       isMenuModal.value = false
-      console.log("done")
     }
     isConfirming.value = false
     isAddComplete.value = false
-    console.log("BBB")
   }
   if (input == "addMenu") {
     isConfirming.value = false
     isAddComplete.value = true
-    console.log(isConfirming.value)
-    console.log(isMenuModal.value)
-    console.log(editingItem.value)
-    console.log("CCC")
   }
 }
 
