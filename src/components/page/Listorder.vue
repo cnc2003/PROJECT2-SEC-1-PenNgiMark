@@ -107,7 +107,7 @@ function opernModalConfirm(order) {
         >
             <div class="w-lvw h-lvh bg-black bg-opacity-50"></div>
             <div
-                class="fixed w-1/4 h-2/6 bg-white rounded-xl flex flex-col items-center indicator"
+                class="fixed w-1/4 h-1/4 bg-white rounded-xl flex flex-col items-center indicator"
             >
                 <div class="flex flex-col">
                     <div class="text-xl border-b-4 mt-4 mb-3 flex justify-center">Confirm Menu</div>
