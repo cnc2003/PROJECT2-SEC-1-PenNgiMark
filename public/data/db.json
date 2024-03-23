@@ -1,6 +1,5 @@
 {
   "Menus": {
-    
       "Coffee": [
         {
           "menu_name": "Espresso",
@@ -79,8 +78,7 @@
           "description": "Iced tea flavored with lemon, often served with sugar or sweetener."
         }
       ],
-     
-    
+
       "Soda": [
         {
           "menu_name": "Cola",
