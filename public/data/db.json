@@ -298,5 +298,25 @@
             "id": "7961"
         }
     ],
+    "Promotions": [
+        {
+            "name": "Happy Hour",
+            "menus": [{ "menuName": "Cappuccino", "quantity": 1 }],
+            "discount": 8
+        },
+        {
+            "name": "Morning Delight",
+            "menus": [{ "menuName": "Espresso", "quantity": 2 }],
+            "discount": 5
+        },
+        {
+            "name": "Summer Lover",
+            "menus": [
+                { "menuName": "Latte", "quantity": 1 },
+                { "menuName": "Mocha", "quantity": 1 }
+            ],
+            "discount": 10
+        }
+    ],
     "Setting": ""
 }
