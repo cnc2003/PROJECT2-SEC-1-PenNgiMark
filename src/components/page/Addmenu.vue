@@ -1,13 +1,16 @@
 <script setup>
-import { ref } from "vue"
+import { ref, watch, onMounted } from "vue"
 
 import { getList } from "../../lib/fetch.js"
 import CartList from "../CartList.vue"
 import JsxIconBase from "../JsxIconBase.vue"
 
-
 const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
+const promotions = ref([])
+const discount = ref(0)
+const price = ref(0)
+const totalPrice = ref(0)
 
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
@@ -15,7 +18,17 @@ async function fetchMenuData() {
         console.log(key)
     }
 }
-fetchMenuData()
+// fetchMenuData()
+
+onMounted(async () => {
+    const [menusRes, promotionsRes] = await Promise.all([
+        getList("Menus"),
+        getList("Promotions"),
+    ])
+    fetchMenuData()
+    promotions.value = promotionsRes
+    // filterResult.value = menusRes
+})
 
 function filterCategory(category) {
     if (filterResult.value.hasOwnProperty(category)) {
@@ -54,8 +67,43 @@ const mocDrinks = [
 ]
 const menusInCart = ref(mocDrinks)
 
-const paymentMethod = ref("")
+const calculateDiscount = () => {
+    let totalDiscount = 0
 
+    for (const promotion of promotions.value) {
+        if (
+            promotion.menus.every((promoItem) => {
+                const cartItem = menusInCart.value.find(
+                    (item) => item.menu_name === promoItem.menuName
+                )
+                return cartItem && cartItem.quantity >= promoItem.quantity
+            })
+        ) {
+            const discountAmount = promotion.discount
+            totalDiscount += discountAmount
+        }
+    }
+    discount.value = totalDiscount
+    // return totalDiscount
+}
+
+const getTotalPrice = () => {
+    let price = 0
+    menusInCart.value.forEach((item) => {
+        price += item.price * item.quantity
+    })
+    return price
+}
+watch(
+    () => menusInCart,
+    (newCart) => {
+        // console.log(newCart.value)
+        calculateDiscount()
+    },
+    { deep: true, immediate: true }
+)
+
+const paymentMethod = ref("")
 </script>
 <template>
     <div class="flex h-full w-full">
@@ -110,7 +158,19 @@ const paymentMethod = ref("")
                 </button>
             </div>
             <CartList :menusInCart="menusInCart" />
-            <div class="border-2 border-black m-2 h-1/5">Payment Summary</div>
+            <div class="border-2 border-black m-2 h-1/5">
+                Payment Summary
+                <div class="flex justify-between">
+                    <p>Price</p>
+                    <p>{{ getTotalPrice() }}</p>
+                </div>
+                <div class="flex justify-between">
+                    <p>Discount</p>
+                    <p>
+                        {{ discount }}
+                    </p>
+                </div>
+            </div>
             <div
                 class="flex flex-col justify-evenly border-2 border-black h-28 mx-2 px-2 pb-2"
             >
@@ -120,7 +180,7 @@ const paymentMethod = ref("")
                         class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
                         @click="paymentMethod = 'cash'"
                     >
-                        <JsxIconBase iconName="Cash"/>
+                        <JsxIconBase iconName="Cash" />
                     </button>
                     <button
                         class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
