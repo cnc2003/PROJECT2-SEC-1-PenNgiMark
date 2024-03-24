@@ -88,10 +88,12 @@ const paymentMethod = ref("")
                     class="p-3 rounded-md"
                 >
                     <!-- loop menulist in category  -->
-                    <div v-for="menus in category" class="border-2 p-2 m-1">
+                    <div v-for="menus in category" class="flex flex-col rounded border-2 p-3 m-1 justify-center">
                         <!-- loop menu in menulist  -->
+
                         <div v-for="menu in menus">
                             <div>{{ menu }}</div>
+
                         </div>
                     </div>
                 </div>
