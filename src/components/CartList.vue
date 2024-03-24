@@ -18,7 +18,13 @@ const props = defineProps({
                     <p>{{ menu.sweetnessLevel }}%</p>
                 </template>
                 <template #quantity>
-                    {{ menu.quantity }}
+                    <button
+                        @click="menu.quantity <= 1 ? null : menu.quantity--"
+                    >
+                        -
+                    </button>
+                    <p>{{ menu.quantity }}</p>
+                    <button @click="menu.quantity++">+</button>
                 </template>
             </CartCard>
             <hr v-show="index + 1 !== menusInCart.length" class="mx-3" />
