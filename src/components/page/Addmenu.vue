@@ -5,24 +5,49 @@ import { getList } from "../../lib/fetch.js"
 import CartList from "../CartList.vue"
 import JsxIconBase from "../JsxIconBase.vue"
 
-
 const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
 
+// async function fetchMenuData() {
+//     filterResult.value = await getList("Menus") // is array
+//     for (const key in filterResult.value) {
+//         console.log(key)
+//     }
+// }
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
-    for (const key in filterResult.value) {
-        console.log(key)
-    }
+    console.log(filterResult.value)
 }
+
 fetchMenuData()
 
-function filterCategory(category) {
-    if (filterResult.value.hasOwnProperty(category)) {
-        afterFilterResult.value = { [category]: filterResult.value[category] }
-        console.log(afterFilterResult.value)
-    } else {
+// function filterCategory(category) {
+//     if (filterResult.value.hasOwnProperty(category)) {
+//         afterFilterResult.value = { [category]: filterResult.value[category] }
+//         console.log(afterFilterResult.value)
+//     } else {
+//         afterFilterResult.value = filterResult.value
+//     }
+// }
+
+function filterCategory(inputcate) {
+    console.log(inputcate)
+    let t = null
+
+    if (inputcate === null || inputcate === "All") {
         afterFilterResult.value = filterResult.value
+    } else {
+        for (const cate in filterResult.value) {
+            const category = filterResult.value[cate] // category [ex index = 0,1,2,3,4,5]
+            for (const iterator in category) {
+                if (inputcate === iterator && inputcate !== undefined) {
+                    const menus = category[inputcate]
+                    t = menus
+                    console.log("menus :", menus) // menus in category
+                }
+            }
+        }
+        afterFilterResult.value = [{ [inputcate]: t }]
     }
 }
 
@@ -55,23 +80,23 @@ const mocDrinks = [
 const menusInCart = ref(mocDrinks)
 
 const paymentMethod = ref("")
-
 </script>
 <template>
     <div class="flex h-full w-full">
         <section class="border-2 border-white w-3/4">
             this must be category list
-            <div class="flex border-2 w-1/2">
-                <div
-                    v-for="(category, key) in filterResult"
-                    :key="category"
-                    class="p-3 rounded-md"
-                >
+            <div class="flex justify-center border-2 w-1/2 rounded-md">
+                <div class="bg-slate-300 p-4 m-2 rounded-md btn btn-md"
+                @click="filterCategory('All')"
+                >All</div>
+                <div v-for="category in filterResult" >
                     <div
-                        @click="filterCategory(key)"
-                        class="bg-slate-300 p-2 rounded-md"
+                        v-for="(items, categoryName) in category"
+                        :key="items"
+                        @click="filterCategory(categoryName)"
+                        class="bg-slate-300 p-2 m-2  rounded-md btn btn-md"
                     >
-                        {{ key }}
+                        {{ categoryName }}
                     </div>
                 </div>
             </div>
@@ -81,17 +106,42 @@ const paymentMethod = ref("")
                 <!-- loop category -->
 
                 <div
-                    v-for="(category, key) in afterFilterResult === null
-                        ? filterResult
-                        : afterFilterResult"
-                    :key="key"
-                    class="p-3 rounded-md"
+                    name="container"
+                    class="w-full h-[90%] flex flex-wrap gap-4 overflow-auto"
                 >
-                    <!-- loop menulist in category  -->
-                    <div v-for="menus in category" class="border-2 p-2 m-1">
-                        <!-- loop menu in menulist  -->
-                        <div v-for="menu in menus">
-                            <div>{{ menu }}</div>
+                    <!-- Dynamic rendering of menu items based on selected category -->
+                    <div
+                        v-for="(itemList, category) in afterFilterResult ===
+                        null
+                            ? filterResult
+                            : afterFilterResult"
+                        :key="category"
+                        class="flex flex-col w-full h-auto gap-2"
+                    >
+                        <!-- แสดงชื่อ category -->
+                        <h2
+                            v-for="(key, categoryName) in itemList"
+                            :key="key"
+                            class="w-full font-mono text-lg font-semibold"
+                        >
+                            {{ categoryName }}
+                        </h2>
+                        <!-- แสดง menu items ในแต่ละ category -->
+                        <div
+                            v-for="(items, key) in itemList"
+                            :key="key"
+                            name="menuContainer"
+                            class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
+                        >
+                            <div
+                                v-for="(item, key) in items"
+                                :key="key"
+                                class="w-[23%] h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
+                                @click="menuModalHandle(item)"
+                            >
+                                <p>{{ item.menu_name }}</p>
+                                <p>{{ item.price }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -120,7 +170,7 @@ const paymentMethod = ref("")
                         class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
                         @click="paymentMethod = 'cash'"
                     >
-                        <JsxIconBase iconName="Cash"/>
+                        <JsxIconBase iconName="Cash" />
                     </button>
                     <button
                         class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"

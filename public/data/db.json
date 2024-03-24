@@ -1,17 +1,17 @@
 {
-  "Menus": {
-    
+  "Menus": [
+    {
       "Coffee": [
         {
           "menu_name": "Espresso",
           "price": 75,
-          "img_src": "espresso.jpg",
+          "img_src": "/src/assets/menuimage/pain.jpg",
           "description": "A strong black coffee made by forcing steam through finely-ground coffee beans."
         },
         {
-          "menu_name": "Cappuccino",
+          "menu_name": "Cap",
           "price": 105,
-          "img_src": "cappuccino.jpg",
+          "img_src": "/src/assets/menuimage/pain.jpg",
           "description": "An espresso-based coffee drink that is typically prepared with equal parts double espresso, steamed milk, and milk foam."
         },
         {
@@ -23,7 +23,7 @@
         {
           "menu_name": "Mocha",
           "price": 135,
-          "img_src": "mocha.jpg",
+          "img_src": "/src/assets/menuimage/pain.jpg",
           "description": "A variant of a latte with chocolate added."
         },
         {
@@ -35,12 +35,12 @@
         {
           "menu_name": "Iced Coffee",
           "price": 110,
-          "img_src": "iced_coffee.jpg",
+          "img_src": "/src/assets/menuimage/pain.jpg",
           "description": "Cold coffee served over ice cubes."
         }
-      ],
-    
-    
+      ]
+    },
+    {
       "Tea": [
         {
           "menu_name": "Chai Latte",
@@ -78,9 +78,9 @@
           "img_src": "lemon_iced_tea.jpg",
           "description": "Iced tea flavored with lemon, often served with sugar or sweetener."
         }
-      ],
-     
-    
+      ]
+    },
+    {
       "Soda": [
         {
           "menu_name": "Cola",
@@ -106,9 +106,9 @@
           "img_src": "root_beer.jpg",
           "description": "A sweet carbonated soft drink traditionally made using the root bark of the sassafras tree as the primary flavoring."
         }
-      ],
-   
-    
+      ]
+    },
+    {
       "Juice": [
         {
           "menu_name": "Fruit Punch",
@@ -122,9 +122,9 @@
           "img_src": "orange_juice.jpg",
           "description": "A beverage made from squeezed or pressed oranges."
         }
-      ],
-   
-    
+      ]
+    },
+    {
       "Other": [
         {
           "menu_name": "Hot Chocolate",
@@ -145,8 +145,19 @@
           "description": "Clear, colorless, odorless, and tasteless liquid that is essential for most living organisms."
         }
       ]
-   
-},
+    },
+    {
+      "id": "231e",
+      "takoyaki": [
+        {
+          "menu_name": "takoyaki",
+          "price": 44,
+          "img_src": "/src/assets/menuimage/pain.jpg",
+          "description": "takoyaki"
+        }
+      ]
+    }
+  ],
   "OrderLists": [
     {
       "order_id": "012001",
@@ -162,6 +173,12 @@
           "quantity": 1,
           "price": 75,
           "details": "Unsweet"
+        },
+        {
+          "menu_name": "Latte",
+          "quantity": 2,
+          "price": 240,
+          "details": "Sweetened"
         }
       ],
       "id": "8202"
@@ -174,6 +191,18 @@
           "quantity": 1,
           "price": 75,
           "details": "Unsweet"
+        },
+        {
+          "menu_name": "Latte",
+          "quantity": 2,
+          "price": 240,
+          "details": "Sweetened"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 3,
+          "price": 270,
+          "details": "Extra sweet"
         },
         {
           "menu_name": "Latte",
@@ -211,26 +240,6 @@
       "selected": true,
       "Time": "3/21/2024 9:19:18 PM",
       "order_id": "012003"
-    },
-    {
-      "id": "e8e4",
-      "menu_name": "Americano",
-      "quantity": 1,
-      "price": 90,
-      "details": "Very sweet",
-      "selected": true,
-      "Time": "3/23/2024 3:14:29 PM",
-      "order_id": "012002"
-    },
-    {
-      "id": "e84e",
-      "menu_name": "Americano",
-      "quantity": 4,
-      "price": 360,
-      "details": "sweet",
-      "selected": true,
-      "Time": "3/23/2024 3:14:33 PM",
-      "order_id": "012002"
     }
   ],
   "Management": [
@@ -307,9 +316,6 @@
         }
       ],
       "id": "2000"
-    },
-    {
-      "id": "7961"
     }
   ],
   "Setting": ""

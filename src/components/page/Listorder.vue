@@ -126,7 +126,7 @@ function opernModalConfirm(order) {
                         <button
                             class="bg-sky-500 rounded-lg btn btn-md"
                             @click="
-                                ;(showModalConfirm = false),
+                                (showModalConfirm = false),
                                     (confirmStatus = true)
                             "
                         >
