@@ -300,16 +300,19 @@
     ],
     "Promotions": [
         {
+            "id": "1",
             "name": "Happy Hour",
             "menus": [{ "menuName": "Cappuccino", "quantity": 1 }],
             "discount": 8
         },
         {
+            "id": "2",
             "name": "Morning Delight",
             "menus": [{ "menuName": "Espresso", "quantity": 2 }],
             "discount": 5
         },
         {
+            "id": "3",
             "name": "Summer Lover",
             "menus": [
                 { "menuName": "Latte", "quantity": 1 },
