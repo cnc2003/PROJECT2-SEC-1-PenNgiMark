@@ -22,7 +22,7 @@ async function fetchData() {
 onMounted(fetchData)
 
 function serveOrder(order) {
-    const order_ID = order.order_id
+    const order_ID = order.order_number
     let restMenu = {}
 
     //History modal
@@ -30,7 +30,7 @@ function serveOrder(order) {
     const serveTime = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`
     const SelectedMenusWithTime = order.orders
         .filter((menu) => menu.selected)
-        .map((menu) => ({ ...menu, Time: serveTime, order_id: order_ID }))
+        .map((menu) => ({ ...menu, Time: serveTime, order_number: order_ID }))
     PostHistoryOrder(...SelectedMenusWithTime,"HistoryOrder")
     // console.log(...SelectedMenusWithTime)
 
@@ -47,7 +47,7 @@ function serveOrder(order) {
         })
     } else {
         restMenu = {
-            order_id: order_ID,
+            order_number: order_ID,
             orders: notSelectedMenus,
             id: order.id,
         }
@@ -147,7 +147,7 @@ function opernModalConfirm(order) {
                 <div class="flex flex-col justify-center items-center w-1/4">
                     <p class="font-bold">Order_ID</p>
                     <!-- ดึง ordermenu มาแสดง -->
-                    <div>{{ order.order_id }}</div>
+                    <div>{{ order.order_number }}</div>
                 </div>
                 <div class="flex w-full">
                     <div class="flex flex-wrap">

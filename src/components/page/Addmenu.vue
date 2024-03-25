@@ -8,12 +8,6 @@ import JsxIconBase from "../JsxIconBase.vue"
 const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
 
-// async function fetchMenuData() {
-//     filterResult.value = await getList("Menus") // is array
-//     for (const key in filterResult.value) {
-//         console.log(key)
-//     }
-// }
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
     console.log(filterResult.value)
@@ -21,33 +15,21 @@ async function fetchMenuData() {
 
 fetchMenuData()
 
-// function filterCategory(category) {
-//     if (filterResult.value.hasOwnProperty(category)) {
-//         afterFilterResult.value = { [category]: filterResult.value[category] }
-//         console.log(afterFilterResult.value)
-//     } else {
-//         afterFilterResult.value = filterResult.value
-//     }
-// }
-
-function filterCategory(inputcate) {
-    console.log(inputcate)
+function filterCategory(inputCategory) {
+    console.log(inputCategory)
     let t = null
-
-    if (inputcate === null || inputcate === "All") {
+    if (inputCategory === null || inputCategory === "All") {
         afterFilterResult.value = filterResult.value
     } else {
-        for (const cate in filterResult.value) {
-            const category = filterResult.value[cate] // category [ex index = 0,1,2,3,4,5]
-            for (const iterator in category) {
-                if (inputcate === iterator && inputcate !== undefined) {
-                    const menus = category[inputcate]
-                    t = menus
-                    console.log("menus :", menus) // menus in category
-                }
+        for (const data in filterResult.value) {
+            const categorykey = filterResult.value[data] // category in menu
+            // console.log(categorykey.category)
+
+            if (inputCategory === categorykey.category) {
+                console.log(categorykey)
+                afterFilterResult.value = [categorykey]
             }
         }
-        afterFilterResult.value = [{ [inputcate]: t }]
     }
 }
 
@@ -86,18 +68,18 @@ const paymentMethod = ref("")
         <section class="border-2 border-white w-3/4">
             this must be category list
             <div class="flex justify-center border-2 w-1/2 rounded-md">
-                <div class="bg-slate-300 p-4 m-2 rounded-md btn btn-md"
-                @click="filterCategory('All')"
-                >All</div>
-                <div v-for="category in filterResult" >
-                    <div
-                        v-for="(items, categoryName) in category"
-                        :key="items"
-                        @click="filterCategory(categoryName)"
-                        class="bg-slate-300 p-2 m-2  rounded-md btn btn-md"
-                    >
-                        {{ categoryName }}
-                    </div>
+                <div
+                    class="bg-slate-300 p-4 m-2 rounded-md btn btn-md"
+                    @click="filterCategory('All')"
+                >
+                    All
+                </div>
+                <div
+                    v-for="propoty in filterResult"
+                    class="bg-slate-300 p-2 m-2 rounded-md btn btn-md"
+                    @click="filterCategory(propoty.category)"
+                >
+                    {{ propoty.category }}
                 </div>
             </div>
 
@@ -106,42 +88,28 @@ const paymentMethod = ref("")
                 <!-- loop category -->
 
                 <div
-                    name="container"
-                    class="w-full h-[90%] flex flex-wrap gap-4 overflow-auto"
+                    v-for="(itemList, category) in afterFilterResult === null
+                        ? filterResult
+                        : afterFilterResult"
+                    :key="category"
+                    class="flex flex-wrap w-full h-auto gap-2"
                 >
-                    <!-- Dynamic rendering of menu items based on selected category -->
+                    <!-- แสดงชื่อ category -->
+                    <h2 class="w-full font-mono text-lg font-semibold">
+                        {{ itemList.category }}
+                    </h2>
+                    <!-- แสดง menu items ในแต่ละ category -->
                     <div
-                        v-for="(itemList, category) in afterFilterResult ===
-                        null
-                            ? filterResult
-                            : afterFilterResult"
-                        :key="category"
-                        class="flex flex-col w-full h-auto gap-2"
+                        v-for="(items, key) in itemList.menus"
+                        :key="key"
+                        name="menuContainer"
+                        class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
                     >
-                        <!-- แสดงชื่อ category -->
-                        <h2
-                            v-for="(key, categoryName) in itemList"
-                            :key="key"
-                            class="w-full font-mono text-lg font-semibold"
-                        >
-                            {{ categoryName }}
-                        </h2>
-                        <!-- แสดง menu items ในแต่ละ category -->
                         <div
-                            v-for="(items, key) in itemList"
-                            :key="key"
-                            name="menuContainer"
-                            class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
+                            class="w-40 h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
                         >
-                            <div
-                                v-for="(item, key) in items"
-                                :key="key"
-                                class="w-[23%] h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
-                                @click="menuModalHandle(item)"
-                            >
-                                <p>{{ item.menu_name }}</p>
-                                <p>{{ item.price }}</p>
-                            </div>
+                            <p>{{ items.menu_name }}</p>
+                            <p>{{ items.price }}</p>
                         </div>
                     </div>
                 </div>

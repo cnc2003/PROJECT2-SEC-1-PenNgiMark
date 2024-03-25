@@ -1,7 +1,7 @@
 <script setup>
 // Import necessary modules
 import { computed, ref, resolveDirective, ssrContextKey } from "vue"
-import { getList, PutMenu } from "../../lib/fetch.js"
+import { getList, PostMenu } from "../../lib/fetch.js"
 
 // Define reactive variables
 const totalMenu = ref(0)
@@ -37,20 +37,14 @@ async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
     console.log(filterResult.value)
     for (const cate in filterResult.value) {
-        const category = filterResult.value[cate] // category [ex index = 0,1,2,3,4,5]
+        // cate [ex index = 0,1,2,3,4,5]
+        const category = filterResult.value[cate] // {id: '236e', takoyaki: Array(1)}
         console.log("category :", category)
-        for (const menuKey in category) {
-          console.log(menuKey);
-            const menus = category[menuKey]
-            totalMenu.value += menus.length
-            // console.log("menus :", menus) // menus in category
-            // for (const menu of menus) {
-            //     console.log(menu)
-              
-            // }
-        }
-      }
+        console.log(category.menus.length)
+        totalMenu.value += category.menus.length
+        console.log(totalMenu.value)
     }
+}
 
 async function fetchOrderData() {
     orderData.value = await getList("OrderLists")
@@ -67,26 +61,21 @@ fetchMenuData()
 fetchOrderData()
 
 // Function to filter categories
-function filterCategory(inputcate) {
-  console.log(inputcate);
-    let t = null;
-    
-    if (inputcate === null || inputcate === "All" ) {
-      afterFilterResult.value = filterResult.value;
+function filterCategory(inputCategory) {
+    console.log(inputCategory)
+    let t = null
+    if (inputCategory === null || inputCategory === "All") {
+        afterFilterResult.value = filterResult.value
     } else {
-        
+        for (const data in filterResult.value) {
+            const categorykey = filterResult.value[data] // category in menu
+            console.log(categorykey.category)
 
-        for (const cate in filterResult.value) {
-        const category = filterResult.value[cate]; // category [ex index = 0,1,2,3,4,5]
-        for (const iterator in category) {
-            if (inputcate === iterator && inputcate !== undefined) {
-                const menus = category[inputcate];
-                t = menus;
-                console.log("menus :", menus); // menus in category
+            if (inputCategory === categorykey.category) {
+                console.log(categorykey)
+                afterFilterResult.value = [categorykey]
             }
         }
-    }
-        afterFilterResult.value = [{[inputcate] : t}] ;
     }
 }
 
@@ -105,9 +94,9 @@ function calTotalOrder() {
 }
 
 // Calculate total menu items
-for (const category in filterResult.value) {
-    totalMenu.value += filterResult.value[category].length
-}
+// for (const category in filterResult.value) {
+//     totalMenu.value += filterResult.value[category].length
+// }
 
 // Menu modal handlerer
 function menuModalHandle(input) {
@@ -121,6 +110,7 @@ function menuModalHandle(input) {
         editingItem.value = input
         isMenuModal.value = true
         isEditMode.value = true
+        console.log(editingItem.value)
     }
 }
 
@@ -140,25 +130,7 @@ function confirmModalHandle(input) {
     if (input == "addMenu") {
         isConfirming.value = false
         isAddComplete.value = true
-        Addmenu()
     }
-    
-}
-function Addmenu() {
-    console.log(editingItem.value)
-
-  let temp = { 
-    [editingItem.value.new_category]: [
-                                        {
-                                          menu_name : editingItem.value.menu_name,
-                                          price: editingItem.value.price,
-                                          img_src:  editingItem.value.img_src,
-                                          description : editingItem.value.description
-                                        }
-                                      ]
-                                    }
-
-    PutMenu(temp, "Menus")
 }
 
 // Set HR style class
@@ -231,13 +203,10 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                 <!-- Generate options for each category -->
 
                                 <option
-                                    v-for="(categorykey) in filterResult"
-
+                                    v-for="(propoty, index) in filterResult"
+                                    :key="index"
                                 >
-                                <option v-for=" (Key, category ) in categorykey  " :key="Key">
-                                  {{ category }}
-                                </option>
-                                    
+                                    {{ propoty.category }}
                                 </option>
                             </select>
                         </div>
@@ -247,39 +216,37 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
 
                 <div
                     name="container"
-                    class="w-full h-[90%] flex flex-wrap gap-4 overflow-auto"
+                    class="w-full h-[70%] flex items-start flex-wrap gap-4 overflow-auto"
                 >
                     <!-- Dynamic rendering of menu items based on selected category -->
                     <div
-                        v-for="(itemList, category) in afterFilterResult === null
+                        v-for="(propoty, category) in afterFilterResult === null
                             ? filterResult
                             : afterFilterResult"
                         :key="category"
-                        class="flex flex-col w-full h-auto gap-2"
+                        class="flex flex-wrap w-full h-auto gap-2"
                     >
-                    
                         <!-- แสดงชื่อ category -->
-                        <h2 v-for="(key , categoryName) in itemList" :key="key"
-                        class="w-full font-mono text-lg font-semibold">{{ categoryName}} </h2>
+                        <h2 class="w-full font-mono text-lg font-semibold">
+                            {{ propoty.category }}
+                        </h2>
                         <!-- แสดง menu items ในแต่ละ category -->
                         <div
-                            v-for="(items , key) in itemList"
+                            v-for="(items, key) in propoty.menus"
                             :key="key"
                             name="menuContainer"
                             class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
                         >
-                            <div v-for="(item, key) in items"
-                            :key="key"
-                                class="w-[23%] h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
-                                @click="menuModalHandle(item)"
+                            <div
+                                class="w-40 h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
+                                @click="menuModalHandle(items)"
                             >
-                                <p>{{ item.menu_name }}</p>
-                                <p>{{ item.price }}</p>
+                                <p>{{ items.menu_name }}</p>
+                                <p>{{ items.price }}</p>
                             </div>
                         </div>
                     </div>
-                
-                  </div>
+                </div>
             </div>
 
             <!-- Management Modal -->
@@ -354,15 +321,14 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                                 <option disabled selected>
                                                     Select category
                                                 </option>
-                                                <option  v-for="(itemList, category) in afterFilterResult === null
-                                                  ? filterResult : afterFilterResult" :key="category">
                                                 <option
-                                                    v-for="(object, category) in itemList"
-                                                    :key="object"
+                                                    v-for="(
+                                                        propoty, index
+                                                    ) in filterResult"
+                                                    :key="index"
                                                 >
-                                                    {{ category }}
+                                                    {{ propoty.category }}
                                                 </option>
-                                              </option>
                                             </select>
                                         </div>
                                     </div>
