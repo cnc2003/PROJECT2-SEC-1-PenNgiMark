@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from "vue"
+import { ref, watch, computed, onMounted } from "vue"
 
 import { getList } from "../../lib/fetch.js"
 import CartList from "../CartList.vue"
@@ -9,8 +9,7 @@ const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
 const promotions = ref([])
 const discount = ref(0)
-const price = ref(0)
-const totalPrice = ref(0)
+const subtotalPrice = ref(0)
 
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
@@ -18,6 +17,15 @@ async function fetchMenuData() {
 }
 fetchMenuData()
 
+onMounted(async () => {
+    const [menusRes, promotionsRes] = await Promise.all([
+        getList("Menus"),
+        getList("Promotions"),
+    ])
+    fetchMenuData()
+    promotions.value = promotionsRes
+    // filterResult.value = menusRes
+})
 
 function filterCategory(inputCategory) {
     console.log(inputCategory)
@@ -65,7 +73,6 @@ const mocDrinks = [
 ]
 const menusInCart = ref(mocDrinks)
 
-
 const calculateDiscount = () => {
     let totalDiscount = 0
 
@@ -86,21 +93,25 @@ const calculateDiscount = () => {
     // return totalDiscount
 }
 
-const getTotalPrice = () => {
+const getSubtotalPrice = () => {
     let price = 0
     menusInCart.value.forEach((item) => {
         price += item.price * item.quantity
     })
-    return price
+    subtotalPrice.value = price
 }
 watch(
     () => menusInCart,
     (newCart) => {
         // console.log(newCart.value)
         calculateDiscount()
+        getSubtotalPrice()
     },
     { deep: true, immediate: true }
 )
+const totalPrice = computed(() => {
+    return subtotalPrice.value - discount.value
+})
 
 const paymentMethod = ref("")
 </script>
@@ -172,13 +183,20 @@ const paymentMethod = ref("")
             <div class="border-2 border-black m-2 h-1/5">
                 Payment Summary
                 <div class="flex justify-between">
-                    <p>Price</p>
-                    <p>{{ getTotalPrice() }}</p>
+                    <p>Subtotal</p>
+                    <p>{{ subtotalPrice }}</p>
                 </div>
                 <div class="flex justify-between">
                     <p>Discount</p>
                     <p>
                         {{ discount }}
+                    </p>
+                </div>
+                <hr class="mx-3"/>
+                <div class="flex justify-between">
+                    <p>Total Price</p>
+                    <p>
+                        {{ totalPrice }}
                     </p>
                 </div>
             </div>
