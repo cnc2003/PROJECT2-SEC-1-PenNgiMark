@@ -1,7 +1,9 @@
 <script setup>
 // Import necessary modules
+
 import { computed, ref, resolveDirective, ssrContextKey } from "vue"
 import { getList, PostMenu } from "../../lib/fetch.js"
+
 
 // Define reactive variables
 const totalMenu = ref(0)
@@ -18,6 +20,7 @@ const isConfirming = ref(false)
 // Filter variables
 const selectFilter = ref("")
 const filterResult = ref(null)
+
 let afterFilterResult = ref(null) // default value
 
 // Temp data for update
@@ -32,9 +35,11 @@ let afterFilterResult = ref(null) // default value
 //     img_src: editingItem.img_src,
 // }
 
+
 //fetch GET menulist
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
+
     console.log(filterResult.value)
     for (const cate in filterResult.value) {
         // cate [ex index = 0,1,2,3,4,5]
@@ -57,10 +62,18 @@ async function fetchOrderData() {
     // console.log(orderData.value)
 }
 
-fetchMenuData()
-fetchOrderData()
+onMounted(async () => {
+    const [menusRes, promotionsRes] = await Promise.all([
+        getList("Menus"),
+        getList("Promotions"),
+    ])
+    fetchMenuData()
+    promotions.value = promotionsRes
+    // filterResult.value = menusRes
+})
 
 // Function to filter categories
+
 function filterCategory(inputCategory) {
     console.log(inputCategory)
     let t = null
@@ -76,6 +89,7 @@ function filterCategory(inputCategory) {
                 afterFilterResult.value = [categorykey]
             }
         }
+
     }
 }
 
@@ -94,6 +108,7 @@ function calTotalOrder() {
 }
 
 // Calculate total menu items
+
 // for (const category in filterResult.value) {
 //     totalMenu.value += filterResult.value[category].length
 // }
@@ -111,6 +126,7 @@ function menuModalHandle(input) {
         isMenuModal.value = true
         isEditMode.value = true
         console.log(editingItem.value)
+
     }
 }
 
@@ -130,6 +146,48 @@ function confirmModalHandle(input) {
     if (input == "addMenu") {
         isConfirming.value = false
         isAddComplete.value = true
+    }
+}
+
+const editingPromo = ref({
+    id: undefined,
+    name: "",
+    menus: [],
+    discount: 0,
+})
+
+const colsePromoModal = () => {
+    isProModalOpen.value = false
+    editingPromo.value = {
+        id: undefined,
+        name: "",
+        menus: [],
+        discount: 0,
+    }
+}
+
+const openPromoModal = (promo) => {
+    editingPromo.value = promo
+    // editingPromo.value = {
+    //     id: promo.id,
+    //     name: promo.name,
+    //     menus: promo.menus,
+    //     discount: promo.discount,
+    // }
+    isProModalOpen.value = true
+}
+
+const updatePromo = (newPromo) => {
+    console.log(newPromo)
+    if (newPromo.id === undefined) {
+        newPromo.id = promotions.value.length
+        promotions.value.push(newPromo)
+    } else {
+        const index = promotions.value.findIndex(
+            (promo) => promo.id === newPromo.id
+        )
+        promotions.value[index] = newPromo
+
     }
 }
 
@@ -199,6 +257,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                 v-model="selectFilter"
                                 @change="filterCategory(selectFilter)"
                             >
+
                                 <option value="All">All</option>
                                 <!-- Generate options for each category -->
 
@@ -207,6 +266,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                     :key="index"
                                 >
                                     {{ propoty.category }}
+
                                 </option>
                             </select>
                         </div>
@@ -234,6 +294,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                         <div
                             v-for="(items, key) in propoty.menus"
                             :key="key"
+
                             name="menuContainer"
                             class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
                         >
@@ -243,6 +304,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                             >
                                 <p>{{ items.menu_name }}</p>
                                 <p>{{ items.price }}</p>
+
                             </div>
                         </div>
                     </div>
@@ -328,6 +390,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                                     :key="index"
                                                 >
                                                     {{ propoty.category }}
+
                                                 </option>
                                             </select>
                                         </div>
@@ -437,6 +500,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                             {{ isEditMode ? "Update" : "Create" }}
                         </button>
                     </div>
+
                 </div>
             </div>
 
@@ -504,6 +568,62 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
             <!----------------------->
             <!-- Promotion Section -->
             <!----------------------->
+            <div
+                class="h-[70%] shrink-0 w-11/12 rounded-md p-4 bg-slate-100 my-10"
+            >
+                <div class="flex justify-between">
+                    <div class="flex text-2xl font-mono">
+                        <h1 class="font-semibold">Promotion</h1>
+                        <span>({{ promotions.length }})</span>
+                    </div>
+                    <h1
+                        class="text-2xl font-mono font-semibold"
+                        @click="openPromoModal()"
+                    >
+                        Add New Promotion
+                    </h1>
+                </div>
+                <div>
+                    <div class="grid grid-cols-3 justify-items-center">
+                        <h2>Name</h2>
+                        <h2>Drinks</h2>
+                        <h2>Discount</h2>
+                    </div>
+                    <div>
+                        <div
+                            v-for="pro in promotions"
+                            :key="pro.id"
+                            class="grid grid-cols-3 border border-gray-300 m-3 rounded-md pointer hover:scale-105 transition-all"
+                            @click="openPromoModal(pro)"
+                        >
+                            <div class="col-span-1 justify-self-center">
+                                {{ pro.name }}
+                            </div>
+                            <div class="col-span-1 pl-20">
+                                <ul class="list-disc">
+                                    <li
+                                        v-for="(menu, index) in pro.menus"
+                                        :key="index"
+                                    >
+                                        {{ menu.menuName }} x
+                                        {{ menu.quantity }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-span-1 justify-self-center">
+                                {{ pro.discount }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="isProModalOpen">
+                <PromoModal
+                    @closeModal="colsePromoModal"
+                    @savePromotion="updatePromo"
+                    :promotion="editingPromo"
+                />
+            </div>
         </div>
     </Suspense>
 </template>

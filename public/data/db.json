@@ -177,6 +177,7 @@
             "id": "8202"
         },
         {
+
             "order_number": "012002",
             "orders": [
                 {
@@ -193,6 +194,7 @@
                 },
                 {
                     "menu_name": "Americano",
+
                     "quantity": 3,
                     "price": 270,
                     "details": "Extra sweet"
@@ -223,6 +225,7 @@
             "selected": true,
             "Time": "3/21/2024 9:19:00 PM",
             "order_id": "012003"
+
         },
         {
             "id": "b16c",
@@ -233,9 +236,7 @@
             "selected": true,
             "Time": "3/21/2024 9:19:18 PM",
             "order_id": "012003"
-        },
-        {
-            "id": "e581",
+        }
             "menu_name": "Latte",
             "quantity": 2,
             "price": 240,
@@ -319,6 +320,29 @@
                 }
             ],
             "id": "2000"
+        },
+    ],
+    "Promotions": [
+        {
+            "id": "1",
+            "name": "Happy Hour",
+            "menus": [{ "menuName": "Cappuccino", "quantity": 1 }],
+            "discount": 8
+        },
+        {
+            "id": "2",
+            "name": "Morning Delight",
+            "menus": [{ "menuName": "Espresso", "quantity": 2 }],
+            "discount": 5
+        },
+        {
+            "id": "3",
+            "name": "Summer Lover",
+            "menus": [
+                { "menuName": "Latte", "quantity": 1 },
+                { "menuName": "Mocha", "quantity": 1 }
+            ],
+            "discount": 10
         }
     ],
     "Setting": ""
