@@ -1,9 +1,9 @@
 <script setup>
 // Import necessary modules
 
-import { computed, ref, resolveDirective, ssrContextKey } from "vue"
+import { computed, ref, onMounted, resolveDirective, ssrContextKey } from "vue"
 import { getList, PostMenu } from "../../lib/fetch.js"
-
+import PromoModal from "../PromoModal.vue"
 
 // Define reactive variables
 const totalMenu = ref(0)
@@ -22,6 +22,8 @@ const selectFilter = ref("")
 const filterResult = ref(null)
 
 let afterFilterResult = ref(null) // default value
+const promotions = ref([])
+const isProModalOpen = ref(false)
 
 // Temp data for update
 // INPROGRESS
@@ -34,7 +36,6 @@ let afterFilterResult = ref(null) // default value
 //     price: editingItem.price,
 //     img_src: editingItem.img_src,
 // }
-
 
 //fetch GET menulist
 async function fetchMenuData() {
@@ -89,7 +90,6 @@ function filterCategory(inputCategory) {
                 afterFilterResult.value = [categorykey]
             }
         }
-
     }
 }
 
@@ -126,7 +126,6 @@ function menuModalHandle(input) {
         isMenuModal.value = true
         isEditMode.value = true
         console.log(editingItem.value)
-
     }
 }
 
@@ -187,7 +186,6 @@ const updatePromo = (newPromo) => {
             (promo) => promo.id === newPromo.id
         )
         promotions.value[index] = newPromo
-
     }
 }
 
@@ -257,7 +255,6 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                 v-model="selectFilter"
                                 @change="filterCategory(selectFilter)"
                             >
-
                                 <option value="All">All</option>
                                 <!-- Generate options for each category -->
 
@@ -266,7 +263,6 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                     :key="index"
                                 >
                                     {{ propoty.category }}
-
                                 </option>
                             </select>
                         </div>
@@ -294,7 +290,6 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                         <div
                             v-for="(items, key) in propoty.menus"
                             :key="key"
-
                             name="menuContainer"
                             class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
                         >
@@ -304,7 +299,6 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                             >
                                 <p>{{ items.menu_name }}</p>
                                 <p>{{ items.price }}</p>
-
                             </div>
                         </div>
                     </div>
@@ -390,7 +384,6 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                                     :key="index"
                                                 >
                                                     {{ propoty.category }}
-
                                                 </option>
                                             </select>
                                         </div>
@@ -500,7 +493,6 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                             {{ isEditMode ? "Update" : "Create" }}
                         </button>
                     </div>
-
                 </div>
             </div>
 
