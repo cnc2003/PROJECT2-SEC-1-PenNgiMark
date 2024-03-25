@@ -14,28 +14,26 @@ const totalPrice = ref(0)
 
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
-    for (const key in filterResult.value) {
-        console.log(key)
-    }
+    console.log(filterResult.value)
 }
-// fetchMenuData()
+fetchMenuData()
 
-onMounted(async () => {
-    const [menusRes, promotionsRes] = await Promise.all([
-        getList("Menus"),
-        getList("Promotions"),
-    ])
-    fetchMenuData()
-    promotions.value = promotionsRes
-    // filterResult.value = menusRes
-})
 
-function filterCategory(category) {
-    if (filterResult.value.hasOwnProperty(category)) {
-        afterFilterResult.value = { [category]: filterResult.value[category] }
-        console.log(afterFilterResult.value)
-    } else {
+function filterCategory(inputCategory) {
+    console.log(inputCategory)
+    let t = null
+    if (inputCategory === null || inputCategory === "All") {
         afterFilterResult.value = filterResult.value
+    } else {
+        for (const data in filterResult.value) {
+            const categorykey = filterResult.value[data] // category in menu
+            // console.log(categorykey.category)
+
+            if (inputCategory === categorykey.category) {
+                console.log(categorykey)
+                afterFilterResult.value = [categorykey]
+            }
+        }
     }
 }
 
@@ -66,6 +64,7 @@ const mocDrinks = [
     },
 ]
 const menusInCart = ref(mocDrinks)
+
 
 const calculateDiscount = () => {
     let totalDiscount = 0
@@ -109,18 +108,19 @@ const paymentMethod = ref("")
     <div class="flex h-full w-full">
         <section class="border-2 border-white w-3/4">
             this must be category list
-            <div class="flex border-2 w-1/2">
+            <div class="flex justify-center border-2 w-1/2 rounded-md">
                 <div
-                    v-for="(category, key) in filterResult"
-                    :key="category"
-                    class="p-3 rounded-md"
+                    class="bg-slate-300 p-4 m-2 rounded-md btn btn-md"
+                    @click="filterCategory('All')"
                 >
-                    <div
-                        @click="filterCategory(key)"
-                        class="bg-slate-300 p-2 rounded-md"
-                    >
-                        {{ key }}
-                    </div>
+                    All
+                </div>
+                <div
+                    v-for="propoty in filterResult"
+                    class="bg-slate-300 p-2 m-2 rounded-md btn btn-md"
+                    @click="filterCategory(propoty.category)"
+                >
+                    {{ propoty.category }}
                 </div>
             </div>
 
@@ -129,17 +129,28 @@ const paymentMethod = ref("")
                 <!-- loop category -->
 
                 <div
-                    v-for="(category, key) in afterFilterResult === null
+                    v-for="(itemList, category) in afterFilterResult === null
                         ? filterResult
                         : afterFilterResult"
-                    :key="key"
-                    class="p-3 rounded-md"
+                    :key="category"
+                    class="flex flex-wrap w-full h-auto gap-2"
                 >
-                    <!-- loop menulist in category  -->
-                    <div v-for="menus in category" class="border-2 p-2 m-1">
-                        <!-- loop menu in menulist  -->
-                        <div v-for="menu in menus">
-                            <div>{{ menu }}</div>
+                    <!-- แสดงชื่อ category -->
+                    <h2 class="w-full font-mono text-lg font-semibold">
+                        {{ itemList.category }}
+                    </h2>
+                    <!-- แสดง menu items ในแต่ละ category -->
+                    <div
+                        v-for="(items, key) in itemList.menus"
+                        :key="key"
+                        name="menuContainer"
+                        class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
+                    >
+                        <div
+                            class="w-40 h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
+                        >
+                            <p>{{ items.menu_name }}</p>
+                            <p>{{ items.price }}</p>
                         </div>
                     </div>
                 </div>

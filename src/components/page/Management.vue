@@ -1,9 +1,9 @@
 <script setup>
 // Import necessary modules
-import { computed, onMounted, ref, resolveDirective, ssrContextKey } from "vue"
-import orderList from "../../../public/data/orderlist.json"
-import { getList } from "../../lib/fetch.js"
-import PromoModal from "../PromoModal.vue"
+
+import { computed, ref, resolveDirective, ssrContextKey } from "vue"
+import { getList, PostMenu } from "../../lib/fetch.js"
+
 
 // Define reactive variables
 const totalMenu = ref(0)
@@ -20,45 +20,47 @@ const isConfirming = ref(false)
 // Filter variables
 const selectFilter = ref("")
 const filterResult = ref(null)
-const afterFilterResult = ref(null) // default value
-const promotions = ref([])
-const isProModalOpen = ref(false)
+
+let afterFilterResult = ref(null) // default value
 
 // Temp data for update
 // INPROGRESS
-const tempMenu = {
-    menu_name: editingItem.menu_name,
-    category: editingItem.new_category
-        ? editingItem.new_category
-        : editingItem.category,
-    description: editingItem.description,
-    price: editingItem.price,
-    img_src: editingItem.img_src,
-}
+// const tempMenu = {
+//     menu_name: editingItem.menu_name,
+//     category: editingItem.new_category
+//         ? editingItem.new_category
+//         : editingItem.category,
+//     description: editingItem.description,
+//     price: editingItem.price,
+//     img_src: editingItem.img_src,
+// }
+
 
 //fetch GET menulist
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
-    // console.log(filterResult.value)
-    for (const cate in filterResult.value) {
-        totalMenu.value += cate.length
-    }
+
     console.log(filterResult.value)
+    for (const cate in filterResult.value) {
+        // cate [ex index = 0,1,2,3,4,5]
+        const category = filterResult.value[cate] // {id: '236e', takoyaki: Array(1)}
+        console.log("category :", category)
+        console.log(category.menus.length)
+        totalMenu.value += category.menus.length
+        console.log(totalMenu.value)
+    }
 }
 
-// async function fetchOrderData() {
-//     orderData.value = await getOrderlist()
-//     totalOrder.value = orderData.value.length
-//     console.log(totalSold.value)
-//     calTotalOrder()
-//     // console.log("----------")
-//     // console.log(totalSold.value)
-//     // console.log(totalOrder.value)
-//     // console.log(orderData.value)
-// }
-
-// fetchMenuData()
-// fetchOrderData()
+async function fetchOrderData() {
+    orderData.value = await getList("OrderLists")
+    totalOrder.value = orderData.value.length
+    console.log(totalSold.value)
+    calTotalOrder()
+    // console.log("----------")
+    // console.log(totalSold.value)
+    // console.log(totalOrder.value)
+    // console.log(orderData.value)
+}
 
 onMounted(async () => {
     const [menusRes, promotionsRes] = await Promise.all([
@@ -71,12 +73,23 @@ onMounted(async () => {
 })
 
 // Function to filter categories
-function filterCategory(category) {
-    if (filterResult.value.hasOwnProperty(category)) {
-        afterFilterResult.value = { [category]: filterResult.value[category] }
-        console.log(afterFilterResult.value)
-    } else {
+
+function filterCategory(inputCategory) {
+    console.log(inputCategory)
+    let t = null
+    if (inputCategory === null || inputCategory === "All") {
         afterFilterResult.value = filterResult.value
+    } else {
+        for (const data in filterResult.value) {
+            const categorykey = filterResult.value[data] // category in menu
+            console.log(categorykey.category)
+
+            if (inputCategory === categorykey.category) {
+                console.log(categorykey)
+                afterFilterResult.value = [categorykey]
+            }
+        }
+
     }
 }
 
@@ -95,9 +108,10 @@ function calTotalOrder() {
 }
 
 // Calculate total menu items
-for (const category in filterResult.value) {
-    totalMenu.value += filterResult.value[category].length
-}
+
+// for (const category in filterResult.value) {
+//     totalMenu.value += filterResult.value[category].length
+// }
 
 // Menu modal handlerer
 function menuModalHandle(input) {
@@ -111,6 +125,8 @@ function menuModalHandle(input) {
         editingItem.value = input
         isMenuModal.value = true
         isEditMode.value = true
+        console.log(editingItem.value)
+
     }
 }
 
@@ -171,6 +187,7 @@ const updatePromo = (newPromo) => {
             (promo) => promo.id === newPromo.id
         )
         promotions.value[index] = newPromo
+
     }
 }
 
@@ -221,6 +238,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                         <h1 class="text-2xl font-mono font-semibold">
                             Management
                         </h1>
+
                         <div class="flex flex-row gap-2 w-2/5 justify-end">
                             <button
                                 class="btn btn-sm"
@@ -239,13 +257,16 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                 v-model="selectFilter"
                                 @change="filterCategory(selectFilter)"
                             >
-                                <option value="">All</option>
+
+                                <option value="All">All</option>
                                 <!-- Generate options for each category -->
+
                                 <option
-                                    v-for="(category, key) in filterResult"
-                                    :key="category"
+                                    v-for="(propoty, index) in filterResult"
+                                    :key="index"
                                 >
-                                    {{ key }}
+                                    {{ propoty.category }}
+
                                 </option>
                             </select>
                         </div>
@@ -255,36 +276,35 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
 
                 <div
                     name="container"
-                    class="w-full h-[90%] flex flex-wrap gap-4 overflow-auto"
+                    class="w-full h-[70%] flex items-start flex-wrap gap-4 overflow-auto"
                 >
                     <!-- Dynamic rendering of menu items based on selected category -->
                     <div
-                        v-for="(itemList, category) in afterFilterResult ===
-                        null
+                        v-for="(propoty, category) in afterFilterResult === null
                             ? filterResult
                             : afterFilterResult"
-                        :name="category"
                         :key="category"
-                        class="flex flex-col w-full h-auto gap-2"
+                        class="flex flex-wrap w-full h-auto gap-2"
                     >
-                        <h2
-                            v-text="category"
-                            class="w-full font-mono text-lg font-semibold"
-                        ></h2>
-                        <!-- Menu items within each category -->
+                        <!-- แสดงชื่อ category -->
+                        <h2 class="w-full font-mono text-lg font-semibold">
+                            {{ propoty.category }}
+                        </h2>
+                        <!-- แสดง menu items ในแต่ละ category -->
                         <div
+                            v-for="(items, key) in propoty.menus"
+                            :key="key"
+
                             name="menuContainer"
                             class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
                         >
                             <div
-                                v-for="item in itemList"
-                                :key="item"
-                                class="w-[23%] h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
-                                @click="menuModalHandle(item)"
+                                class="w-40 h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
+                                @click="menuModalHandle(items)"
                             >
-                                <p>{{ item.menu_name }}</p>
-                                <p>{{ item.price }}</p>
-                                <p>{{ category }}</p>
+                                <p>{{ items.menu_name }}</p>
+                                <p>{{ items.price }}</p>
+
                             </div>
                         </div>
                     </div>
@@ -365,11 +385,12 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                                 </option>
                                                 <option
                                                     v-for="(
-                                                        object, category
+                                                        propoty, index
                                                     ) in filterResult"
-                                                    :key="object"
+                                                    :key="index"
                                                 >
-                                                    {{ category }}
+                                                    {{ propoty.category }}
+
                                                 </option>
                                             </select>
                                         </div>
@@ -479,6 +500,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                             {{ isEditMode ? "Update" : "Create" }}
                         </button>
                     </div>
+
                 </div>
             </div>
 

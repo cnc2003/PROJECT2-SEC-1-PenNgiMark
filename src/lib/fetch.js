@@ -22,6 +22,28 @@ async function PostHistoryOrder(SelectedMenusWithTime,path) {
 
 }
 
+async function PostMenu(filterResult,path) {
+  await fetch(`${url}${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(filterResult),
+  })
+
+}
+
+async function PutMenu() {
+  await fetch("http://localhost:5000/Menus/236e", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({Tako:"tako"}),
+  })
+
+}
+// PutMenu()
 // DeleteMenuInOrder (ListOrder Page)
 async function DeleteMenuInOrder(restMenu, id) {
   await fetch(`${url}OrderLists/${id}`, {
@@ -41,5 +63,5 @@ async function DeleteOrder(id) {
   })
 }
 
-export { getList ,PostHistoryOrder, DeleteMenuInOrder, DeleteOrder}
+export { getList ,PostHistoryOrder, DeleteMenuInOrder, DeleteOrder,PostMenu}
 

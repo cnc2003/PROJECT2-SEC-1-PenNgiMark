@@ -22,7 +22,7 @@ async function fetchData() {
 onMounted(fetchData)
 
 function serveOrder(order) {
-    const order_ID = order.order_id
+    const order_ID = order.order_number
     let restMenu = {}
 
     //History modal
@@ -30,7 +30,7 @@ function serveOrder(order) {
     const serveTime = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`
     const SelectedMenusWithTime = order.orders
         .filter((menu) => menu.selected)
-        .map((menu) => ({ ...menu, Time: serveTime, order_id: order_ID }))
+        .map((menu) => ({ ...menu, Time: serveTime, order_number: order_ID }))
     PostHistoryOrder(...SelectedMenusWithTime,"HistoryOrder")
     // console.log(...SelectedMenusWithTime)
 
@@ -47,7 +47,7 @@ function serveOrder(order) {
         })
     } else {
         restMenu = {
-            order_id: order_ID,
+            order_number: order_ID,
             orders: notSelectedMenus,
             id: order.id,
         }
@@ -107,7 +107,7 @@ function opernModalConfirm(order) {
         >
             <div class="w-lvw h-lvh bg-black bg-opacity-50"></div>
             <div
-                class="fixed w-1/4 h-2/6 bg-white rounded-xl flex flex-col items-center indicator"
+                class="fixed w-1/4 h-1/4 bg-white rounded-xl flex flex-col items-center indicator"
             >
                 <div class="flex flex-col">
                     <div class="text-xl border-b-4 mt-4 mb-3 flex justify-center">Confirm Menu</div>
@@ -126,7 +126,7 @@ function opernModalConfirm(order) {
                         <button
                             class="bg-sky-500 rounded-lg btn btn-md"
                             @click="
-                                ;(showModalConfirm = false),
+                                (showModalConfirm = false),
                                     (confirmStatus = true)
                             "
                         >
@@ -147,7 +147,7 @@ function opernModalConfirm(order) {
                 <div class="flex flex-col justify-center items-center w-1/4">
                     <p class="font-bold">Order_ID</p>
                     <!-- ดึง ordermenu มาแสดง -->
-                    <div>{{ order.order_id }}</div>
+                    <div>{{ order.order_number }}</div>
                 </div>
                 <div class="flex w-full">
                     <div class="flex flex-wrap">
