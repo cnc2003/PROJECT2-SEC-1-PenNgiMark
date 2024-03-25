@@ -2,6 +2,7 @@
 import { ref, computed } from "vue"
 import CartCard from "./CartCard.vue"
 import JsxIconBase from "./JsxIconBase.vue"
+import SearchInput from "./SearchInput.vue"
 const emits = defineEmits(["closeModal", "savePromotion"])
 const props = defineProps({
     promotion: {
@@ -13,6 +14,7 @@ const props = defineProps({
             discount: 0,
         },
     },
+    drinks: {type: Array, required: true},
 })
 
 // if (!props.promotion){}
@@ -71,19 +73,13 @@ const removeMenu = (index) => {
                     class="border border-gray-300 rounded-md max-w-lg ml-8 my-1 p-2"
                 >
                     <template #drinkName>
-                        <input
+                        <!-- <input
                             type="text"
                             v-model.trim="menu.menuName"
                             class="p-0.5 border border-gray-300 rounded-lg outline-none"
-                        />
+                        /> -->
+                        <SearchInput :drinks="props.drinks" :editingMenu="menu" class="z-20"/>
                     </template>
-                    <!-- <template #sweet>
-                        <input
-                            type="number"
-                            v-model.number="menu.quantity"
-                            class="p-0.5 border border-gray-300 rounded-lg outline-none"
-                        />
-                    </template> -->
                     <template #quantity>
                         <!-- <button @click="removeMenu(index)">X</button> -->
                         <button

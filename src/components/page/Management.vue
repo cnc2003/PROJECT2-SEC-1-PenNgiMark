@@ -625,6 +625,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                 <PromoModal
                     @closeModal="colsePromoModal"
                     @savePromotion="updatePromo"
+                    :drinks="filterResult"
                     :promotion="editingPromo"
                 />
             </div>
