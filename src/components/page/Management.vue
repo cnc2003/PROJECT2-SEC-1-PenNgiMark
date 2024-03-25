@@ -4,6 +4,7 @@
 import { computed, ref, onMounted, resolveDirective, ssrContextKey } from "vue"
 import { getList, PostMenu } from "../../lib/fetch.js"
 import PromoModal from "../PromoModal.vue"
+import MenuBaseCard from "../MenuBaseCard.vue"
 
 // Define reactive variables
 const totalMenu = ref(0)
@@ -293,12 +294,15 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                             name="menuContainer"
                             class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
                         >
-                            <div
-                                class="w-40 h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
-                                @click="menuModalHandle(items)"
-                            >
-                                <p>{{ items.menu_name }}</p>
-                                <p>{{ items.price }}</p>
+                            <div @click="menuModalHandle(items)">
+                                <MenuBaseCard variant="menuList">
+                                    <template #title>
+                                        <b>{{ items.menu_name }}</b>
+                                    </template>
+                                    <template #price>
+                                        <p>{{ items.price }}</p>
+                                    </template>
+                                </MenuBaseCard>
                             </div>
                         </div>
                     </div>
@@ -597,8 +601,16 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                         v-for="(menu, index) in pro.menus"
                                         :key="index"
                                     >
-                                        {{ menu.menuName }} x
-                                        {{ menu.quantity }}
+                                        <MenuBaseCard variant="promotion">
+                                            <template #title>
+                                                <b>{{ menu.menuName }}</b>
+                                            </template>
+                                            <template #price>
+                                                <p>
+                                                    &nbsp x {{ menu.quantity }}
+                                                </p>
+                                            </template>
+                                        </MenuBaseCard>
                                     </li>
                                 </ul>
                             </div>
