@@ -53,7 +53,7 @@ async function PostMenu(filterResult, path) {
 // =========================================
 async function addNewCategory(categoryData) {
   try {
-      const response = await fetch(`${url}/Menus`, {
+      const response = await fetch(`${url}Menus`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -74,7 +74,7 @@ async function addNewCategory(categoryData) {
 
 async function addNewMenu(categoryId, newMenuData) {
   try {
-      const response = await fetch(`${url}/Menus`, {
+      const response = await fetch(`${url}Menus/${categoryId}`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -97,7 +97,7 @@ async function addNewMenu(categoryId, newMenuData) {
 
 async function DeleteMenu(categoryId, menuName) {
   try {
-      const response = await fetch(`${url}/Menus/${categoryId}/menus/${menuName}`, {
+      const response = await fetch(`${url}Menus/${categoryId}/menus/${menuName}`, {
           method: 'DELETE'
       });
 
