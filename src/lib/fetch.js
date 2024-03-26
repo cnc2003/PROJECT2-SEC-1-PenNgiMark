@@ -97,7 +97,7 @@ async function addNewMenu(categoryId, newMenuData) {
 
 async function DeleteMenu(categoryId, menuName) {
   try {
-      const response = await fetch(`${url}/Menus/${categoryId}/menus/${menuId}`, {
+      const response = await fetch(`${url}/Menus/${categoryId}/menus/${menuName}`, {
           method: 'DELETE'
       });
 
