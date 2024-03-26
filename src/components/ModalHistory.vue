@@ -67,7 +67,7 @@ watch(
                     >
                         <tr class="grid grid-cols-9 ">
                             <td class="col-span-3 flex justify-center">{{ order.Time }}</td>
-                            <td class="flex justify-center">{{ order.order_id }}</td>
+                            <td class="flex justify-center">{{ order.order_number }}</td>
                             <td class="col-span-2 flex justify-center">{{ order.menu_name }}</td>
                             <td class="flex justify-center">{{ order.quantity }}</td>
                             <td class="flex justify-center">{{ order.details }}</td>

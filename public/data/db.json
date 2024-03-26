@@ -178,12 +178,6 @@
           "quantity": 2,
           "price": 240,
           "details": "Sweetened"
-        },
-        {
-          "menu_name": "Americano",
-          "quantity": 3,
-          "price": 270,
-          "details": "Extra sweet"
         }
       ],
       "id": "0357"
@@ -198,7 +192,7 @@
       "details": "Unsweet",
       "selected": true,
       "Time": "3/21/2024 9:19:00 PM",
-      "order_id": "012003"
+      "order_number": "012003"
     },
     {
       "id": "b16c",
@@ -208,7 +202,7 @@
       "details": "Sweetened",
       "selected": true,
       "Time": "3/21/2024 9:19:18 PM",
-      "order_id": "012003"
+      "order_number": "012003"
     },
     {
       "id": "6d06",
@@ -218,6 +212,16 @@
       "details": "Unsweet",
       "selected": true,
       "Time": "3/25/2024 6:23:40 PM",
+      "order_number": "012002"
+    },
+    {
+      "id": "8e89",
+      "menu_name": "Americano",
+      "quantity": 3,
+      "price": 270,
+      "details": "Extra sweet",
+      "selected": true,
+      "Time": "3/26/2024 9:46:19 AM",
       "order_number": "012002"
     }
   ],
