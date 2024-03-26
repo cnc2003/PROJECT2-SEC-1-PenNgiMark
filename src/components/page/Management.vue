@@ -42,26 +42,26 @@ const isProModalOpen = ref(false)
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
 
-    console.log(filterResult.value)
+    //console.log(filterResult.value)
     for (const cate in filterResult.value) {
         // cate [ex index = 0,1,2,3,4,5]
         const category = filterResult.value[cate] // {id: '236e', takoyaki: Array(1)}
-        console.log("category :", category)
-        console.log(category.menus.length)
+        //console.log("category :", category)
+        //console.log(category.menus.length)
         totalMenu.value += category.menus.length
-        console.log(totalMenu.value)
+        //console.log(totalMenu.value)
     }
 }
 
 async function fetchOrderData() {
     orderData.value = await getList("OrderLists")
     totalOrder.value = orderData.value.length
-    console.log(totalSold.value)
+    //console.log(totalSold.value)
     calTotalOrder()
-    // console.log("----------")
-    // console.log(totalSold.value)
-    // console.log(totalOrder.value)
-    // console.log(orderData.value)
+    // //console.log("----------")
+    // //console.log(totalSold.value)
+    // //console.log(totalOrder.value)
+    // //console.log(orderData.value)
 }
 
 onMounted(async () => {
@@ -77,17 +77,17 @@ onMounted(async () => {
 // Function to filter categories
 
 function filterCategory(inputCategory) {
-    console.log(inputCategory)
+    //console.log(inputCategory)
     let t = null
     if (inputCategory === null || inputCategory === "All") {
         afterFilterResult.value = filterResult.value
     } else {
         for (const data in filterResult.value) {
             const categorykey = filterResult.value[data] // category in menu
-            console.log(categorykey.category)
+            //console.log(categorykey.category)
 
             if (inputCategory === categorykey.category) {
-                console.log(categorykey)
+                //console.log(categorykey)
                 afterFilterResult.value = [categorykey]
             }
         }
@@ -105,7 +105,7 @@ function calTotalOrder() {
     const totalQuantities = [...orderQuantities]
     totalSold.value = totalQuantities.reduce((acc, curr) => acc + curr, 0)
 
-    console.log(totalSold.value)
+    //console.log(totalSold.value)
 }
 
 // Calculate total menu items
@@ -126,7 +126,7 @@ function menuModalHandle(input) {
         editingItem.value = input
         isMenuModal.value = true
         isEditMode.value = true
-        console.log(editingItem.value)
+        //console.log(editingItem.value)
     }
 }
 
@@ -146,6 +146,8 @@ function confirmModalHandle(input) {
     if (input == "addMenu") {
         isConfirming.value = false
         isAddComplete.value = true
+        
+        console.log(editingItem.value)
     }
 }
 
@@ -178,7 +180,7 @@ const openPromoModal = (promo) => {
 }
 
 const updatePromo = (newPromo) => {
-    console.log(newPromo)
+    //console.log(newPromo)
     if (newPromo.id === undefined) {
         newPromo.id = promotions.value.length
         promotions.value.push(newPromo)
