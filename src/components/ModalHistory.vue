@@ -37,7 +37,7 @@ watch(
 
         <!-- modal content -->
         <div
-            class="fixed w-2/4 h-[40%] bg-white rounded-xl flex flex-col items-center"
+            class="fixed w-2/4 h-[35%] bg-white rounded-xl flex flex-col items-center"
         >
             <div>
                 <div class="flex">
@@ -46,8 +46,8 @@ watch(
                     </div>
                     <!-- close button -->
                     <img
-                        class="h-6 p-1 btn rounded-lg absolute top-2 right-2 hover:cursor-pointer bg-red-500"
-                        @click="emits('close')"
+                        class="h- p-1 btn rounded-lg absolute top-2 right-2 hover:cursor-pointer bg-red-600"
+                        @click="emits('close',false)"
                         src="/src/assets/icon/cross.png"
                     />
                 </div>
@@ -60,7 +60,7 @@ watch(
                         <th>Quantity</th>
                         <th>Detail</th>
                     </tr>
-                    <div v-if="HistoryOrder.length > 0" class="h-96 overflow-x-scroll">
+                    <div v-if="HistoryOrder.length > 0" class="h-60 overflow-x-scroll">
                     <div
                         
                         v-for="(order, index) in HistoryOrder"

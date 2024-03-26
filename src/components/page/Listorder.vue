@@ -7,6 +7,7 @@ import {
     getList,
 } from "../../lib/fetch.js"
 import ModalHistory from "../ModalHistory.vue"
+import ModalConfirm from "../ModalConfirm.vue"
 
 // define variable
 let orderListBefore = ref([])
@@ -80,9 +81,10 @@ function tuggleSelection(order_menu) {
     order_menu.selected = !order_menu.selected
 }
 
-function opernModalConfirm(order) {
+function openModalConfirm(order) {
     showModalConfirm.value = true
     console.log(order)
+    console.log(showModalConfirm.value);
 
     if (confirmStatus.value === false) {
         // รอจนกว่าค่า confirm จะเป็น true
@@ -96,6 +98,9 @@ function opernModalConfirm(order) {
         }, 100) // ตรวจสอบทุก 100 milliseconds
     }
 }
+
+// เมื่อได้รับการยืนยันการทำงานจาก ModalConfirm.vue
+
 </script>
 <template>
     <button
@@ -107,46 +112,15 @@ function opernModalConfirm(order) {
 
     <!-- ModalHistory -->
     <div v-show="showModalHistory">
-        <ModalHistory :data="ReloadHistory" @close="showModalHistory = false" />
+        <ModalHistory :data="ReloadHistory" @close="showModalHistory = $event" />
     </div>
 
     <!-- ModalComfirm -->
     <div v-show="showModalConfirm">
-        <div
-            class="fixed w-screen h-screen top-0 left-0 flex justify-center items-center"
-        >
-            <div class="w-lvw h-lvh bg-black bg-opacity-50"></div>
-            <div
-                class="fixed w-1/4 h-[30%] bg-white rounded-xl flex flex-col items-center indicator"
-            >
-                <div class="flex flex-col">
-                    <div class="text-xl border-b-4 mt-2 flex justify-center">
-                        Confirm Menu
-                    </div>
-                    <!-- modal content -->
-                    <div class="mb-12 mt-10">Do you confirm to serve Menu?</div>
-                    <!-- button -->
-                    <div class="flex justify-center">
-                        <button
-                            class="bg-red-500 rounded-lg btn btn-md mr-10"
-                            @click="showModalConfirm = false"
-                        >
-                            cancle
-                        </button>
-                        <button
-                            class="bg-sky-500 rounded-lg btn btn-md"
-                            @click="
-                                ;(showModalConfirm = false),
-                                    (confirmStatus = true)
-                            "
-                        >
-                            serve
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- <ModalConfirm @close="showModalConfirm = $event" @serve="confirmStatus = $event"/> -->
+        <ModalConfirm @close="showModalConfirm = $event" @serve="confirmStatus = $event" />
     </div>
+    
 
     <!-- main -->
     <div
@@ -198,13 +172,13 @@ function opernModalConfirm(order) {
                 </div>
                 <!-- <button
                     class="bg-[#00E3FE] w-1/4 rounded-lg"
-                    @click="opernModalConfirm(order)"
+                    @click="openModalConfirm(order)"
                 >
                     Serve
                 </button> -->
                 <button
                     class="bg-[#00E3FE] w-1/4 rounded-lg"
-                    @click="opernModalConfirm(order)"
+                    @click="openModalConfirm(order)"
                     :disabled="
                         order.orders.filter((menu) => menu.selected).length ===
                         0
