@@ -314,7 +314,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                             name="menuContainer"
                             class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
                         >
-                            <div @click="menuModalHandle()">
+                            <div @click="menuModalHandle(items)">
                                 <MenuBaseCard variant="menuList">
                                     <template #title>
                                         <b>{{ items.menu_name }}</b>
