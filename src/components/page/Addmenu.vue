@@ -1,16 +1,16 @@
 <script setup>
-import { ref, watch, onMounted } from "vue"
+import { ref, watch, computed, onMounted } from "vue"
 
 import { getList } from "../../lib/fetch.js"
 import CartList from "../CartList.vue"
 import JsxIconBase from "../JsxIconBase.vue"
+import MenuBaseCard from "../MenuBaseCard.vue"
 
 const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
 const promotions = ref([])
 const discount = ref(0)
-const price = ref(0)
-const totalPrice = ref(0)
+const subtotalPrice = ref(0)
 
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
@@ -18,6 +18,15 @@ async function fetchMenuData() {
 }
 fetchMenuData()
 
+onMounted(async () => {
+    const [menusRes, promotionsRes] = await Promise.all([
+        getList("Menus"),
+        getList("Promotions"),
+    ])
+    fetchMenuData()
+    promotions.value = promotionsRes
+    // filterResult.value = menusRes
+})
 
 function filterCategory(inputCategory) {
     console.log(inputCategory)
@@ -65,7 +74,6 @@ const mocDrinks = [
 ]
 const menusInCart = ref(mocDrinks)
 
-
 const calculateDiscount = () => {
     let totalDiscount = 0
 
@@ -86,23 +94,46 @@ const calculateDiscount = () => {
     // return totalDiscount
 }
 
-const getTotalPrice = () => {
+const getSubtotalPrice = () => {
     let price = 0
     menusInCart.value.forEach((item) => {
         price += item.price * item.quantity
     })
-    return price
+    subtotalPrice.value = price
 }
 watch(
     () => menusInCart,
     (newCart) => {
         // console.log(newCart.value)
         calculateDiscount()
+        getSubtotalPrice()
     },
     { deep: true, immediate: true }
 )
+const totalPrice = computed(() => {
+    return subtotalPrice.value - discount.value
+})
 
 const paymentMethod = ref("")
+
+const placeOrder = () => {
+    console.log("Place Order")
+    if (menusInCart.value.length === 0) {
+        alert("Please add some items to cart")
+        return
+    }
+    if (paymentMethod.value === "") {
+        alert("Please select payment method")
+        return
+    }
+    const order = {
+        orderNumber: Math.floor(Math.random() * 1000000),
+        menus: menusInCart.value,
+        paymentMethod: paymentMethod.value,
+        totalPrice: totalPrice.value,
+    }
+    console.log(order)
+}
 </script>
 <template>
     <div class="flex h-full w-full">
@@ -146,11 +177,15 @@ const paymentMethod = ref("")
                         name="menuContainer"
                         class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
                     >
-                        <div
-                            class="w-40 h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all"
-                        >
-                            <p>{{ items.menu_name }}</p>
-                            <p>{{ items.price }}</p>
+                        <div>
+                            <MenuBaseCard>
+                                <template #title>
+                                    <b>{{ items.menu_name }}</b>
+                                </template>
+                                <template #price>
+                                    <p>{{ items.price }}</p>
+                                </template>
+                            </MenuBaseCard>
                         </div>
                     </div>
                 </div>
@@ -172,13 +207,20 @@ const paymentMethod = ref("")
             <div class="border-2 border-black m-2 h-1/5">
                 Payment Summary
                 <div class="flex justify-between">
-                    <p>Price</p>
-                    <p>{{ getTotalPrice() }}</p>
+                    <p>Subtotal</p>
+                    <p>{{ subtotalPrice }}</p>
                 </div>
                 <div class="flex justify-between">
                     <p>Discount</p>
                     <p>
                         {{ discount }}
+                    </p>
+                </div>
+                <hr class="mx-3" />
+                <div class="flex justify-between">
+                    <p>Total Price</p>
+                    <p>
+                        {{ totalPrice }}
                     </p>
                 </div>
             </div>
@@ -207,7 +249,10 @@ const paymentMethod = ref("")
                     </button>
                 </div>
             </div>
-            <button class="border-2 border-black h-20 m-2 mb-6">
+            <button 
+                class="border-2 border-black h-20 m-2 mb-6"
+                @click="placeOrder"
+            >
                 Place Order
             </button>
         </section>

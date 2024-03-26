@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed } from "vue"
 import CartCard from "./CartCard.vue"
+import JsxIconBase from "./JsxIconBase.vue"
+import SearchInput from "./SearchInput.vue"
 const emits = defineEmits(["closeModal", "savePromotion"])
 const props = defineProps({
     promotion: {
@@ -12,6 +14,7 @@ const props = defineProps({
             discount: 0,
         },
     },
+    drinks: {type: Array, required: true},
 })
 
 // if (!props.promotion){}
@@ -50,7 +53,7 @@ const removeMenu = (index) => {
         @click="$emit('closeModal', false), $event"
     >
         <div
-            class="bg-white w-1/2 h-1/2 flex flex-col"
+            class="bg-white w-1/2 h-1/2 flex flex-col justify-center pl-16"
             @click="$event.stopPropagation()"
         >
             <div>
@@ -64,42 +67,19 @@ const removeMenu = (index) => {
 
             <div class="flex flex-col">
                 Menus:
-                <!-- <div>
-                    <div v-for="(menu, index) in menus">
-                        <input
-                            type="text"
-                            v-model.trim="menu.menuName"
-                            @input=""
-                            class="p-0.5 border border-gray-300 rounded-lg outline-none"
-                        />
-                        Quantity:
-                        <input
-                            type="number"
-                            v-model.number="menu.quantity"
-                            class="p-0.5 border border-gray-300 rounded-lg outline-none"
-                        />
-                        <button @click="removeMenu(index)">X</button>
-                    </div>
-                </div> -->
                 <CartCard
                     v-for="(menu, index) in menus"
                     :key="index"
                     class="border border-gray-300 rounded-md max-w-lg ml-8 my-1 p-2"
                 >
                     <template #drinkName>
-                        <input
+                        <!-- <input
                             type="text"
                             v-model.trim="menu.menuName"
                             class="p-0.5 border border-gray-300 rounded-lg outline-none"
-                        />
+                        /> -->
+                        <SearchInput :drinks="props.drinks" :editingMenu="menu" class="z-20"/>
                     </template>
-                    <!-- <template #sweet>
-                        <input
-                            type="number"
-                            v-model.number="menu.quantity"
-                            class="p-0.5 border border-gray-300 rounded-lg outline-none"
-                        />
-                    </template> -->
                     <template #quantity>
                         <!-- <button @click="removeMenu(index)">X</button> -->
                         <button
@@ -131,6 +111,7 @@ const removeMenu = (index) => {
             <button @click="$emit('closeModal', false)" class="border">
                 CloseModal
             </button>
+            <JsxIconBase iconName="Trash" color="red" />
         </div>
     </div>
 </template>

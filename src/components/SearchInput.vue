@@ -1,45 +1,68 @@
 <script setup>
-import { ref, computed } from "vue"
-const props = defineProps({ drinks: { type: Array, required: true } })
+import { ref, computed, watch } from "vue"
+const props = defineProps({
+    drinks: { type: Array, required: true },
+    editingMenu: { type: Object, required: true },
+})
+
+const prevMenu = computed(() => {
+    return props.editingMenu
+})
+const listOption = ref([])
 const isInputClicked = ref(false)
-const menuName = ref("")
 
 const optionClicked = (newName) => {
     isInputClicked.value = false
-    menuName.value = newName
+    prevMenu.value.menuName = newName
 }
 
-const filterdDrinks = computed(() => {
-    return props.drinks.filter((drink) => {
-        return drink.menuName
-            .toUpperCase()
-            .includes(menuName.value.toUpperCase())
+const listOptiond = computed(() => {
+    return props.drinks.map((drink) => {
+        return drink.menus.map((menu) => {
+            return menu.menu_name
+        })
     })
 })
+
+const filterOption = (newKeyword) => {
+    const filteredOption = []
+    let keyword = newKeyword
+    for (const category of props.drinks) {
+        for (const menu of category.menus) {
+            if (menu.menu_name.toUpperCase().includes(keyword.toUpperCase())) {
+                filteredOption.push(menu.menu_name)
+            }
+        }
+    }
+    listOption.value = filteredOption
+}
 </script>
 
 <template>
-    <div
-        class="max-w-60 border border-slate-300"
-        @blur="isInputClicked = false"
-    >
-        <slot name="default">
+    <div class="flex flex-col">
+        <div @blur="isInputClicked = false">
             <input
                 type="text"
-                class="border border-slate-300 w-full"
-                v-model.trim="menuName"
+                class="border border-slate-300 w-96"
+                v-model.trim="prevMenu.menuName"
+                @input="filterOption(prevMenu.menuName)"
                 @focus="isInputClicked = true"
             />
-        </slot>
-        <div class="w-full z-30" :class="isInputClicked ? '' : 'hidden'">
-            <button
-                v-for="(drink, index) in filterdDrinks"
-                :key="index"
-                class="block w-full text-left"
-                @click="optionClicked(drink.menuName)"
+        </div>
+        <div
+            class=""
+            :class="
+                isInputClicked
+                    ? 'absolute max-h-40 w-96 mt-7 bg-slate-200 overflow-auto'
+                    : 'hidden'
+            "
+        >
+            <div
+                v-for="(menu, index) in listOption"
+                @click="optionClicked(menu)"
             >
-                {{ drink.menuName }}
-            </button>
+                {{ menu }}
+            </div>
         </div>
     </div>
 </template>
