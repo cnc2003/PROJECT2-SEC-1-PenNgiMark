@@ -159,8 +159,36 @@
   ],
   "OrderLists": [
     {
-      "order_number": "012002",
+      "order_number": "012001",
+      "payment": "Cash",
       "orders": [
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
+        },
+        {
+          "menu_name": "Espresso",
+          "quantity": 1,
+          "price": 75,
+          "details": "Unsweet"
+        }
+        
+      ],
+      "id": "4aac"
+    },
+    {
+      "order_number": "012002",
+      "payment": "Cash",
+      "orders": [
+        
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
+        },
         {
           "menu_name": "Latte",
           "quantity": 2,
@@ -168,16 +196,22 @@
           "details": "Sweetened"
         },
         {
-          "menu_name": "Americano",
-          "quantity": 3,
-          "price": 270,
+          "menu_name": "Mocha",
+          "quantity": 1,
+          "price": 135,
           "details": "Extra sweet"
         },
         {
-          "menu_name": "Latte",
-          "quantity": 2,
-          "price": 240,
-          "details": "Sweetened"
+          "menu_name": "Americano",
+          "quantity": 1,
+          "price": 90,
+          "details": "Very sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 4,
+          "price": 360,
+          "details": "sweet"
         },
         {
           "menu_name": "Americano",
@@ -186,7 +220,7 @@
           "details": "Extra sweet"
         }
       ],
-      "id": "0357"
+      "id": "2000"
     }
   ],
   "HistoryOrder": [
@@ -198,7 +232,7 @@
       "details": "Unsweet",
       "selected": true,
       "Time": "3/21/2024 9:19:00 PM",
-      "order_id": "012003"
+      "order_number": "012003"
     },
     {
       "id": "b16c",
@@ -208,17 +242,7 @@
       "details": "Sweetened",
       "selected": true,
       "Time": "3/21/2024 9:19:18 PM",
-      "order_id": "012003"
-    },
-    {
-      "id": "6d06",
-      "menu_name": "Espresso",
-      "quantity": 1,
-      "price": 75,
-      "details": "Unsweet",
-      "selected": true,
-      "Time": "3/25/2024 6:23:40 PM",
-      "order_number": "012002"
+      "order_number": "012003"
     }
   ],
   "Management": [

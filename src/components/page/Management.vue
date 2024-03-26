@@ -11,6 +11,7 @@ const totalMenu = ref(0)
 const totalSold = ref(0)
 const totalOrder = ref(0)
 const orderData = ref(null)
+const managementData = ref(null)
 // Edit variable - Modal
 const editingItem = ref({})
 const isMenuModal = ref(false)
@@ -63,15 +64,35 @@ async function fetchOrderData() {
     // //console.log(totalOrder.value)
     // //console.log(orderData.value)
 }
+async function fetchMenagementData() {
+    managementData.value = await getList("Management")
 
+    for (const cate in managementData.value) {
+        // cate [ex index = 0,1,2,3,4,5]
+        const category = managementData.value[cate] // {id: '236e', takoyaki: Array(1)}
+        console.log("category :", category)
+        console.log(category.menus)
+        totalSold.value += category.orders.length
+        console.log(totalSold.value)
+    }
+
+    // calTotalOrder()
+    // console.log("----------")
+    // console.log(managementData.value)
+    // console.log(totalSold.value)
+    // console.log(totalOrder.value)
+}
+fetchMenagementData()
 onMounted(async () => {
     const [menusRes, promotionsRes] = await Promise.all([
         getList("Menus"),
         getList("Promotions"),
     ])
     fetchMenuData()
+    fetchOrderData()
+    
     promotions.value = promotionsRes
-    // filterResult.value = menusRes
+    filterResult.value = menusRes
 })
 
 // Function to filter categories
@@ -94,19 +115,18 @@ function filterCategory(inputCategory) {
     }
 }
 
-function calTotalOrder() {
-    const orderQuantities = orderData.value.map((order) => {
-        const totalQuantity = order.orders.reduce(
-            (acc, curr) => acc + curr.quantity,
-            0
-        )
-        return totalQuantity
-    })
-    const totalQuantities = [...orderQuantities]
-    totalSold.value = totalQuantities.reduce((acc, curr) => acc + curr, 0)
-
-    //console.log(totalSold.value)
-}
+// function calTotalOrder() {
+//     const orderQuantities = managementData.value.map((order) => {
+//         const totalQuantity = order.orders.reduce(
+//             (acc, curr) => acc + curr.quantity,
+//             0
+//         )
+//         return totalQuantity
+//     })
+//     const totalQuantities = [...orderQuantities]
+//     totalSold.value = totalQuantities.reduce((acc, curr) => acc + curr, 0)
+//     console.log(totalSold.value)
+// }
 
 // Calculate total menu items
 
