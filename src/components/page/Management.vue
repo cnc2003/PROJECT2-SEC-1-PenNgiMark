@@ -7,6 +7,7 @@ import {
   addNewCategory,
   addNewMenu,
   DeleteMenu,
+  DeleteCate
 } from "../../lib/fetch.js"
 import PromoModal from "../PromoModal.vue"
 import MenuBaseCard from "../MenuBaseCard.vue"
@@ -45,6 +46,10 @@ async function fetchMenuData() {
     ////console.log(category.menus.length)
     totalMenu.value += category.menus.length
     ////console.log(totalMenu.value)
+    if (category.menus.length == 0 ) {
+      DeleteCate(category.id)
+      filterResult.value = await getList("Menus")
+    }
   }
 }
 
