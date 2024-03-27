@@ -104,7 +104,8 @@ async function DeleteMenu(categoryId, editedMenuData) {
     if (!response.ok) {
       throw new Error("Failed to delete menu")
     }
-    console.log("Menu deleted successfully")
+    const jsonResponse = await response.json()
+    console.log("Menu deleted successfully", jsonResponse)
     // Optionally, you can return some data indicating success
     return { success: true }
   } catch (error) {
