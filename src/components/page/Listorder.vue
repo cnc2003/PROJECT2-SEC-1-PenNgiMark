@@ -3,10 +3,11 @@ import { ref, onMounted } from "vue"
 import {
     DeleteMenuInOrder,
     DeleteOrder,
-    PostHistoryOrder,
-    getList
+    AddHistoryOrder,
+    getList,
 } from "../../lib/fetch.js"
 import ModalHistory from "../ModalHistory.vue"
+import ModalConfirm from "../ModalConfirm.vue"
 
 // define variable
 let orderListBefore = ref([])
@@ -22,7 +23,7 @@ async function fetchData() {
 onMounted(fetchData)
 
 function serveOrder(order) {
-    const order_ID = order.order_number
+    const order_Number = order.order_number
     let restMenu = {}
 
     //History modal
@@ -30,8 +31,16 @@ function serveOrder(order) {
     const serveTime = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`
     const SelectedMenusWithTime = order.orders
         .filter((menu) => menu.selected)
-        .map((menu) => ({ ...menu, Time: serveTime, order_number: order_ID }))
-    PostHistoryOrder(...SelectedMenusWithTime,"HistoryOrder")
+        .map((menu) => ({
+            ...menu,
+            Time: serveTime,
+            order_number: order_Number,
+        }))
+        for (const key of SelectedMenusWithTime) {
+            console.log("AddMenuHistory:", key)
+            AddHistoryOrder(key, "HistoryOrder")
+        }
+    
     // console.log(...SelectedMenusWithTime)
 
     // filter MenusNotSelected
@@ -47,7 +56,7 @@ function serveOrder(order) {
         })
     } else {
         restMenu = {
-            order_number: order_ID,
+            order_number: order_Number,
             orders: notSelectedMenus,
             id: order.id,
         }
@@ -72,9 +81,10 @@ function tuggleSelection(order_menu) {
     order_menu.selected = !order_menu.selected
 }
 
-function opernModalConfirm(order) {
+function openModalConfirm(order) {
     showModalConfirm.value = true
     console.log(order)
+    console.log(showModalConfirm.value);
 
     if (confirmStatus.value === false) {
         // รอจนกว่าค่า confirm จะเป็น true
@@ -82,70 +92,50 @@ function opernModalConfirm(order) {
             if (confirmStatus.value === true) {
                 clearInterval(interval) // stop setInterval
                 serveOrder(order)
-                confirmStatus.value = false 
+                confirmStatus.value = false
                 console.log(confirmStatus.value)
             }
         }, 100) // ตรวจสอบทุก 100 milliseconds
     }
 }
 
+// เมื่อได้รับการยืนยันการทำงานจาก ModalConfirm.vue
+
 </script>
 <template>
-    <button @click="showModalHistory = true ,ReloadHistory = !ReloadHistory" class="fixed border-2 w-1/6">
+    <button
+        @click=";(showModalHistory = true), (ReloadHistory = !ReloadHistory)"
+        class="fixed border-2 w-1/6"
+    >
         History
     </button>
 
     <!-- ModalHistory -->
     <div v-show="showModalHistory">
-        <ModalHistory :data="ReloadHistory" @close="showModalHistory = false" />
+        <ModalHistory :data="ReloadHistory" @close="showModalHistory = $event" />
     </div>
 
     <!-- ModalComfirm -->
     <div v-show="showModalConfirm">
-        <div
-            class="fixed w-screen h-screen top-0 left-0 flex justify-center items-center"
-        >
-            <div class="w-lvw h-lvh bg-black bg-opacity-50"></div>
-            <div
-                class="fixed w-1/4 h-1/4 bg-white rounded-xl flex flex-col items-center indicator"
-            >
-                <div class="flex flex-col">
-                    <div class="text-xl border-b-4 mt-4 mb-3 flex justify-center">Confirm Menu</div>
-                    <!-- modal content -->
-                    <div class="mb-12 mt-10">Do you confirm to serve Menu?</div>
-                    <!-- button -->
-                    <div
-                    
-                    class="flex justify-center">
-                        <button
-                            class="bg-red-500 rounded-lg btn btn-md mr-10"
-                            @click="showModalConfirm = false"
-                        >
-                            cancle
-                        </button>
-                        <button
-                            class="bg-sky-500 rounded-lg btn btn-md"
-                            @click="
-                                (showModalConfirm = false),
-                                    (confirmStatus = true)
-                            "
-                        >
-                            serve
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- <ModalConfirm @close="showModalConfirm = $event" @serve="confirmStatus = $event"/> -->
+        <ModalConfirm @close="showModalConfirm = $event" @serve="confirmStatus = $event" />
     </div>
+    
 
     <!-- main -->
-    <div>
+    <div
+        v-if="orderListBefore.length === 0"
+        class="w-full h-[30%] flex justify-center border-2 rounded-md p-4 bg-slate-100 shadow-lg mt-12 ml-4"
+    >
+        <p>No Order ?</p>
+    </div>
+    <div v-else>
         <div v-for="(order, index) in orderListBefore" :key="index">
             <div
                 class="w-full flex justify-between border-2 rounded-md p-4 bg-slate-100 shadow-lg mt-12 ml-4"
             >
                 <div class="flex flex-col justify-center items-center w-1/4">
-                    <p class="font-bold">Order_ID</p>
+                    <p class="font-bold">Order</p>
                     <!-- ดึง ordermenu มาแสดง -->
                     <div>{{ order.order_number }}</div>
                 </div>
@@ -182,21 +172,26 @@ function opernModalConfirm(order) {
                 </div>
                 <!-- <button
                     class="bg-[#00E3FE] w-1/4 rounded-lg"
-                    @click="opernModalConfirm(order)"
+                    @click="openModalConfirm(order)"
                 >
                     Serve
                 </button> -->
                 <button
-    class="bg-[#00E3FE] w-1/4 rounded-lg"
-    @click="opernModalConfirm(order)"
-    :disabled="order.orders.filter(menu => menu.selected).length === 0"
-    :class="{ 'bg-gray-300': order.orders.filter(menu => menu.selected).length === 0 }"
-    title="Prease select a menu"
->
-    Serve
-</button>
-
-                
+                    class="bg-[#00E3FE] w-1/4 rounded-lg"
+                    @click="openModalConfirm(order)"
+                    :disabled="
+                        order.orders.filter((menu) => menu.selected).length ===
+                        0
+                    "
+                    :class="{
+                        'bg-gray-300':
+                            order.orders.filter((menu) => menu.selected)
+                                .length === 0,
+                    }"
+                    title="Prease select a menu"
+                >
+                    Serve
+                </button>
             </div>
         </div>
     </div>

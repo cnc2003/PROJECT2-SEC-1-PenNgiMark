@@ -160,14 +160,8 @@
   "OrderLists": [
     {
       "order_number": "012001",
-      "payment": "QR",
+      "payment": "Cash",
       "orders": [
-        {
-          "menu_name": "Espresso",
-          "quantity": 1,
-          "price": 75,
-          "details": "Unsweet"
-        },
         {
           "menu_name": "Cappuccino",
           "quantity": 1,
@@ -175,24 +169,20 @@
           "details": "Lightly sweet"
         },
         {
-          "menu_name": "Latte",
-          "quantity": 2,
-          "price": 240,
-          "details": "Sweetened"
-        }
-      ],
-      "id": "4aac"
-    },
-    {
-      "order_id": "012002",
-      "payment": "Cash",
-      "orders": [
-        {
           "menu_name": "Espresso",
           "quantity": 1,
           "price": 75,
           "details": "Unsweet"
-        },
+        }
+        
+      ],
+      "id": "4aac"
+    },
+    {
+      "order_number": "012002",
+      "payment": "Cash",
+      "orders": [
+        
         {
           "menu_name": "Cappuccino",
           "quantity": 1,
@@ -253,26 +243,6 @@
       "selected": true,
       "Time": "3/21/2024 9:19:18 PM",
       "order_number": "012003"
-    },
-    {
-      "id": "6d06",
-      "menu_name": "Espresso",
-      "quantity": 1,
-      "price": 75,
-      "details": "Unsweet",
-      "selected": true,
-      "Time": "3/25/2024 6:23:40 PM",
-      "order_number": "012002"
-    },
-    {
-      "id": "8e89",
-      "menu_name": "Americano",
-      "quantity": 3,
-      "price": 270,
-      "details": "Extra sweet",
-      "selected": true,
-      "Time": "3/26/2024 9:46:19 AM",
-      "order_number": "012002"
     }
   ],
   "Management": [

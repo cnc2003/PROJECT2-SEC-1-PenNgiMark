@@ -37,7 +37,7 @@ watch(
 
         <!-- modal content -->
         <div
-            class="fixed w-2/4 h-auto bg-white rounded-xl flex flex-col items-center"
+            class="fixed w-2/4 h-[35%] bg-white rounded-xl flex flex-col items-center"
         >
             <div>
                 <div class="flex">
@@ -46,21 +46,23 @@ watch(
                     </div>
                     <!-- close button -->
                     <img
-                        class="h-6 p-1 btn rounded-lg absolute top-2 right-2 hover:cursor-pointer bg-red-500"
-                        @click="emits('close')"
+                        class="h- p-1 btn rounded-lg absolute top-2 right-2 hover:cursor-pointer bg-red-600"
+                        @click="emits('close',false)"
                         src="/src/assets/icon/cross.png"
                     />
                 </div>
-                <table class=" w-full mb-10">
-                    <tr class="grid grid-cols-9 border-b-4">
+                
+                <table >
+                    <tr class=" sticky grid grid-cols-9 border-b-4">
                         <th class="col-span-3">Time</th>
-                        <th>OrderID</th>
+                        <th>Order_Number</th>
                         <th class="col-span-2">Menu</th>
                         <th>Quantity</th>
                         <th>Detail</th>
                     </tr>
+                    <div v-if="HistoryOrder.length > 0" class="h-60 overflow-x-scroll">
                     <div
-                        v-if="HistoryOrder.length > 0"
+                        
                         v-for="(order, index) in HistoryOrder"
                         :key="index"
                         class="mt-4"
@@ -78,6 +80,7 @@ watch(
                     <p class="pl-3 pr-3">{{ order.menu_name }}</p>
                     <p class="pl-3 pr-3">{{ order.quantity }}</p>
                     <p class="pl-3 pr-3">{{ order.details }}</p> -->
+                    </div>
                     </div>
                     <div v-else>
                         <p class="flex justify-center text-base mt-48">
