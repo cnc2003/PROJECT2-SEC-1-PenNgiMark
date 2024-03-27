@@ -47,75 +47,72 @@ async function PostMenu(filterResult, path) {
   }
 }
 
-
 // =========================================
 //               Menu mangement
 // =========================================
 async function addNewCategory(categoryData) {
   try {
-      const response = await fetch(`${url}Menus`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(categoryData)
-      });
-      if (!response.ok) {
-          throw new Error('Failed to add new category');
-      }
-      const jsonResponse = await response.json();
-      console.log('New category added successfully:', jsonResponse);
-      return jsonResponse; // Return the response if needed
+    const response = await fetch(`${url}Menus`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(categoryData),
+    })
+    if (!response.ok) {
+      throw new Error("Failed to add new category")
+    }
+    const jsonResponse = await response.json()
+    console.log("New category added successfully:", jsonResponse)
+    return jsonResponse // Return the response if needed
   } catch (error) {
-      console.error('Error adding new category:', error.message);
-      // Handle errors as per your application's requirements
+    console.error("Error adding new category:", error.message)
+    // Handle errors as per your application's requirements
   }
 }
 
 async function addNewMenu(categoryId, newMenuData) {
   try {
-      const response = await fetch(`${url}Menus/${categoryId}`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(newMenuData)
-      });
-
-      if (!response.ok) {
-          throw new Error('Failed to add new menu');
-      }
-
-      const jsonResponse = await response.json();
-      console.log('New menu added successfully:', jsonResponse);
-      return jsonResponse; // Return the response if needed
+    const response = await fetch(`${url}Menus/${categoryId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newMenuData),
+    })
+    if (!response.ok) {
+      throw new Error("Failed to add new menu")
+    }
+    const jsonResponse = await response.json()
+    console.log("New menu added successfully:", jsonResponse)
+    return jsonResponse // Return the response if needed
   } catch (error) {
-      console.error('Error adding new menu:', error.message);
-      // Handle errors as per your application's requirements
+    console.error("Error adding new menu:", error.message)
+    // Handle errors as per your application's requirements
   }
 }
 
-async function DeleteMenu(categoryId, menuName) {
+async function DeleteMenu(categoryId, editedMenuData) {
   try {
-      const response = await fetch(`${url}Menus/${categoryId}/menus/${menuName}`, {
-          method: 'DELETE'
-      });
-
-      if (!response.ok) {
-          throw new Error('Failed to delete menu');
-      }
-
-      console.log('Menu deleted successfully');
-      // Optionally, you can return some data indicating success
-      return { success: true };
+    const response = await fetch(`${url}Menus/${categoryId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editedMenuData),
+    })
+    if (!response.ok) {
+      throw new Error("Failed to delete menu")
+    }
+    console.log("Menu deleted successfully")
+    // Optionally, you can return some data indicating success
+    return { success: true }
   } catch (error) {
-      console.error('Error deleting menu:', error.message);
-      // Handle errors as per your application's requirements
-      return { success: false, error: error.message };
+    console.error("Error deleting menu:", error.message)
+    // Handle errors as per your application's requirements
+    return { success: false, error: error.message }
   }
 }
-
-
 
 // =========================================
 //               Order mangement
@@ -148,4 +145,13 @@ async function DeleteOrder(id) {
   }
 }
 
-export { getList, AddHistoryOrder, DeleteMenuInOrder, DeleteOrder, PostMenu }
+export {
+  getList,
+  AddHistoryOrder,
+  DeleteMenuInOrder,
+  DeleteOrder,
+  PostMenu,
+  addNewCategory,
+  addNewMenu,
+  DeleteMenu,
+}
