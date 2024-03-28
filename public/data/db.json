@@ -1,6 +1,9 @@
 {
-  "Menus": {
-      "Coffee": [
+  "Menus": [
+    {
+      "id": "231e",
+      "category": "Coffee",
+      "menus": [
         {
           "menu_name": "Espresso",
           "price": 75,
@@ -37,10 +40,12 @@
           "img_src": "iced_coffee.jpg",
           "description": "Cold coffee served over ice cubes."
         }
-      ],
-    
-    
-      "Tea": [
+      ]
+    },
+    {
+      "id": "232e",
+      "category": "Tea",
+      "menus": [
         {
           "menu_name": "Chai Latte",
           "price": 120,
@@ -77,9 +82,12 @@
           "img_src": "lemon_iced_tea.jpg",
           "description": "Iced tea flavored with lemon, often served with sugar or sweetener."
         }
-      ],
-
-      "Soda": [
+      ]
+    },
+    {
+      "id": "233e",
+      "category": "Soda",
+      "menus": [
         {
           "menu_name": "Cola",
           "price": 45,
@@ -104,10 +112,12 @@
           "img_src": "root_beer.jpg",
           "description": "A sweet carbonated soft drink traditionally made using the root bark of the sassafras tree as the primary flavoring."
         }
-      ],
-   
-    
-      "Juice": [
+      ]
+    },
+    {
+      "id": "234e",
+      "category": "Juice",
+      "menus": [
         {
           "menu_name": "Fruit Punch",
           "price": 60,
@@ -120,10 +130,12 @@
           "img_src": "orange_juice.jpg",
           "description": "A beverage made from squeezed or pressed oranges."
         }
-      ],
-   
-    
-      "Other": [
+      ]
+    },
+    {
+      "id": "235e",
+      "category": "other",
+      "menus": [
         {
           "menu_name": "Hot Chocolate",
           "price": 100,
@@ -143,41 +155,35 @@
           "description": "Clear, colorless, odorless, and tasteless liquid that is essential for most living organisms."
         }
       ]
-   
-},
+    }
+  ],
   "OrderLists": [
     {
-      "order_id": "012001",
-      "orders": [
+      "order_number": "012001",
+      "menus": [
         {
-          "menu_name": "Latte",
-          "quantity": 2,
-          "price": 240,
-          "details": "Sweetened"
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
         },
         {
-          "menu_name": "Espresso",
+          "menu_name": "Americano",
           "quantity": 1,
-          "price": 75,
-          "details": "Unsweet"
+          "price": 90,
+          "details": "Very sweet"
         }
       ],
-      "id": "8202"
+      "id": "4aac"
     },
     {
-      "order_id": "012002",
-      "orders": [
+      "order_number": "012002",
+      "menus": [
         {
-          "menu_name": "Espresso",
+          "menu_name": "Cappuccino",
           "quantity": 1,
-          "price": 75,
-          "details": "Unsweet"
-        },
-        {
-          "menu_name": "Latte",
-          "quantity": 2,
-          "price": 240,
-          "details": "Sweetened"
+          "price": 105,
+          "details": "Lightly sweet"
         },
         {
           "menu_name": "Americano",
@@ -198,7 +204,7 @@
           "details": "Extra sweet"
         }
       ],
-      "id": "0357"
+      "id": "2000"
     }
   ],
   "HistoryOrder": [
@@ -210,7 +216,7 @@
       "details": "Unsweet",
       "selected": true,
       "Time": "3/21/2024 9:19:00 PM",
-      "order_id": "012003"
+      "order_number": "012003"
     },
     {
       "id": "b16c",
@@ -220,7 +226,27 @@
       "details": "Sweetened",
       "selected": true,
       "Time": "3/21/2024 9:19:18 PM",
-      "order_id": "012003"
+      "order_number": "012003"
+    },
+    {
+      "id": "2c41",
+      "menu_name": "Espresso",
+      "quantity": 1,
+      "price": 75,
+      "details": "Unsweet",
+      "selected": true,
+      "Time": "3/28/2024 3:32:53 PM",
+      "order_number": "012001"
+    },
+    {
+      "id": "6701",
+      "menu_name": "Espresso",
+      "quantity": 1,
+      "price": 75,
+      "details": "Unsweet",
+      "selected": true,
+      "Time": "3/28/2024 9:47:09 PM",
+      "order_number": "012001"
     }
   ],
   "Management": [
@@ -297,9 +323,45 @@
         }
       ],
       "id": "2000"
+    }
+  ],
+  "Promotions": [
+    {
+      "id": "1",
+      "name": "Happy Hour",
+      "menus": [
+        {
+          "menuName": "Cappuccino",
+          "quantity": 1
+        }
+      ],
+      "discount": 8
     },
     {
-      "id": "7961"
+      "id": "2",
+      "name": "Morning Delight",
+      "menus": [
+        {
+          "menuName": "Espresso",
+          "quantity": 2
+        }
+      ],
+      "discount": 5
+    },
+    {
+      "id": "3",
+      "name": "Summer Lover",
+      "menus": [
+        {
+          "menuName": "Latte",
+          "quantity": 1
+        },
+        {
+          "menuName": "Mocha",
+          "quantity": 1
+        }
+      ],
+      "discount": 10
     }
   ],
   "Setting": ""

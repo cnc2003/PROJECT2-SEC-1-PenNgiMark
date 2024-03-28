@@ -1,28 +1,50 @@
 <script setup>
-import { ref } from "vue"
+import { ref, watch, computed, onMounted } from "vue"
 
 import { getList } from "../../lib/fetch.js"
 import CartList from "../CartList.vue"
 import JsxIconBase from "../JsxIconBase.vue"
-
+import MenuBaseCard from "../MenuBaseCard.vue"
 
 const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
+const promotions = ref([])
+const discount = ref(0)
+const subtotalPrice = ref(0)
+const isShowOptionMenu = ref(false)
+let selectedmenus = []
 
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
-    for (const key in filterResult.value) {
-        console.log(key)
-    }
+    console.log(filterResult.value)
 }
 fetchMenuData()
 
-function filterCategory(category) {
-    if (filterResult.value.hasOwnProperty(category)) {
-        afterFilterResult.value = { [category]: filterResult.value[category] }
-        console.log(afterFilterResult.value)
-    } else {
+onMounted(async () => {
+    const [menusRes, promotionsRes] = await Promise.all([
+        getList("Menus"),
+        getList("Promotions"),
+    ])
+    fetchMenuData()
+    promotions.value = promotionsRes
+    // filterResult.value = menusRes
+})
+
+function filterCategory(inputCategory) {
+    console.log(inputCategory)
+    let t = null
+    if (inputCategory === null || inputCategory === "All") {
         afterFilterResult.value = filterResult.value
+    } else {
+        for (const data in filterResult.value) {
+            const categorykey = filterResult.value[data] // category in menu
+            // console.log(categorykey.category)
+
+            if (inputCategory === categorykey.category) {
+                console.log(categorykey)
+                afterFilterResult.value = [categorykey]
+            }
+        }
     }
 }
 
@@ -54,46 +76,209 @@ const mocDrinks = [
 ]
 const menusInCart = ref(mocDrinks)
 
+const calculateDiscount = () => {
+    let totalDiscount = 0
+
+    for (const promotion of promotions.value) {
+        if (
+            promotion.menus.every((promoItem) => {
+                const cartItem = menusInCart.value.find(
+                    (item) => item.menu_name === promoItem.menuName
+                )
+                return cartItem && cartItem.quantity >= promoItem.quantity
+            })
+        ) {
+            const discountAmount = promotion.discount
+            totalDiscount += discountAmount
+        }
+    }
+    discount.value = totalDiscount
+    // return totalDiscount
+}
+
+const getSubtotalPrice = () => {
+    let price = 0
+    menusInCart.value.forEach((item) => {
+        price += item.price * item.quantity
+    })
+    subtotalPrice.value = price
+}
+watch(
+    () => menusInCart,
+    (newCart) => {
+        // console.log(newCart.value)
+        calculateDiscount()
+        getSubtotalPrice()
+    },
+    { deep: true, immediate: true }
+)
+const totalPrice = computed(() => {
+    return subtotalPrice.value - discount.value
+})
+
 const paymentMethod = ref("")
 
+const placeOrder = () => {
+    console.log("Place Order")
+    if (menusInCart.value.length === 0) {
+        alert("Please add some items to cart")
+        return
+    }
+    if (paymentMethod.value === "") {
+        alert("Please select payment method")
+        return
+    }
+    const order = {
+        orderNumber: Math.floor(Math.random() * 1000000),
+        menus: menusInCart.value,
+        paymentMethod: paymentMethod.value,
+        totalPrice: totalPrice.value,
+    }
+    console.log(order)
+}
+function ToggleClick(item) {
+    if (selectedmenus.length > 0) { 
+        selectedmenus[0].selected = false
+        selectedmenus.pop()
+    }
+    item.selected = true
+    selectedmenus.push(item)
+
+}
+
+
+function confirmOption(item) {
+    if (item.sweetnessLevel === undefined || item.sweetnessLevel === '') {
+        alert("Please select sweetness level")
+
+    }
+    selectedmenus[0].selected = false
+    let addToCart = {
+        menu_name: item.menu_name,
+        price: item.price,
+        selected: item.selected,
+        sweetnessLevel: item.sweetnessLevel,
+    }
+    fetchMenuData()
+    mocDrinks.push(addToCart)
+    console.log("mocDrinks :", mocDrinks)
+}
 </script>
 <template>
     <div class="flex h-full w-full">
-        <section class="border-2 border-white w-3/4">
+        <section class="border-2 border-white w-3/4" @click="closeModal">
             this must be category list
-            <div class="flex border-2 w-1/2">
+            <div 
+            
+            class="flex justify-center border-2 w-1/2 rounded-md">
                 <div
-                    v-for="(category, key) in filterResult"
-                    :key="category"
-                    class="p-3 rounded-md"
+                    class="bg-slate-300 p-4 m-2 rounded-md btn btn-md"
+                    @click="filterCategory('All')"
                 >
-                    <div
-                        @click="filterCategory(key)"
-                        class="bg-slate-300 p-2 rounded-md"
-                    >
-                        {{ key }}
-                    </div>
+                    All
+                </div>
+                <div
+                    v-for="propoty in filterResult"
+                    class="bg-slate-300 p-2 m-2 rounded-md btn btn-md"
+                    @click="filterCategory(propoty.category)"
+                >
+                    {{ propoty.category }}
                 </div>
             </div>
 
             this must be menus list
-            <div>
+            <div >
                 <!-- loop category -->
 
                 <div
-                    v-for="(category, key) in afterFilterResult === null
+                    v-for="(itemList, category) in afterFilterResult === null
                         ? filterResult
                         : afterFilterResult"
-                    :key="key"
-                    class="p-3 rounded-md"
+                    :key="category"
+                    class="flex flex-wrap w-full h-auto gap-2"
                 >
-                    <!-- loop menulist in category  -->
-                    <div v-for="menus in category" class="flex flex-col rounded border-2 p-3 m-1 justify-center">
-                        <!-- loop menu in menulist  -->
+                    <!-- แสดงชื่อ category -->
+                    <h2 class="w-full font-mono text-lg font-semibold mt-10">
+                        {{ itemList.category }}
+                    </h2>
+                    <!-- แสดง menu items ในแต่ละ category -->
+                    <div
+                        v-for="(item, key) in itemList.menus"
+                        :key="key"
+                        name="menuContainer"
+                        class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
+                    >
+                        <div @click="ToggleClick(item)">
+                            <MenuBaseCard class="flex flex-col justify-center items-center">
+                                <template #title v-if="!item.selected">
+                                    <img
+                                        :src="`/images/${item.img_src}`"
+                                        alt=""
+                                        class="w-40 h-40"
+                                    />
+                                    <b>{{ item.menu_name }}</b>
+                                    <p>{{ item.price }}</p>
+                                </template>
 
-                        <div v-for="menu in menus">
-                            <div>{{ menu }}</div>
+                                <template
+                                    #title
+                                    v-if="!item.selected"
+                                    @click="openModal(item)"
+                                >
+                                    <img
+                                        :src="`/images/${item.img_src}`"
+                                        alt=""
+                                        class="w-40 h-40"
+                                    />
+                                    <b>{{ item.menu_name }}</b>
+                                    <p>{{ item.price }}</p>
+                                </template>
 
+                                <template #modal v-if="item.selected">
+                                    <div class="flex flex-col justify-center">
+                                        <p>Sweetness Level</p>
+                                        <br />
+                                        <div>
+                                            <input
+                                                type="radio"
+                                                id="light_sweet"
+                                                name="sweetLevel"
+                                                value="light_sweet"
+                                                v-model="item.sweetnessLevel"
+                                            />
+                                            <label for="light_sweet"
+                                                >Light Sweet</label
+                                            >
+                                        </div>
+                                        <div>
+                                            <input
+                                                type="radio"
+                                                id="sweet"
+                                                name="sweetLevel"
+                                                value="sweet"
+                                                v-model="item.sweetnessLevel"
+                                            />
+                                            <label for="sweet">Sweet</label>
+                                        </div>
+                                        <div>
+                                            <input
+                                                type="radio"
+                                                id="verySweet"
+                                                name="sweetLevel"
+                                                value="verySweet"
+                                                v-model="item.sweetnessLevel"
+                                            />
+                                            <label for="verySweet"
+                                                >Very Sweet</label
+                                            >
+                                        </div>
+                                        <br />
+                                        <button @click="confirmOption(item)">
+                                            OK
+                                        </button>
+                                    </div>
+                                </template>
+                            </MenuBaseCard>
                         </div>
                     </div>
                 </div>
@@ -112,7 +297,26 @@ const paymentMethod = ref("")
                 </button>
             </div>
             <CartList :menusInCart="menusInCart" />
-            <div class="border-2 border-black m-2 h-1/5">Payment Summary</div>
+            <div class="border-2 border-black m-2 h-1/5">
+                Payment Summary
+                <div class="flex justify-between">
+                    <p>Subtotal</p>
+                    <p>{{ subtotalPrice }}</p>
+                </div>
+                <div class="flex justify-between">
+                    <p>Discount</p>
+                    <p>
+                        {{ discount }}
+                    </p>
+                </div>
+                <hr class="mx-3" />
+                <div class="flex justify-between">
+                    <p>Total Price</p>
+                    <p>
+                        {{ totalPrice }}
+                    </p>
+                </div>
+            </div>
             <div
                 class="flex flex-col justify-evenly border-2 border-black h-28 mx-2 px-2 pb-2"
             >
@@ -122,7 +326,7 @@ const paymentMethod = ref("")
                         class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
                         @click="paymentMethod = 'cash'"
                     >
-                        <JsxIconBase iconName="Cash"/>
+                        <JsxIconBase iconName="Cash" />
                     </button>
                     <button
                         class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
@@ -138,7 +342,10 @@ const paymentMethod = ref("")
                     </button>
                 </div>
             </div>
-            <button class="border-2 border-black h-20 m-2 mb-6">
+            <button
+                class="border-2 border-black h-20 m-2 mb-6"
+                @click="placeOrder"
+            >
                 Place Order
             </button>
         </section>
