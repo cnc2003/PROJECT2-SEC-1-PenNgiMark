@@ -1,11 +1,11 @@
 <template>
   <div
     name="analysis"
-    class="my-6 h-[20%] w-11/12 shrink-0 rounded-md p-4 bg-slate-100"
+    class="my-6 h-[20%] w-11/12 shrink-0 p-4 rounded-3xl bg-white border-solid border-slate-300 border-4"
   >
-    <div class="flex flex-col h-[20%]">
-      <h1 class="text-2xl font-mono font-semibold">Analysis</h1>
-      <hr :class="hr" />
+    <div class="flex flex-col h-[20%] mb-2">
+      <h1 class="text-2xl font-bold pb-2">Analysis</h1>
+      <hr :class="hr"/>
     </div>
     <div
       name="Content"

@@ -1,7 +1,7 @@
 <script setup>
 // Import necessary modules
 
-import { computed, ref, onMounted, resolveDirective, ssrContextKey } from "vue"
+import { computed, ref, onMounted} from "vue"
 import {
   getList,
   addNewCategory,
@@ -43,11 +43,14 @@ async function fetchMenuData() {
   }
 }
 
+const promotions = ref([])
 onMounted(async () => {
-  const [menusRes] = await Promise.all([
+  const [menusRes, promotionsRes] = await Promise.all([
     getList("Menus"),
+    getList("Promotions")
   ])
   fetchMenuData()
+  promotions.value = promotionsRes
   filterResult.value = menusRes
 })
 
@@ -237,7 +240,7 @@ function confirmModalHandle(input) {
 }
 
 // Set HR style class
-const hr = ref("mb-2 border-gray-300 border-1 rounded")
+const hr = ref("mb-2 border-gray-300 border-2 rounded")
 </script>
 
 <template>
@@ -251,10 +254,10 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
       <!------------------------ 
         -- Management Section --
         ------------------------>
-      <div name="management" class="h-[70%] shrink-0 w-11/12 rounded-md p-4 bg-slate-100">
+      <div name="management" class="h-[70%] shrink-0 w-11/12 p-4 pt-2 rounded-3xl bg-white border-solid border-slate-300 border-4">
         <div class="h-[10%] mb-2">
-          <div class="flex flex-row justify-between items-center w-full h-full mb-2">
-            <h1 class="text-2xl font-mono font-semibold">Management</h1>
+          <div class="flex flex-row justify-between items-center w-full h-full">
+            <h1 class="text-2xl font-bold">Management</h1>
 
             <div class="flex flex-row gap-2 w-2/5 justify-end">
               <button class="btn btn-sm" @click="menuModalHandle(`addNewMenu`)">
@@ -288,15 +291,11 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
             <!-- แสดง menu items ในแต่ละ category -->
             <div v-for="(items, key) in propoty.menus" :key="key" name="menuContainer"
               class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4">
-              <div @click="menuModalHandle(items, propoty.category)">
-                <MenuBaseCard variant="menuList">
-                  <template #title>
-                    <b>{{ items.menu_name }}</b>
-                  </template>
-                  <template #price>
-                    <p>{{ items.price }}</p>
-                  </template>
-                </MenuBaseCard>
+              <div @click="menuModalHandle(items, propoty.category)" class="">
+                <h1 v-text="items.menu_name"></h1>
+                <h1 v-text="items.description.slice(0,20) + '...'"></h1>
+                <h1 v-text="items.price"></h1>
+                <img :src="items.img_src" alt="" class="w-32 h-32 bg-black bg-opacity-50">
               </div>
             </div>
           </div>
@@ -467,7 +466,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
       <!----------------------->
       <!-- Promotion Section -->
       <!----------------------->
-      <Promotion />
+      <Promotion :promotions="promotions" :drinks="filterResult"/>
     </div>
   </Suspense>
 </template>

@@ -1,9 +1,11 @@
+
+
 <template>
   <div class="h-[70%] shrink-0 w-11/12 rounded-md p-4 bg-slate-100 my-10">
     <div class="flex justify-between">
-      <div class="flex text-2xl font-mono">
-        <h1 class="font-semibold">Promotion</h1>
-        <span>({{ promotions.length }})</span>
+      <div class="flex">
+        <h1 class="text-2xl font-bold">Promotion</h1>
+        <span class="text-2xl font-bold">({{ promotions.length }})</span>
       </div>
       <h1
         class="text-2xl font-mono font-semibold"
@@ -56,7 +58,7 @@
     <PromoModal
       @closeModal="colsePromoModal"
       @savePromotion="updatePromo"
-      :drinks="filterResult"
+      :drinks="drinks"
       :promotion="editingPromo"
     />
   </div>
@@ -67,12 +69,17 @@ import { ref ,onMounted} from "vue"
 import { getList } from "../lib/fetch";
 import PromoModal from "./PromoModal.vue"
 import MenuBaseCard from "./MenuBaseCard.vue"
-const promotions = ref([])
 const isProModalOpen = ref(false)
-onMounted(async () => {
-  const [promotionsRes] = await Promise.all([getList("Promotions")])
-  promotions.value = promotionsRes
+const props = defineProps({
+  promotions: {type: Array, require : false},
+  drinks: {type: Array, require : false}
 })
+
+
+// onMounted(async () => {
+//   const [promotionsRes] = await Promise.all([])
+//   promotions.value = promotionsRes
+// })
 
 const editingPromo = ref({
   id: undefined,
