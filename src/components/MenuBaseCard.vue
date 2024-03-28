@@ -11,12 +11,14 @@ const props = defineProps({
     <div
         :class="
             variant === 'menuList'
-                ? 'w-40 h-32 p-4 border border-gray-300 rounded-md pointer hover:scale-105 transition-all'
+                ? 'w-40 h-40 m-6 border border-gray-300 rounded-md pointer hover:scale-105 transition-all'
                 : 'flex'
         "
     >
-        <slot name="title">Untitled</slot>
-        <slot name="price"></slot>
+        <slot name="modal">
+            
+        </slot>
+        <slot name="title"></slot>
     </div>
 </template>
 

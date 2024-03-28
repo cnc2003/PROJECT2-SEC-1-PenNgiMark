@@ -37,11 +37,11 @@ watch(
 
         <!-- modal content -->
         <div
-            class="fixed w-2/4 h-[35%] bg-white rounded-xl flex flex-col items-center"
+            class="fixed w-2/4 h-2/4 bg-white rounded-xl flex flex-col items-center"
         >
             <div>
                 <div class="flex">
-                    <div class="flex justify-start text-xl font-bold mt-4 mb-4 ml-2">
+                    <div class="flex justify-center text-xl font-bold mt-4 mb-8 ml-2">
                         History Order
                     </div>
                     <!-- close button -->
@@ -60,12 +60,12 @@ watch(
                         <th>Quantity</th>
                         <th>Detail</th>
                     </tr>
-                    <div v-if="HistoryOrder.length > 0" class="h-60 overflow-x-scroll">
+                    <div v-if="HistoryOrder.length > 0" class="mt-3 h-48 flex flex-col overflow-y-scroll">
                     <div
                         
                         v-for="(order, index) in HistoryOrder"
                         :key="index"
-                        class="mt-4"
+                        class="mt-4 "
                     >
                         <tr class="grid grid-cols-9 ">
                             <td class="col-span-3 flex justify-center">{{ order.Time }}</td>

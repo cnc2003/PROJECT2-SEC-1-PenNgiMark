@@ -9,8 +9,8 @@ import ModalConfirm from './components/ModalConfirm.vue'
 const app = createApp(App)
 app.use(routers)
 
-app.component('ModalHistory', ModalHistory )
-app.component('ModalConfirm', ModalConfirm )
+// app.component('ModalHistory', ModalHistory )
+// app.component('ModalConfirm', ModalConfirm )
 app.mount('#app')
 
 

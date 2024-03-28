@@ -11,6 +11,8 @@ const afterFilterResult = ref(null) // default value
 const promotions = ref([])
 const discount = ref(0)
 const subtotalPrice = ref(0)
+const isShowOptionMenu = ref(false)
+let selectedmenus = []
 
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
@@ -134,12 +136,41 @@ const placeOrder = () => {
     }
     console.log(order)
 }
+function ToggleClick(item) {
+    if (selectedmenus.length > 0) { 
+        selectedmenus[0].selected = false
+        selectedmenus.pop()
+    }
+    item.selected = true
+    selectedmenus.push(item)
+
+}
+
+
+function confirmOption(item) {
+    if (item.sweetnessLevel === undefined || item.sweetnessLevel === '') {
+        alert("Please select sweetness level")
+
+    }
+    selectedmenus[0].selected = false
+    let addToCart = {
+        menu_name: item.menu_name,
+        price: item.price,
+        selected: item.selected,
+        sweetnessLevel: item.sweetnessLevel,
+    }
+    fetchMenuData()
+    mocDrinks.push(addToCart)
+    console.log("mocDrinks :", mocDrinks)
+}
 </script>
 <template>
     <div class="flex h-full w-full">
-        <section class="border-2 border-white w-3/4">
+        <section class="border-2 border-white w-3/4" @click="closeModal">
             this must be category list
-            <div class="flex justify-center border-2 w-1/2 rounded-md">
+            <div 
+            
+            class="flex justify-center border-2 w-1/2 rounded-md">
                 <div
                     class="bg-slate-300 p-4 m-2 rounded-md btn btn-md"
                     @click="filterCategory('All')"
@@ -156,7 +187,7 @@ const placeOrder = () => {
             </div>
 
             this must be menus list
-            <div>
+            <div >
                 <!-- loop category -->
 
                 <div
@@ -167,23 +198,85 @@ const placeOrder = () => {
                     class="flex flex-wrap w-full h-auto gap-2"
                 >
                     <!-- แสดงชื่อ category -->
-                    <h2 class="w-full font-mono text-lg font-semibold">
+                    <h2 class="w-full font-mono text-lg font-semibold mt-10">
                         {{ itemList.category }}
                     </h2>
                     <!-- แสดง menu items ในแต่ละ category -->
                     <div
-                        v-for="(items, key) in itemList.menus"
+                        v-for="(item, key) in itemList.menus"
                         :key="key"
                         name="menuContainer"
                         class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
                     >
-                        <div>
-                            <MenuBaseCard>
-                                <template #title>
-                                    <b>{{ items.menu_name }}</b>
+                        <div @click="ToggleClick(item)">
+                            <MenuBaseCard class="flex flex-col justify-center items-center">
+                                <template #title v-if="!item.selected">
+                                    <img
+                                        :src="`/images/${item.img_src}`"
+                                        alt=""
+                                        class="w-40 h-40"
+                                    />
+                                    <b>{{ item.menu_name }}</b>
+                                    <p>{{ item.price }}</p>
                                 </template>
-                                <template #price>
-                                    <p>{{ items.price }}</p>
+
+                                <template
+                                    #title
+                                    v-if="!item.selected"
+                                    @click="openModal(item)"
+                                >
+                                    <img
+                                        :src="`/images/${item.img_src}`"
+                                        alt=""
+                                        class="w-40 h-40"
+                                    />
+                                    <b>{{ item.menu_name }}</b>
+                                    <p>{{ item.price }}</p>
+                                </template>
+
+                                <template #modal v-if="item.selected">
+                                    <div class="flex flex-col justify-center">
+                                        <p>Sweetness Level</p>
+                                        <br />
+                                        <div>
+                                            <input
+                                                type="radio"
+                                                id="light_sweet"
+                                                name="sweetLevel"
+                                                value="light_sweet"
+                                                v-model="item.sweetnessLevel"
+                                            />
+                                            <label for="light_sweet"
+                                                >Light Sweet</label
+                                            >
+                                        </div>
+                                        <div>
+                                            <input
+                                                type="radio"
+                                                id="sweet"
+                                                name="sweetLevel"
+                                                value="sweet"
+                                                v-model="item.sweetnessLevel"
+                                            />
+                                            <label for="sweet">Sweet</label>
+                                        </div>
+                                        <div>
+                                            <input
+                                                type="radio"
+                                                id="verySweet"
+                                                name="sweetLevel"
+                                                value="verySweet"
+                                                v-model="item.sweetnessLevel"
+                                            />
+                                            <label for="verySweet"
+                                                >Very Sweet</label
+                                            >
+                                        </div>
+                                        <br />
+                                        <button @click="confirmOption(item)">
+                                            OK
+                                        </button>
+                                    </div>
                                 </template>
                             </MenuBaseCard>
                         </div>
@@ -249,7 +342,7 @@ const placeOrder = () => {
                     </button>
                 </div>
             </div>
-            <button 
+            <button
                 class="border-2 border-black h-20 m-2 mb-6"
                 @click="placeOrder"
             >

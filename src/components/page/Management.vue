@@ -183,12 +183,8 @@ function confirmModalHandle(input) {
         // EDIT MODE CASE MODULE
         if (isEditMode.value) {
             console.log("case1")
-
             filterCateForEdit(editingItem.value.category)
             findEditIndex(editingItem.value.menu_name)
-            // console.log(editingItem.value)
-            // console.log(editSpace)
-            //add new category case
             if (editingItem.value.new_category) {
                 console.log("case1-A")
                 const object = {
@@ -442,6 +438,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                                     <template #price>
                                         <p>{{ items.price }}</p>
                                     </template>
+                                    <p @click="confirmModalHandle('delete')">DELETE</p>
                                 </MenuBaseCard>
                             </div>
                         </div>
