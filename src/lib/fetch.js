@@ -154,5 +154,5 @@ export {
   PostMenu,
   addNewCategory,
   addNewMenu,
-  DeleteMenu,
+  DeleteMenu,DeleteCate
 }
