@@ -159,25 +159,23 @@
   ],
   "OrderLists": [
     {
-    "order_number": "012001",
-    "payment": "Cash",
-    "menus": [
-      {
-        "menu_name": "Cappuccino",
-        "quantity": 1,
-        "price": 105,
-        "details": "Lightly sweet"
-      },
-      {
-        "menu_name": "Espresso",
-        "quantity": 1,
-        "price": 75,
-        "details": "Unsweet"
-      }
-      
-    ],
-    "id": "4aac"
-  },
+      "order_number": "012001",
+      "menus": [
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 1,
+          "price": 90,
+          "details": "Very sweet"
+        }
+      ],
+      "id": "4aac"
+    },
     {
       "order_number": "012002",
       "menus": [
@@ -238,6 +236,16 @@
       "details": "Unsweet",
       "selected": true,
       "Time": "3/28/2024 3:32:53 PM",
+      "order_number": "012001"
+    },
+    {
+      "id": "6701",
+      "menu_name": "Espresso",
+      "quantity": 1,
+      "price": 75,
+      "details": "Unsweet",
+      "selected": true,
+      "Time": "3/28/2024 9:47:09 PM",
       "order_number": "012001"
     }
   ],
