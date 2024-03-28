@@ -137,9 +137,10 @@ const placeOrder = () => {
     console.log(order)
 }
 function ToggleClick(item) {
+    console.log(selectedmenus)
     if (selectedmenus.length > 0) { 
         selectedmenus[0].selected = false
-        selectedmenus.pop()
+        selectedmenus.shift()
     }
     item.selected = true
     selectedmenus.push(item)
@@ -147,7 +148,8 @@ function ToggleClick(item) {
 }
 
 
-function confirmOption(item) {
+function confirmOption(item ,propoty) {
+    console.log(propoty.value)
     if (item.sweetnessLevel === undefined || item.sweetnessLevel === '') {
         alert("Please select sweetness level")
 
@@ -158,8 +160,10 @@ function confirmOption(item) {
         price: item.price,
         selected: item.selected,
         sweetnessLevel: item.sweetnessLevel,
+        category:propoty.category
+       
     }
-    fetchMenuData()
+    // fetchMenuData()
     mocDrinks.push(addToCart)
     console.log("mocDrinks :", mocDrinks)
 }
@@ -191,7 +195,7 @@ function confirmOption(item) {
                 <!-- loop category -->
 
                 <div
-                    v-for="(itemList, category) in afterFilterResult === null
+                    v-for="(propoty, category) in afterFilterResult === null
                         ? filterResult
                         : afterFilterResult"
                     :key="category"
@@ -199,31 +203,22 @@ function confirmOption(item) {
                 >
                     <!-- แสดงชื่อ category -->
                     <h2 class="w-full font-mono text-lg font-semibold mt-10">
-                        {{ itemList.category }}
+                        {{ propoty.category }}
                     </h2>
                     <!-- แสดง menu items ในแต่ละ category -->
                     <div
-                        v-for="(item, key) in itemList.menus"
+                        v-for="(item, key) in propoty.menus"
                         :key="key"
                         name="menuContainer"
                         class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
                     >
                         <div @click="ToggleClick(item)">
                             <MenuBaseCard class="flex flex-col justify-center items-center">
-                                <template #title v-if="!item.selected">
-                                    <img
-                                        :src="`/images/${item.img_src}`"
-                                        alt=""
-                                        class="w-40 h-40"
-                                    />
-                                    <b>{{ item.menu_name }}</b>
-                                    <p>{{ item.price }}</p>
-                                </template>
-
+                               
                                 <template
                                     #title
                                     v-if="!item.selected"
-                                    @click="openModal(item)"
+                                    
                                 >
                                     <img
                                         :src="`/images/${item.img_src}`"
@@ -273,7 +268,7 @@ function confirmOption(item) {
                                             >
                                         </div>
                                         <br />
-                                        <button @click="confirmOption(item)">
+                                        <button @click="confirmOption(item,propoty)">
                                             OK
                                         </button>
                                     </div>
