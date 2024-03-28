@@ -9,7 +9,7 @@
     </div>
     <div
       name="Content"
-      class="flex flex-row gap-4 justify-center items-center h-[80%] mt-2"
+      class="flex flex-row gap-4 justify-center content-center items-center h-[70%] mt-5"
     >
       <!-- total cup sold -->
       <div :class="partBox">
@@ -19,7 +19,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-12 h-12"
+          class="w-16 h-16"
         >
           <path
             stroke-linecap="round"
@@ -29,7 +29,7 @@
         </svg>
 
         <div class="flex flex-col">
-          <h2 :class="header">Total Sold</h2>
+          <h2 :class="header">Total Cups Sold</h2>
           <h1
             v-text="totalSold ? totalSold : NaN"
             :class="number"
@@ -44,7 +44,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-12 h-12"
+          class="w-16 h-16"
         >
           <path
             stroke-linecap="round"
@@ -69,7 +69,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-12 h-12"
+          class="w-16 h-16"
         >
           <path
             stroke-linecap="round"
@@ -79,7 +79,7 @@
         </svg>
 
         <div class="flex flex-col">
-          <h2 :class="header">Total Menu</h2>
+          <h2 :class="header" >Total Menu</h2>
           <h1
             v-text="totalMenu ? totalMenu : NaN"
             :class="number"
@@ -95,7 +95,7 @@ import { getList } from "../lib/fetch"
 import { ref } from "vue"
 
 const partBox = ref("w-1/3 h-24  flex flex-row gap-4 p-4 items-center")
-const header = ref("font-medium text-gray-500")
+const header = ref("font-medium text-gray-500 text-lg")
 const number = ref("font-bold text-3xl")
 
 const totalOrder = ref(0)

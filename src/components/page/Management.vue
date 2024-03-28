@@ -1,7 +1,7 @@
 <script setup>
 // Import necessary modules
 
-import { computed, ref, onMounted } from "vue"
+import { ref, onMounted } from "vue"
 import {
   getList,
   addNewCategory,
@@ -282,7 +282,12 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                 v-model="selectFilter"
                 @change="filterCategory(selectFilter)"
               >
-                <option value="All" selected>All</option>
+                <option
+                  value=""
+                  selected
+                >
+                  All
+                </option>
                 <!-- Generate options for each category -->
                 <option
                   v-for="(propoty, index) in filterResult"
@@ -298,7 +303,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
 
         <div
           name="container"
-          class="w-full h-[85%] flex items-start flex-wrap gap-4 overflow-auto mt-5"
+          class="w-full h-[85%] flex items-start flex-wrap gap-4 overflow-auto mt-3"
         >
           <!-- Dynamic rendering of menu items based on selected category -->
           <div
@@ -311,36 +316,38 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
             <!-- แสดงชื่อ category -->
             <h2
               name="cateSet"
-              class="w-full font-mono text-lg font-semibold"
-            >
-              {{ propoty.category }}
-            </h2>
+              class="w-full font-mono text-xl font-extrabold py-2"
+              v-text="propoty.category"
+            ></h2>
             <!-- แสดง menu items ในแต่ละ category -->
             <div class="flex flex-row gap-5 flex-wrap pl-4">
-            <div
-              v-for="(items, key) in propoty.menus"
-              :key="key"
-              name="menuCard"
-              class="card card-compact w-64 h-72 bg-base-100 shadow-xl transition ease-in-out hover:scale-105 duration-300"
-              
-              @click="menuModalHandle(items, propoty.category)"
-            >
-              <figure class="image-full">
-                <img
-                  :src="items.img_src"
-                  alt="MenuImage"
-                />
-              </figure>
-              <div class="card-body gap-1">
-                <h2
-                  class="card-title"
-                  v-text="items.menu_name"
-                ></h2>
-                <p v-text="items.description.slice(0, 60) + '...'"></p>
-                <p v-text="items.price + ' ฿'" class="font-bold text-lg"></p>
+              <div
+                v-for="(items, key) in propoty.menus"
+                :key="key"
+                name="menuCard"
+                class="card card-compact w-80 h-72 bg-base-100 shadow-md transition ease-in-out hover:scale-105 duration-300"
+                @click="menuModalHandle(items, propoty.category)"
+              >
+                <figure class="image-full min-h-40">
+                  <img
+                    :src="items.img_src"
+                    alt="MenuImage"
+                    @error="items.img_src = '/src/assets/img/errorImg.png'"
+                  />
+                </figure>
+                <div class="card-body gap-1">
+                  <h2
+                    class="card-title"
+                    v-text="items.menu_name"
+                  ></h2>
+                  <p v-text="items.description.slice(0, 60) + '...'"></p>
+                  <p
+                    v-text="items.price + ' ฿'"
+                    class="font-bold text-lg"
+                  ></p>
+                </div>
               </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -357,7 +364,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
         <!-- modal content -->
         <div
           name="modal"
-          class="fixed w-3/4 h-3/4 bg-white rounded-xl flex flex-col items-center justify-center indicator"
+          class="fixed w-auto h-auto bg-white rounded-xl flex flex-col items-center justify-center indicator p-10"
         >
           <button
             class="btn btn-square absolute top-2 right-2"
@@ -378,21 +385,32 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
               />
             </svg>
           </button>
-          <h1 name="Header">
+          <h1
+            name="Header"
+            class="justify-self-start w-full font-bold text-3xl"
+          >
             {{ isEditMode ? "Edit Menu" : "Add new Menu" }}
+            <p
+              v-text="
+                isEditMode
+                  ? `Refresh your menu! Edit existing items.`
+                  : `Spice up your shop! Create a new menu item.`
+              "
+              class="font-medium text-lg"
+            ></p>
           </h1>
-          {{ isEditMode ? editingItem.menu_name : "add new===menu" }}
+
           <!-- cate, menuname, price, picture, description -->
           <div
             name="modalcontainer"
-            class="flex flex-row justify-around gap-20 items-center"
+            class="flex flex-row justify-around gap-20 items-center mt-2 mb-12"
           >
             <div
               name="formfield"
               class="w-3/6"
             >
               <form>
-                <label class="form-control w-full max-w-sm">
+                <label class="form-control w-full gap-1 max-w-sm">
                   <div class="flex flex-row gap-4">
                     <div>
                       <div class="label">
@@ -435,51 +453,55 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                       v-model="editingItem.new_category"
                     />
                   </div>
-
-                  <div class="label">
-                    <span class="label-text">Menu description</span>
+                  <div>
+                    <div class="label">
+                      <span class="label-text">Menu description</span>
+                    </div>
+                    <textarea
+                      type="text"
+                      placeholder="Type here"
+                      class="textarea textarea-bordered textarea-sm w-full max-w-sm max-h-20"
+                      v-model="editingItem.description"
+                    ></textarea>
                   </div>
-                  <textarea
-                    type="text"
-                    placeholder="Type here"
-                    class="textarea textarea-bordered textarea-sm w-full max-w-sm max-h-20"
-                    v-model="editingItem.description"
-                  ></textarea>
-                  <div class="label">
-                    <span class="label-text">Price</span>
+                  <div>
+                    <div class="label">
+                      <span class="label-text">Price</span>
+                    </div>
+                    <input
+                      type="number"
+                      placeholder="Type here"
+                      class="input input-bordered w-full max-w-xs"
+                      v-model="editingItem.price"
+                    />
                   </div>
-                  <input
-                    type="number"
-                    placeholder="Type here"
-                    class="input input-bordered w-full max-w-xs"
-                    v-model="editingItem.price"
-                  />
-                  <div class="label">
-                    <span class="label-text">Image URL</span>
+                  <div>
+                    <div class="label">
+                      <span class="label-text">Image URL</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      class="input input-bordered w-full max-w-xs"
+                      v-model="editingItem.img_src"
+                    />
                   </div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    class="input input-bordered w-full max-w-xs"
-                    v-model="editingItem.img_src"
-                  />
                 </label>
               </form>
             </div>
 
             <div name="card">
               <div class="card card-compact w-96 bg-base-100 shadow-xl">
-                <figure>
+                <figure class="image-full max-h-52">
                   <img
                     :src="
-                      editingItem.img_src != '/src/assets/menuimage/pain.jpg'
+                      editingItem.img_src != '/src/assets/img/errorImg.png'
                         ? editingItem.img_src
-                        : '/src/assets/menuimage/pain.jpg'
+                        : '/src/assets/img/errorImg.png'
                     "
                     @error="
-                      editingItem.img_src = '/src/assets/menuimage/pain.jpg'
+                      editingItem.img_src = '/src/assets/img/errorImg.png'
                     "
-                    class="max-h-56 object-cover overflow-clip"
                     alt="Menu Image"
                   />
                 </figure>
@@ -542,14 +564,30 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
           <!-- modal content -->
           <div
             name="modal"
-            class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
+            class="fixed w-1/6 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
             v-if="!isDeleting"
           >
-            <h1>Confirmation</h1>
-            <p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-28 h-28 my-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+              />
+            </svg>
+
+            <h1 class="text-2xl font-semibold mb-4">Confirmation</h1>
+            <p class="text-lg mb-4">
               Are you sure to
               {{ isEditMode ? " edit " : " create " }} this menu ?
             </p>
+
             <div class="flex flex-row gap-4">
               <button
                 class="btn btn-outline btn-warning"
@@ -570,8 +608,8 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
             class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
             v-if="isDeleting"
           >
-            <h1>Confirmation</h1>
-            <p>Are you sure to remove this menu ?</p>
+            <h1 class="text-2xl font-semibold mb-4">Confirmation</h1>
+            <p class="text-lg mb-4">Are you sure to remove this menu ?</p>
             <div class="flex flex-row gap-4">
               <button
                 class="btn btn-outline btn-warning"
@@ -583,7 +621,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                 class="btn btn-success"
                 @click="confirmModalHandle(`deleteMenu`)"
               >
-                Success
+                Remove
               </button>
             </div>
           </div>
@@ -602,7 +640,23 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
             name="modal"
             class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
           >
-            <h1>Complete</h1>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-24 h-24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+
+            <h1 class="text-2xl font-semibold mb-4">Complete</h1>
+            <p class="text-lg mb-4">Have a good day :D</p>
             <div class="flex flex-row gap-4">
               <button
                 class="btn btn-success"
@@ -620,6 +674,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
       <Promotion
         :promotions="promotions"
         :drinks="filterResult"
+        :hr="hr"
       />
     </div>
   </Suspense>
