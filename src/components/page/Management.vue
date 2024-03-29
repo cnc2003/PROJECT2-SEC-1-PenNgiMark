@@ -7,7 +7,6 @@ import {
   addNewCategory,
   addNewMenu,
   DeleteMenu,
-  DeleteCate,
 } from "../../lib/fetch.js"
 
 import Analysis from "../Analysis.vue"

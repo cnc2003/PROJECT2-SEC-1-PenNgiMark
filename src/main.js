@@ -10,10 +10,9 @@ import Promotion from './components/Promotion.vue'
 const app = createApp(App)
 app.use(routers)
 
+
 app.component('Analysis', Analysis)
 app.component('Promotion', Promotion)
-app.component('ModalHistory', ModalHistory )
-app.component('ModalConfirm', ModalConfirm )
 app.mount('#app')
 
 
