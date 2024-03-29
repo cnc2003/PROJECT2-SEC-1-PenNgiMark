@@ -170,7 +170,7 @@ function cancelOption(item) {
 </script>
 <template>
   <div
-    class="flex h-full w-full shrink-0 w-12/12 p-4 pt-2 rounded-3xl bg-white border-solid border-slate-300 border-4"
+    class="flex h-screen w-full shrink-0 p-4 rounded-3xl bg-white border-solid border-slate-300 border-4"
   >
     <section class="border-2 border-white w-3/4" @click="closeModal">
       <!-- this must be category list -->
@@ -226,7 +226,7 @@ function cancelOption(item) {
       </div>
 
       <!-- this must be menus list -->
-      <div>
+      <div class="h-full overflow-y-scroll">
         <!-- loop category -->
 
         <div
@@ -249,25 +249,30 @@ function cancelOption(item) {
             v-for="(item, key) in propoty.menus"
             :key="key"
             name="menuContainer"
-            class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
+            
           >
             <div @click="ToggleClick(item)">
-              <MenuBaseCard class="flex flex-col justify-center items-center">
+              <MenuBaseCard>
                 <template #title v-if="!item.selected">
-                  <img :src="item.img_src" alt="" class="w-40 h-40" />
+                  <img :src="item.img_src" alt="MenuImage" class="min-h-20 rounded-t-3xl" />
+                  <div class="card-body gap-1">
                   <b>
-                    <p class="text-black">{{ item.menu_name }}</p></b
+                    <p class="card-title">{{ item.menu_name }}</p></b
                   >
-                  <p class="text-black font-semibold">{{ item.price }}</p>
+                  <p
+                    v-text=" item.price + ' ฿'"
+                    class="font-bold text-lg"
+                  ></p>
+                </div>
                 </template>
 
                 <template #modal v-if="item.selected">
-                  <div class="flex flex-col justify-center">
-                    <p class="text-lg font-bold text-pink-500">
+                  <div class="flex flex-col items-center justify-center ">
+                    <p class="text-2xl font-bold text-pink-500 mt-10 mb-5">
                       Sweetness Level
                     </p>
-                    <br />
                     <div>
+                    <div class="mt-3">
                       <input
                         type="radio"
                         id="light_sweet"
@@ -277,11 +282,11 @@ function cancelOption(item) {
                       />
                       <label
                         for="light_sweet"
-                        class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold"
+                        class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4"
                         >Light Sweet</label
                       >
                     </div>
-                    <div>
+                    <div class="mt-3">
                       <input
                         type="radio"
                         id="sweet"
@@ -291,11 +296,11 @@ function cancelOption(item) {
                       />
                       <label
                         for="sweet"
-                        class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold"
+                        class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4 "
                         >Sweet</label
                       >
                     </div>
-                    <div>
+                    <div class="mt-3">
                       <input
                         type="radio"
                         id="verySweet"
@@ -305,24 +310,28 @@ function cancelOption(item) {
                       />
                       <label
                         for="verySweet"
-                        class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold"
+                        class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4"
                         >Very Sweet</label
                       >
                     </div>
+                  </div>
                     <br />
+                    <div class="flex w-full h-32 justify-around items-end">
                     <button
-                      class="hover:bg-red-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-0.5 px-0.5 border border-gray-400 rounded shadow mr-2"
+                      class="hover:bg-red-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-8 border border-gray-400 rounded shadow "
                       @click="cancelOption(item)"
                     >
                       Cancel
                     </button>
                     <button
-                      class="hover:bg-green-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-0.5 px-0.5 border border-gray-400 rounded shadow mr-2"
+                      class="hover:bg-green-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-10 border border-gray-400 rounded shadow"
                       @click="confirmOption(item, propoty)"
                     >
                       OK
                     </button>
                   </div>
+                  </div>
+                  
                 </template>
               </MenuBaseCard>
             </div>
@@ -331,7 +340,7 @@ function cancelOption(item) {
       </div>
     </section>
 
-    <section class="flex flex-col border-2 border-black h-dvh w-1/4">
+    <section class="flex flex-col border-2 border-black h-dvh w-1/4 ml-2">
       <div class="flex justify-evenly border-2 border-black my-1 mx-2 h-20 p-1">
         <button class="border-2 border-black rounded-md h-full">Dine in</button>
         <button class="border-2 border-black rounded-md h-full">

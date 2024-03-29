@@ -406,7 +406,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
           >
             <div
               name="formfield"
-              class="w-3/6"
+              class="w-5/6"
             >
               <form>
                 <label class="form-control w-full gap-1 max-w-sm">
