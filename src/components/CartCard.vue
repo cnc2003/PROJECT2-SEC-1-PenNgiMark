@@ -19,7 +19,7 @@ import { ref, computed } from "vue"
 </script>
 
 <template>
-    <div class="flex gap-12 pl-4">
+    <div class="flex gap-12 justify-around">
         <div class="flex-1">
             <slot name="drinkName">NAME</slot>
             <slot name="sweet"></slot>
