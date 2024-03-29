@@ -185,8 +185,88 @@
     },
     {
       "order_number": "012002",
+      "menus": [
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 1,
+          "price": 90,
+          "details": "Very sweet"
+        }
+      ],
+      "id": "2000"
+    },
+    {
+      "order_number": "012002",
       "payment": "Cash",
-      "orders": [
+      "menus": [
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 1,
+          "price": 90,
+          "details": "Very sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 4,
+          "price": 360,
+          "details": "sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 3,
+          "price": 270,
+          "details": "Extra sweet"
+        }
+      ],
+      "id": "2000"
+    },
+    {
+      "order_number": "012002",
+      "payment": "Cash",
+      "menus": [
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "details": "Lightly sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 1,
+          "price": 90,
+          "details": "Very sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 4,
+          "price": 360,
+          "details": "sweet"
+        },
+        {
+          "menu_name": "Americano",
+          "quantity": 3,
+          "price": 270,
+          "details": "Extra sweet"
+        }
+      ],
+      "id": "2000"
+    },
+    {
+      "order_number": "012002",
+      "payment": "Cash",
+      "menus": [
         {
           "menu_name": "Cappuccino",
           "quantity": 1,
@@ -255,6 +335,26 @@
       "selected": true,
       "Time": "3/28/2024 9:47:09 PM",
       "order_number": "012001"
+    },
+    {
+      "id": "5db5",
+      "menu_name": "Americano",
+      "quantity": 3,
+      "price": 270,
+      "details": "Extra sweet",
+      "selected": true,
+      "Time": "3/29/2024 5:37:45 PM",
+      "order_number": "012002"
+    },
+    {
+      "id": "04f4",
+      "menu_name": "Americano",
+      "quantity": 4,
+      "price": 360,
+      "details": "sweet",
+      "selected": true,
+      "Time": "3/29/2024 5:52:27 PM",
+      "order_number": "012002"
     }
   ],
   "Management": [

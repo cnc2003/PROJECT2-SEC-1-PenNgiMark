@@ -88,21 +88,24 @@ function confirmServe(event) {
 }
 </script>
 <template>
-
-    <div class="fixed flex border-4 rounded-xl w-[12%]">
-        <img
-            src="https://www.svgrepo.com/show/492596/food.svg"
-            alt=""
-            class="w-14"
-        />
-        <button
-            @click="
-                showModalHistory = true, ReloadHistory = !ReloadHistory
-            "
-            class="text-lg"
-        >
-            History
-        </button>
+    <div class="fixed grid grid-cols-2 h-[10%] w-10/12  mb-2 bg-slate-200 rounded-b-2xl">
+        <h1 class="flex items-center text-2xl font-bold pb-2 ml-10">List Orders</h1>
+        <div class="flex justify-end items-center mr-2">
+            <button
+                class=" flex flex-col justify-center border-4 rounded-xl w-[22%] btn btn-error right-[2%] text-xl"
+                @click="
+                    (showModalHistory = true), (ReloadHistory = !ReloadHistory)
+                "
+            >
+                <img
+                    src="https://www.svgrepo.com/show/492596/food.svg"
+                    alt=""
+                    class="w-10"
+                />
+                <h2 class="mt-1 text-black">History</h2>
+            </button>
+        </div>
+        <!-- <hr class="border-2 col-span-2"> -->
     </div>
     <!-- ModalHistory -->
     <div v-show="showModalHistory">
@@ -123,17 +126,17 @@ function confirmServe(event) {
     <!-- main -->
     <div
         v-if="orderListData.length === 0"
-        class="w-full h-[30%] flex justify-center border-2 rounded-md p-4 bg-slate-100 mt-12 ml-4"
+        class="h-[20%] w-11/12 shrink-0 p-4 flex justify-center items-center mt-24 ml-4 rounded-3xl bg-white border-solid border-slate-300 border-4 shadow-lg text-3xl"
     >
         <p>No Order ?</p>
     </div>
-    <div v-else class="mt-10">
-        <div v-for="(order, index) in orderListData" :key="index" >
+    <div v-else class="mt-16">
+        <div v-for="(order, index) in orderListData" :key="index">
             <div
-                class="my-6 h-[20%] w-11/12 shrink-0 p-4 flex mt-8 ml-4 rounded-3xl bg-white border-solid border-slate-300 border-4 shadow-lg"
+                class="h-[20%] w-11/12 shrink-0 p-4 flex mt-6 ml-[4%] rounded-3xl bg-white border-solid border-slate-300 border-4 shadow-lg"
             >
                 <div class="flex flex-col justify-center items-center w-1/4">
-                    <p class="font-bold">Order</p>
+                    <p class="font-bold">Order Number</p>
                     <!-- ดึง ordermenu มาแสดง -->
                     <div>{{ order.order_number }}</div>
                 </div>
@@ -161,10 +164,10 @@ function confirmServe(event) {
                                     Menu : {{ order_menu.menu_name }}
                                 </div>
                                 <div class="pt-2 pb-2">
-                                    quantity : {{ order_menu.quantity }}
+                                    Quantity : {{ order_menu.quantity }}
                                 </div>
                                 <div class="pt-2 pb-2">
-                                    details : {{ order_menu.details }}
+                                    Details : {{ order_menu.details }}
                                 </div>
                                 <input
                                     type="checkbox"
@@ -176,13 +179,16 @@ function confirmServe(event) {
                     </div>
                 </div>
                 <button
-                    class="bg-[#00E3FE] w-1/4 rounded-lg text-4xl font-bold"
+                    class="btn btn-square btn-success w-1/6 h-44 rounded-lg text-4xl text-white font-bold"
                     @click="openModalConfirm(order)"
                     :disabled="
                         order.menus.filter((menu) => menu.selected).length === 0
                     "
                     :class="{
                         'bg-gray-300':
+                            order.menus.filter((menu) => menu.selected)
+                                .length === 0,
+                        'text-black':
                             order.menus.filter((menu) => menu.selected)
                                 .length === 0,
                     }"
@@ -194,6 +200,4 @@ function confirmServe(event) {
         </div>
     </div>
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>

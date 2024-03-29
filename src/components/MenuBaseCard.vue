@@ -11,7 +11,7 @@ const props = defineProps({
     <div
         :class="
             variant === 'menuList'
-                ? 'w-40 h-40 m-6 border border-gray-300 rounded-md pointer hover:scale-105 transition-all'
+                ? 'w-64 h-96 m-3 border-4 border-gray-300 rounded-3xl cursor-pointer hover:scale-105 transition-all'
                 : 'flex'
         "
     >
