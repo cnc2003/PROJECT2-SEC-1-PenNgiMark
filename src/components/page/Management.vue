@@ -469,6 +469,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                     </div>
                     <input
                       type="number"
+                      min="0"
                       placeholder="Type here"
                       class="input input-bordered w-full max-w-xs"
                       v-model="editingItem.price"

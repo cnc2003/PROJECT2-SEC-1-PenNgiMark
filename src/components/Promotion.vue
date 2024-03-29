@@ -31,11 +31,11 @@
     <div class="w-full">
     <table class="table w-full table-zebra">
       <thead class="text-xl">
-        <tr>
+        <tr class="w-full">
           <th></th>
-          <th>Name</th>
-          <th>Drinks</th>
-          <th>Discount Price</th>
+          <th class="w-[30%]">Name</th>
+          <th class="w-[30%]">Drinks</th>
+          <th class="w-[30%]">Discount Price</th>
         </tr>
       </thead>
       <tbody >

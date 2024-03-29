@@ -49,17 +49,18 @@ const removeMenu = (index) => {
 
 <template>
   <div
-    class="fixed flex justify-center items-center z-10 inset-0 bg-gray-500 bg-opacity-60 w-screen"
+    class="fixed flex justify-center items-center gap-4 z-10 inset-0 bg-gray-500 bg-opacity-60 w-screen"
     @click="$emit('closeModal', false), $event"
   >
     <div
-      class="bg-white w-auto h-auto flex flex-col gap-2 justify-center rounded-3xl p-10"
+      class="bg-white w-auto h-auto flex flex-col gap-2 justify-center rounded-3xl p-10 "
       @click="$event.stopPropagation()"
     >
       <div class="mb-3">
         <h1 class="font-bold text-3xl">Update menu easily</h1>
         <p class="text-xl">add or edit items.</p>
       </div>
+      <div class="mb-3">
       <div>
         <div class="label">
           <span class="">Promotion Name </span>
@@ -70,46 +71,89 @@ const removeMenu = (index) => {
           class="p-0.5 border border-gray-300 rounded-lg outline-none"
         />
       </div>
-      <div>
+      <div
+        name="drinks "
+        class="w-full flex flex-col"
+      >
         <div class="label">
           <span class="">Promotion Name </span>
         </div>
-        <CartCard
-          v-for="(menu, index) in menus"
-          :key="index"
-          class="border border-gray-300 rounded-md h-8 flex justify-center items-center"
+        <div
+          name="drinks container"
+          class="border border-gray-300 rounded-md p-4"
         >
-          <template #drinkName>
-            <!-- <input
+          <CartCard
+            v-for="(menu, index) in menus"
+            :key="index"
+            class="flex justify-center items-center pb-2"
+          >
+            <template #drinkName>
+              <!-- <input
                 type="text"
                 v-model.trim="menu.menuName"
                 class="p-0.5 border border-gray-300 rounded-lg outline-none"
             /> -->
-            <SearchInput
-              :drinks="props.drinks"
-              :editingMenu="menu"
-              class="z-20"
-            />
-          </template>
-          <template #quantity>
-            <!-- <button @click="removeMenu(index)">X</button> -->
-            <button @click="menu.quantity <= 1 ? null : menu.quantity--">
-              -
+              <SearchInput
+                :drinks="props.drinks"
+                :editingMenu="menu"
+                class="z-20"
+              />
+            </template>
+            <template #quantity>
+              <!-- <button @click="removeMenu(index)">X</button> -->
+              <div class="flex flex-row gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6 hover:scale-[105%]"
+                  @click="menu.quantity <= 1 ? null : menu.quantity--"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+
+                <p>{{ menu.quantity }}</p>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6 hover:scale-[105%]"
+                  @click="menu.quantity++"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+              </div>
+            </template>
+          </CartCard>
+          <div
+            name="flex"
+            class="flex justify-center w-full h-10"
+          >
+            <button
+              @click="addMenu"
+              class="btn btn-sm bg-sky-300 hover:bg-sky-200 border-0 rounded-md w-[80%] mt-2"
+            >
+              +
             </button>
-            <p>{{ menu.quantity }}</p>
-            <button @click="menu.quantity++">+</button>
-          </template>
-        </CartCard>
-        <button
-          @click="addMenu"
-          class="self-center bg-gray-300 rounded-md w-16 h-8"
-        >
-          +
-        </button>
+          </div>
+        </div>
       </div>
       <div>
         <div class="label">
-          <span class="">Discount: </span>
+          <span>Discount</span>
         </div>
         <input
           type="number"
@@ -118,14 +162,21 @@ const removeMenu = (index) => {
           class="p-0.5 border border-gray-300 rounded-lg outline-none"
         />
       </div>
-
-      <button @click="savePromotion">Save</button>
-      <button
-        @click="$emit('closeModal', false)"
-        class="border"
-      >
-        CloseModal
-      </button>
+    </div>
+      <div class="flex flex-col gap-2 justify-center items-center">
+        <button
+          @click="savePromotion"
+          class="btn btn-sm btn-success w-[80%]"
+        >
+          Save
+        </button>
+        <button
+          @click="$emit('closeModal', false)"
+          class="btn btn-sm btn-warning btn-outline w-[80%]"
+        >
+          CloseModal
+        </button>
+      </div>
       <JsxIconBase
         iconName="Trash"
         color="red"
