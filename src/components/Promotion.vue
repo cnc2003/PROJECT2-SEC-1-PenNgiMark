@@ -20,23 +20,23 @@
       </h1>
     </div>
     <hr :class="hr" class="my-2" />
-    <div>
-      <div class="grid grid-cols-3 justify-items-center">
+    <div class="flex flex-col justify-center ">
+      <div class="flex flex-row justify-around ">
         <h2>Name</h2>
         <h2>Drinks</h2>
         <h2>Discount</h2>
       </div>
-      <div>
+      
         <div
           v-for="pro in promotions"
           :key="pro.id"
-          class="grid grid-cols-3 border border-gray-300 m-3 rounded-md pointer hover:scale-105 transition-all"
+          class="flex flex-row justify-around items-center border w-full h-12 border-gray-300 rounded-md pointer hover:scale-105 transition-all "
           @click="openPromoModal(pro)"
         >
-          <div class="col-span-1 justify-self-center">
+          <div class="justify-self-center w-[33%] pl-28">
             {{ pro.name }}
           </div>
-          <div class="col-span-1 pl-20">
+          <div class="w-[33%]">
             <ul class="list-disc">
               <li
                 v-for="(menu, index) in pro.menus"
@@ -53,11 +53,11 @@
               </li>
             </ul>
           </div>
-          <div class="col-span-1 justify-self-center">
+          <div class="w-1/3 justify-self-center">
             {{ pro.discount }}
           </div>
         </div>
-      </div>
+      
     </div>
   </div>
   <div v-if="isProModalOpen">
