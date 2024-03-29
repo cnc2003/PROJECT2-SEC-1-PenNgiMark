@@ -7,6 +7,7 @@ import {
   addNewCategory,
   addNewMenu,
   DeleteMenu,
+  DeleteCate,
 } from "../../lib/fetch.js"
 
 import Analysis from "../Analysis.vue"
@@ -32,7 +33,7 @@ async function fetchMenuData() {
   totalMenu.value = 0
   for (const cate in filterResult.value) {
     // cate [ex index = 0,1,2,3,4,5]
-    const category = filterResult.value[cate] // {id: '236e', takoyaki: Array(1)}
+    const category = filterResult.value[cate] ? filterResult.value[cate] : 0 // {id: '236e', takoyaki: Array(1)}
     totalMenu.value += category.menus.length
     if (category.menus.length == 0) {
       DeleteCate(category.id)
@@ -77,13 +78,17 @@ function menuModalHandle(input, category) {
     editingItem.value = currEditOrigin.menu
     isEditMode.value = false
     isMenuModal.value = false
+    fetchMenuData()
   } else if (input == "addNewMenu") {
     isEditMode.value = false
     isMenuModal.value = true
   } else if (typeof input == "object") {
     currEditOrigin = { category: category, menu: input }
+    // console.log(input)
+    // console.log(category)
     editingItem.value = input
     editingItem.value.category = category
+    // console.log(editingItem.value.category)
     isMenuModal.value = true
     isEditMode.value = true
   }
@@ -92,14 +97,18 @@ function menuModalHandle(input, category) {
 function confirmModalHandle(input) {
   let editSpace = null
   let index = null
+  //find cate that matched
   function filterCateForEdit(input) {
     for (const cate of filterResult.value) {
       if (cate.category.toLowerCase() == input.toLowerCase()) {
+        // console.log(cate);
         editSpace = cate
       }
     }
+    // console.log(editSpace);
     return editSpace
   }
+  //find index inside that category menus
   function findEditIndex(menuName) {
     index = editSpace.menus.findIndex(
       (menu) => menu.menu_name.toLowerCase() == menuName.toLowerCase()
@@ -143,9 +152,14 @@ function confirmModalHandle(input) {
     // EDIT MODE CASE MODULE
     if (isEditMode.value) {
       console.log("case1")
+      // console.log(editingItem.value)
+      // console.log(editingItem.value.category)
 
-      filterCateForEdit(editingItem.value.category)
+      filterCateForEdit(currEditOrigin.category)
+      // console.log(editSpace);
       findEditIndex(editingItem.value.menu_name)
+      console.log(editSpace.category)
+      console.log(currEditOrigin.category)
       //add new category case
       if (editingItem.value.new_category) {
         console.log("case1-A")
@@ -169,7 +183,9 @@ function confirmModalHandle(input) {
       } else {
         console.log("case1-B")
         //NOT add new category case
-        if (editSpace.category == currEditOrigin.category) {
+        console.log(editSpace.category)
+        console.log(currEditOrigin.category)
+        if (editingItem.value.category == currEditOrigin.category) {
           console.log("//Edit data case ")
           editSpace.menus[index] = {
             menu_name: editingItem.value.menu_name,
@@ -192,6 +208,7 @@ function confirmModalHandle(input) {
             description: editingItem.value.description,
             img_src: editingItem.value.img_src,
           })
+          console.log("dofetch")
           addNewMenu(editSpace.id, editSpace).then(() => fetchMenuData())
         }
       }
@@ -339,9 +356,15 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                     class="card-title"
                     v-text="items.menu_name"
                   ></h2>
-                  <p v-text="items.description.slice(0, 60) + '...'"></p>
                   <p
-                    v-text="items.price + ' ฿'"
+                    v-text="
+                      items.description
+                        ? items.description.slice(0, 60) + '...'
+                        : 'no infomation'
+                    "
+                  ></p>
+                  <p
+                    v-text="items.price ? items.price + ' ฿' : 'Nan ฿'"
                     class="font-bold text-lg"
                   ></p>
                 </div>
@@ -446,7 +469,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                       <span class="label-text">New category</span>
                     </div>
                     <input
-                      type="text" 
+                      type="text"
                       placeholder="Type here"
                       class="input input-bordered w-full max-w-sm"
                       v-model="editingItem.new_category"
