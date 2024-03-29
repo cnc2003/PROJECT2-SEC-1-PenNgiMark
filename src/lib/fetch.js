@@ -115,26 +115,6 @@ async function DeleteMenu(categoryId, editedMenuData) {
   }
 }
 
-async function DeleteCate(categoryId) {
-  try {
-    const response = await fetch(`${url}Menus/${categoryId}`, {
-      method: "DELETE"
-    })
-    if (!response.ok) {
-      throw new Error("Failed to delete category")
-    }
-    const jsonResponse = await response.json()
-    console.log("Category deleted successfully", jsonResponse)
-    // Optionally, you can return some data indicating success
-    return { success: true }
-  } catch (error) {
-    console.error("Error deleting category:", error.message)
-    // Handle errors as per your application's requirements
-    return { success: false, error: error.message }
-  }
-}
-
-
 // =========================================
 //               Order mangement
 // =========================================
@@ -174,5 +154,5 @@ export {
   PostMenu,
   addNewCategory,
   addNewMenu,
-  DeleteMenu,
+  DeleteMenu
 }

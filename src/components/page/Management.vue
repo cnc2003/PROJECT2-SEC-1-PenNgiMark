@@ -1,22 +1,18 @@
 <script setup>
 // Import necessary modules
 
-import { computed, ref, onMounted, resolveDirective, ssrContextKey } from "vue"
+import { ref, onMounted } from "vue"
 import {
   getList,
   addNewCategory,
   addNewMenu,
   DeleteMenu,
 } from "../../lib/fetch.js"
-import PromoModal from "../PromoModal.vue"
-import MenuBaseCard from "../MenuBaseCard.vue"
 
+import Analysis from "../Analysis.vue"
+import Promotion from "../Promotion.vue"
 // Define reactive variables
 const totalMenu = ref(0)
-const totalSold = ref(0)
-const totalOrder = ref(0)
-const orderData = ref(null)
-const managementData = ref(null)
 // Edit variable - Modal
 const editingItem = ref({})
 const isMenuModal = ref(false)
@@ -28,58 +24,36 @@ const isDeleting = ref(false)
 // Filter variables
 const selectFilter = ref("")
 const filterResult = ref(null)
-
 let afterFilterResult = ref(null) // default value
-const promotions = ref([])
-const isProModalOpen = ref(false)
 
 //fetch GET menulist
 async function fetchMenuData() {
   filterResult.value = await getList("Menus") // is array
-
-  ////console.log(filterResult.value)
+  totalMenu.value = 0
   for (const cate in filterResult.value) {
     // cate [ex index = 0,1,2,3,4,5]
     const category = filterResult.value[cate] // {id: '236e', takoyaki: Array(1)}
-    ////console.log("category :", category)
-    ////console.log(category.menus.length)
     totalMenu.value += category.menus.length
-    ////console.log(totalMenu.value)
+    if (category.menus.length == 0) {
+      DeleteCate(category.id)
+      filterResult.value = await getList("Menus")
+    }
   }
 }
 
-async function fetchOrderData() {
-  orderData.value = await getList("OrderLists")
-  totalOrder.value = orderData.value.length
-  calTotalOrder()
-}
-async function fetchMenagementData() {
-  managementData.value = await getList("Management")
-  for (const cate in managementData.value) {
-    // cate [ex index = 0,1,2,3,4,5]
-    const category = managementData.value[cate] // {id: '236e', takoyaki: Array(1)}
-    //console.log("category :", category)
-    //console.log(category.menus)
-    totalSold.value += category.orders.length
-    //console.log(totalSold.value)
-  }
-}
-fetchMenagementData()
+const promotions = ref([])
 onMounted(async () => {
   const [menusRes, promotionsRes] = await Promise.all([
     getList("Menus"),
     getList("Promotions"),
   ])
   fetchMenuData()
-  fetchOrderData()
-
   promotions.value = promotionsRes
   filterResult.value = menusRes
 })
 
 // Function to filter categories
 function filterCategory(inputCategory) {
-  //console.log(inputCategory)
   let t = null
   if (inputCategory === null || inputCategory === "All") {
     afterFilterResult.value = filterResult.value
@@ -96,19 +70,6 @@ function filterCategory(inputCategory) {
   }
 }
 
-function calTotalOrder() {
-  const orderQuantities = managementData.value.map((order) => {
-    const totalQuantity = order.orders.reduce(
-      (acc, curr) => acc + curr.quantity,
-      0
-    )
-    return totalQuantity
-  })
-  const totalQuantities = [...orderQuantities]
-  totalSold.value = totalQuantities.reduce((acc, curr) => acc + curr, 0)
-  //console.log(totalSold.value)
-}
-
 // Menu modal handlerer
 let currEditOrigin = {}
 function menuModalHandle(input, category) {
@@ -119,14 +80,12 @@ function menuModalHandle(input, category) {
   } else if (input == "addNewMenu") {
     isEditMode.value = false
     isMenuModal.value = true
-    // console.log(isEditMode.value);
   } else if (typeof input == "object") {
     currEditOrigin = { category: category, menu: input }
     editingItem.value = input
     editingItem.value.category = category
     isMenuModal.value = true
     isEditMode.value = true
-    // console.log(editingItem.value)
   }
 }
 
@@ -178,7 +137,6 @@ function confirmModalHandle(input) {
   if (input == "addMenu") {
     console.log("add")
     if (!editingItem.value.category) {
-      // console.log(editingItem.value)
       return alert("put si")
     }
 
@@ -279,95 +237,31 @@ function confirmModalHandle(input) {
   }
 }
 
-const editingPromo = ref({
-  id: undefined,
-  name: "",
-  menus: [],
-  discount: 0,
-})
-
-const colsePromoModal = () => {
-  isProModalOpen.value = false
-  editingPromo.value = {
-    id: undefined,
-    name: "",
-    menus: [],
-    discount: 0,
-  }
-}
-
-const openPromoModal = (promo) => {
-  editingPromo.value = promo
-  // editingPromo.value = {
-  //     id: promo.id,
-  //     name: promo.name,
-  //     menus: promo.menus,
-  //     discount: promo.discount,
-  // }
-  isProModalOpen.value = true
-}
-
-const updatePromo = (newPromo) => {
-  ////console.log(newPromo)
-  if (newPromo.id === undefined) {
-    newPromo.id = promotions.value.length
-    promotions.value.push(newPromo)
-  } else {
-    const index = promotions.value.findIndex(
-      (promo) => promo.id === newPromo.id
-    )
-    promotions.value[index] = newPromo
-  }
-}
-
 // Set HR style class
-const hr = ref("mb-2 border-gray-300 border-1 rounded")
+const hr = ref("mb-2 border-gray-300 border-2 rounded")
 </script>
 
 <template>
   <Suspense>
     <div class="flex flex-col w-full h-lvh items-center">
-      <!---->
-      <div
-        name="analysis"
-        class="my-6 h-[20%] w-11/12 shrink-0 rounded-md p-4 bg-slate-100"
-      >
-        <h1 class="text-2xl font-mono font-semibold">Analysis</h1>
-        <hr :class="hr" />
-        <div
-          name="Content"
-          class="flex"
-        >
-          <!-- total cup sold -->
-          <div>
-            <h2>Total Sold</h2>
-            <h1 v-text="totalSold ? totalSold : NaN"></h1>
-          </div>
-          <!-- total order -->
-          <div>
-            <h2>Total Order</h2>
-            <h1 v-text="totalOrder ? totalOrder : NaN"></h1>
-          </div>
-          <!-- total product -->
-          <div>
-            <h2>Total Menu</h2>
-            <h1 v-text="totalMenu ? totalMenu : NaN"></h1>
-          </div>
-        </div>
-      </div>
+      <!------------------------ 
+        -- Analysis Section --
+        ------------------------>
+      <Analysis
+        :totalMenu="totalMenu"
+        :hr="hr"
+      />
 
-      <!------------------------>
-      <!-- Management Section -->
-      <!------------------------>
+      <!------------------------ 
+        -- Management Section --
+        ------------------------>
       <div
         name="management"
-        class="h-[70%] shrink-0 w-11/12 rounded-md p-4 bg-slate-100"
+        class="h-[70%] shrink-0 w-11/12 p-4 pt-2 rounded-3xl bg-white border-solid border-slate-300 border-4"
       >
         <div class="h-[10%] mb-2">
-          <div
-            class="flex flex-row justify-between items-center w-full h-full mb-2"
-          >
-            <h1 class="text-2xl font-mono font-semibold">Management</h1>
+          <div class="flex flex-row justify-between items-center w-full h-full">
+            <h1 class="text-2xl font-bold">Management</h1>
 
             <div class="flex flex-row gap-2 w-2/5 justify-end">
               <button
@@ -387,9 +281,13 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                 v-model="selectFilter"
                 @change="filterCategory(selectFilter)"
               >
-                <option value="All">All</option>
+                <option
+                  value=""
+                  selected
+                >
+                  All
+                </option>
                 <!-- Generate options for each category -->
-
                 <option
                   v-for="(propoty, index) in filterResult"
                   :key="index"
@@ -404,7 +302,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
 
         <div
           name="container"
-          class="w-full h-[70%] flex items-start flex-wrap gap-4 overflow-auto"
+          class="w-full h-[85%] flex items-start flex-wrap gap-4 overflow-auto mt-3"
         >
           <!-- Dynamic rendering of menu items based on selected category -->
           <div
@@ -415,25 +313,38 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
             class="flex flex-wrap w-full h-auto gap-2"
           >
             <!-- แสดงชื่อ category -->
-            <h2 class="w-full font-mono text-lg font-semibold">
-              {{ propoty.category }}
-            </h2>
+            <h2
+              name="cateSet"
+              class="w-full font-mono text-xl font-extrabold py-2"
+              v-text="propoty.category"
+            ></h2>
             <!-- แสดง menu items ในแต่ละ category -->
-            <div
-              v-for="(items, key) in propoty.menus"
-              :key="key"
-              name="menuContainer"
-              class="flex flex-row gap-4 flex-wrap justify-items-center items-center pl-4"
-            >
-              <div @click="menuModalHandle(items, propoty.category)">
-                <MenuBaseCard variant="menuList">
-                  <template #title>
-                    <b>{{ items.menu_name }}</b>
-                  </template>
-                  <template #price>
-                    <p>{{ items.price }}</p>
-                  </template>
-                </MenuBaseCard>
+            <div class="flex flex-row gap-5 flex-wrap pl-4">
+              <div
+                v-for="(items, key) in propoty.menus"
+                :key="key"
+                name="menuCard"
+                class="card card-compact w-80 h-72 bg-base-100 shadow-md transition ease-in-out hover:scale-105 duration-300"
+                @click="menuModalHandle(items, propoty.category)"
+              >
+                <figure class="image-full min-h-40">
+                  <img
+                    :src="items.img_src"
+                    alt="MenuImage"
+                    @error="items.img_src = '/src/assets/img/errorImg.png'"
+                  />
+                </figure>
+                <div class="card-body gap-1">
+                  <h2
+                    class="card-title"
+                    v-text="items.menu_name"
+                  ></h2>
+                  <p v-text="items.description.slice(0, 60) + '...'"></p>
+                  <p
+                    v-text="items.price + ' ฿'"
+                    class="font-bold text-lg"
+                  ></p>
+                </div>
               </div>
             </div>
           </div>
@@ -452,7 +363,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
         <!-- modal content -->
         <div
           name="modal"
-          class="fixed w-3/4 h-3/4 bg-white rounded-xl flex flex-col items-center justify-center indicator"
+          class="fixed w-auto h-auto bg-white rounded-xl flex flex-col items-center justify-center indicator p-10"
         >
           <button
             class="btn btn-square absolute top-2 right-2"
@@ -473,21 +384,32 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
               />
             </svg>
           </button>
-          <h1 name="Header">
+          <h1
+            name="Header"
+            class="justify-self-start w-full font-bold text-3xl"
+          >
             {{ isEditMode ? "Edit Menu" : "Add new Menu" }}
+            <p
+              v-text="
+                isEditMode
+                  ? `Refresh your menu! Edit existing items.`
+                  : `Spice up your shop! Create a new menu item.`
+              "
+              class="font-medium text-lg"
+            ></p>
           </h1>
-          {{ isEditMode ? editingItem.menu_name : "add new===menu" }}
+
           <!-- cate, menuname, price, picture, description -->
           <div
             name="modalcontainer"
-            class="flex flex-row justify-around gap-20 items-center"
+            class="flex flex-row justify-around gap-20 items-center mt-2 mb-12"
           >
             <div
               name="formfield"
               class="w-3/6"
             >
               <form>
-                <label class="form-control w-full max-w-sm">
+                <label class="form-control w-full gap-1 max-w-sm">
                   <div class="flex flex-row gap-4">
                     <div>
                       <div class="label">
@@ -530,51 +452,55 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                       v-model="editingItem.new_category"
                     />
                   </div>
-
-                  <div class="label">
-                    <span class="label-text">Menu description</span>
+                  <div>
+                    <div class="label">
+                      <span class="label-text">Menu description</span>
+                    </div>
+                    <textarea
+                      type="text"
+                      placeholder="Type here"
+                      class="textarea textarea-bordered textarea-sm w-full max-w-sm max-h-20"
+                      v-model="editingItem.description"
+                    ></textarea>
                   </div>
-                  <textarea
-                    type="text"
-                    placeholder="Type here"
-                    class="textarea textarea-bordered textarea-sm w-full max-w-sm max-h-20"
-                    v-model="editingItem.description"
-                  ></textarea>
-                  <div class="label">
-                    <span class="label-text">Price</span>
+                  <div>
+                    <div class="label">
+                      <span class="label-text">Price</span>
+                    </div>
+                    <input
+                      type="number"
+                      placeholder="Type here"
+                      class="input input-bordered w-full max-w-xs"
+                      v-model="editingItem.price"
+                    />
                   </div>
-                  <input
-                    type="number"
-                    placeholder="Type here"
-                    class="input input-bordered w-full max-w-xs"
-                    v-model="editingItem.price"
-                  />
-                  <div class="label">
-                    <span class="label-text">Image URL</span>
+                  <div>
+                    <div class="label">
+                      <span class="label-text">Image URL</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      class="input input-bordered w-full max-w-xs"
+                      v-model="editingItem.img_src"
+                    />
                   </div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    class="input input-bordered w-full max-w-xs"
-                    v-model="editingItem.img_src"
-                  />
                 </label>
               </form>
             </div>
 
             <div name="card">
               <div class="card card-compact w-96 bg-base-100 shadow-xl">
-                <figure>
+                <figure class="image-full max-h-52">
                   <img
                     :src="
-                      editingItem.img_src != '/src/assets/menuimage/pain.jpg'
+                      editingItem.img_src != '/src/assets/img/errorImg.png'
                         ? editingItem.img_src
-                        : '/src/assets/menuimage/pain.jpg'
+                        : '/src/assets/img/errorImg.png'
                     "
                     @error="
-                      editingItem.img_src = '/src/assets/menuimage/pain.jpg'
+                      editingItem.img_src = '/src/assets/img/errorImg.png'
                     "
-                    class="max-h-56 object-cover overflow-clip"
                     alt="Menu Image"
                   />
                 </figure>
@@ -637,14 +563,30 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
           <!-- modal content -->
           <div
             name="modal"
-            class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
+            class="fixed w-1/6 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
             v-if="!isDeleting"
           >
-            <h1>Confirmation</h1>
-            <p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-28 h-28 my-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+              />
+            </svg>
+
+            <h1 class="text-2xl font-semibold mb-4">Confirmation</h1>
+            <p class="text-lg mb-4">
               Are you sure to
               {{ isEditMode ? " edit " : " create " }} this menu ?
             </p>
+
             <div class="flex flex-row gap-4">
               <button
                 class="btn btn-outline btn-warning"
@@ -665,8 +607,8 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
             class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
             v-if="isDeleting"
           >
-            <h1>Confirmation</h1>
-            <p>Are you sure to remove this menu ?</p>
+            <h1 class="text-2xl font-semibold mb-4">Confirmation</h1>
+            <p class="text-lg mb-4">Are you sure to remove this menu ?</p>
             <div class="flex flex-row gap-4">
               <button
                 class="btn btn-outline btn-warning"
@@ -678,7 +620,7 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
                 class="btn btn-success"
                 @click="confirmModalHandle(`deleteMenu`)"
               >
-                Success
+                Remove
               </button>
             </div>
           </div>
@@ -697,7 +639,23 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
             name="modal"
             class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
           >
-            <h1>Complete</h1>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-24 h-24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+
+            <h1 class="text-2xl font-semibold mb-4">Complete</h1>
+            <p class="text-lg mb-4">Have a good day :D</p>
             <div class="flex flex-row gap-4">
               <button
                 class="btn btn-success"
@@ -712,67 +670,11 @@ const hr = ref("mb-2 border-gray-300 border-1 rounded")
       <!----------------------->
       <!-- Promotion Section -->
       <!----------------------->
-      <div class="h-[70%] shrink-0 w-11/12 rounded-md p-4 bg-slate-100 my-10">
-        <div class="flex justify-between">
-          <div class="flex text-2xl font-mono">
-            <h1 class="font-semibold">Promotion</h1>
-            <span>({{ promotions.length }})</span>
-          </div>
-          <h1
-            class="text-2xl font-mono font-semibold"
-            @click="openPromoModal()"
-          >
-            Add New Promotion
-          </h1>
-        </div>
-        <div>
-          <div class="grid grid-cols-3 justify-items-center">
-            <h2>Name</h2>
-            <h2>Drinks</h2>
-            <h2>Discount</h2>
-          </div>
-          <div>
-            <div
-              v-for="pro in promotions"
-              :key="pro.id"
-              class="grid grid-cols-3 border border-gray-300 m-3 rounded-md pointer hover:scale-105 transition-all"
-              @click="openPromoModal(pro)"
-            >
-              <div class="col-span-1 justify-self-center">
-                {{ pro.name }}
-              </div>
-              <div class="col-span-1 pl-20">
-                <ul class="list-disc">
-                  <li
-                    v-for="(menu, index) in pro.menus"
-                    :key="index"
-                  >
-                    <MenuBaseCard variant="promotion">
-                      <template #title>
-                        <b>{{ menu.menuName }}</b>
-                      </template>
-                      <template #price>
-                        <p>&nbsp x {{ menu.quantity }}</p>
-                      </template>
-                    </MenuBaseCard>
-                  </li>
-                </ul>
-              </div>
-              <div class="col-span-1 justify-self-center">
-                {{ pro.discount }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-if="isProModalOpen">
-        <PromoModal
-          @closeModal="colsePromoModal"
-          @savePromotion="updatePromo"
-          :drinks="filterResult"
-          :promotion="editingPromo"
-        />
-      </div>
+      <Promotion
+        :promotions="promotions"
+        :drinks="filterResult"
+        :hr="hr"
+      />
     </div>
   </Suspense>
 </template>
