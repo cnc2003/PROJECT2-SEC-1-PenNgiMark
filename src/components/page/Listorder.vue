@@ -88,18 +88,25 @@ function confirmServe(event) {
 }
 </script>
 <template>
-    <button
-        class="fixed flex flex-row justify-center border-4 rounded-xl w-[10%] btn btn-outline btn-error right-[2%] text-xl"
-        
-        @click=";(showModalHistory = true), (ReloadHistory = !ReloadHistory)"
-    >
-        <img
-            src="https://www.svgrepo.com/show/492596/food.svg"
-            alt=""
-            class="w-10"
-        />
-        <h2 class="mt-1 text-black">History</h2>
-    </button>
+    <div class="fixed grid grid-cols-2 h-[10%] w-10/12  mb-2 bg-slate-200 rounded-b-2xl">
+        <h1 class="flex items-center text-2xl font-bold pb-2 ml-10">List Orders</h1>
+        <div class="flex justify-end items-center mr-2">
+            <button
+                class=" flex flex-col justify-center border-4 rounded-xl w-[22%] btn btn-error right-[2%] text-xl"
+                @click="
+                    (showModalHistory = true), (ReloadHistory = !ReloadHistory)
+                "
+            >
+                <img
+                    src="https://www.svgrepo.com/show/492596/food.svg"
+                    alt=""
+                    class="w-10"
+                />
+                <h2 class="mt-1 text-black">History</h2>
+            </button>
+        </div>
+        <!-- <hr class="border-2 col-span-2"> -->
+    </div>
     <!-- ModalHistory -->
     <div v-show="showModalHistory">
         <ModalHistory
@@ -119,18 +126,14 @@ function confirmServe(event) {
     <!-- main -->
     <div
         v-if="orderListData.length === 0"
-        class="h-[20%] w-11/12 shrink-0 p-4 flex justify-center items-center mt-20 ml-4 rounded-3xl bg-white border-solid border-slate-300 border-4 shadow-lg text-3xl"
+        class="h-[20%] w-11/12 shrink-0 p-4 flex justify-center items-center mt-24 ml-4 rounded-3xl bg-white border-solid border-slate-300 border-4 shadow-lg text-3xl"
     >
         <p>No Order ?</p>
     </div>
-    <div v-else class="mt-10">
-        <div class="flex flex-col h-[20%] mb-2">
-            <h1 class="text-2xl font-bold pb-2 ml-2">List Orders</h1>
-            <hr class="border-2"/>
-        </div>
+    <div v-else class="mt-16">
         <div v-for="(order, index) in orderListData" :key="index">
             <div
-                class="h-[20%] w-11/12 shrink-0 p-4 flex mt-8 ml-[4%] rounded-3xl bg-white border-solid border-slate-300 border-4 shadow-lg"
+                class="h-[20%] w-11/12 shrink-0 p-4 flex mt-6 ml-[4%] rounded-3xl bg-white border-solid border-slate-300 border-4 shadow-lg"
             >
                 <div class="flex flex-col justify-center items-center w-1/4">
                     <p class="font-bold">Order Number</p>
