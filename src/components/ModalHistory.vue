@@ -12,8 +12,10 @@ let datas = ref(props.data)
 console.log(datas.value)
 
 async function fetchData() {
+    
     HistoryOrder.value = await getList("HistoryOrder")
     HistoryOrder.value = HistoryOrder.value.slice().reverse()
+    
 }
 fetchData()
 
@@ -37,56 +39,64 @@ watch(
 
         <!-- modal content -->
         <div
-            class="fixed w-2/4 h-2/4 bg-white rounded-xl flex flex-col items-center"
+            class="fixed w-[50%] h-[50%] bg-white rounded-xl flex flex-col items-center"
         >
             <div>
-                <div class="flex">
-                    <div class="flex justify-center text-xl font-bold mt-4 mb-8 ml-2">
-                        History Order
-                    </div>
+                <div class="flex flex-col justify-end items-center">
+                    <div class="text-xl font-bold mt-4 mb-8">History Order</div>
                     <!-- close button -->
                     <img
-                        class="h- p-1 btn rounded-lg absolute top-2 right-2 hover:cursor-pointer bg-red-600"
-                        @click="emits('close',false)"
+                        class="p-1 btn btn-error rounded-lg absolute top-2 right-2 hover:cursor-pointer "
+                        @click="emits('close', false)"
                         src="/src/assets/icon/cross.png"
                     />
                 </div>
-                
-                <table >
-                    <tr class=" sticky grid grid-cols-9 border-b-4">
-                        <th class="col-span-3">Time</th>
-                        <th>Order_Number</th>
-                        <th class="col-span-2">Menu</th>
-                        <th>Quantity</th>
-                        <th>Detail</th>
-                    </tr>
-                    <div v-if="HistoryOrder.length > 0" class="mt-3 h-48 flex flex-col overflow-y-scroll">
-                    <div
-                        
-                        v-for="(order, index) in HistoryOrder"
-                        :key="index"
-                        class="mt-4 "
-                    >
-                        <tr class="grid grid-cols-9 ">
-                            <td class="col-span-3 flex justify-center">{{ order.Time }}</td>
-                            <td class="flex justify-center">{{ order.order_number }}</td>
-                            <td class="col-span-2 flex justify-center">{{ order.menu_name }}</td>
-                            <td class="flex justify-center">{{ order.quantity }}</td>
-                            <td class="flex justify-center">{{ order.details }}</td>
-                        </tr>
 
-                        <!-- <p class="pl-3 pr-3">{{ order.Time }}</p>
-                    <p class="pl-3 pr-3">{{ order.order_id }}</p>
-                    <p class="pl-3 pr-3">{{ order.menu_name }}</p>
-                    <p class="pl-3 pr-3">{{ order.quantity }}</p>
-                    <p class="pl-3 pr-3">{{ order.details }}</p> -->
-                    </div>
-                    </div>
-                    <div v-else>
-                        <p class="flex justify-center text-base mt-48">
-                            Don't Have order ??
-                        </p>
-                    </div>
+                <table class="table">
+                    <thead >
+                        <tr class="grid grid-cols-9 mr-4"> 
+                            <th class="flex justify-center col-span-2 ">Time</th>
+                            <th class="flex justify-center col-span-2">Order_Number</th>
+                            <th class=" flex justify-center col-span-2">Menu</th>
+                            <th class=" flex justify-center col-span-1">Quantity</th>
+                            <th class=" flex justify-center col-span-2">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody class="flex justify-center overflow-y-scroll">
+                        <div
+                            v-if="HistoryOrder.length > 0"
+                            class="mt-3 h-60 flex flex-col "
+                        >
+                            <tr
+                                v-for="(order, index) in HistoryOrder"
+                                :key="index"
+                                class="grid grid-cols-9 mt-4 "
+                            >
+                            
+                                <td class="col-span-2 flex justify-center">
+                                    {{ order.Time }}
+                                </td>
+                                <td class="col-span-2 flex justify-center">
+                                    {{ order.order_number }}
+                                </td>
+                                <td class="col-span-2 flex justify-center">
+                                    {{ order.menu_name }}
+                                </td>
+                                <td class=" col-span-1  flex justify-center">
+                                    {{ order.quantity }}
+                                </td>
+                                <td class="col-span-2 flex justify-center">
+                                    {{ order.details }}
+                                </td>
+                            </tr>
+                        </div>
+
+                        <div v-else>
+                            <p class="flex justify-center text-base mt-48">
+                                Don't Have order ??
+                            </p>
+                        </div>
+                    </tbody>
                 </table>
             </div>
         </div>
