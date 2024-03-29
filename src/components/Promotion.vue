@@ -1,36 +1,42 @@
-
-
 <template>
-  <div class="h-[70%] shrink-0 w-11/12 rounded-md p-4 bg-slate-100 my-10">
+  <div
+    class="h-[70%] shrink-0 w-11/12 p-4 my-10 rounded-3xl bg-white border-solid border-slate-300 border-4"
+  >
     <div class="flex justify-between">
-      <div class="flex">
+      <div class="flex gap-2">
         <h1 class="text-2xl font-bold">Promotion</h1>
-        <span class="text-2xl font-bold">({{ promotions.length }})</span>
+        <span class=" flex justify-center content-center bg-slate-200 rounded-full size-8"> <p class="text-2xl font-bold">{{ promotions.length }}</p> </span>
       </div>
       <h1
-        class="text-2xl font-mono font-semibold"
+        class="btn btn-sm"
         @click="openPromoModal()"
       >
         Add New Promotion
+        <img
+                  src="/src/assets/icon/plus.svg"
+                  alt="plus"
+                  class="size-4"
+                />
       </h1>
     </div>
-    <div>
-      <div class="grid grid-cols-3 justify-items-center">
+    <hr :class="hr" class="my-2" />
+    <div class="flex flex-col justify-center ">
+      <div class="flex flex-row justify-around ">
         <h2>Name</h2>
         <h2>Drinks</h2>
         <h2>Discount</h2>
       </div>
-      <div>
+      
         <div
           v-for="pro in promotions"
           :key="pro.id"
-          class="grid grid-cols-3 border border-gray-300 m-3 rounded-md pointer hover:scale-105 transition-all"
+          class="flex flex-row justify-around items-center border w-full h-12 border-gray-300 rounded-md pointer hover:scale-105 transition-all "
           @click="openPromoModal(pro)"
         >
-          <div class="col-span-1 justify-self-center">
+          <div class="justify-self-center w-[33%] pl-28">
             {{ pro.name }}
           </div>
-          <div class="col-span-1 pl-20">
+          <div class="w-[33%]">
             <ul class="list-disc">
               <li
                 v-for="(menu, index) in pro.menus"
@@ -41,17 +47,17 @@
                     <b>{{ menu.menuName }}</b>
                   </template>
                   <template #price>
-                    <p>&nbsp x {{ menu.quantity }}</p>
+                    <p>&nbsp; x {{ menu.quantity }}</p>
                   </template>
                 </MenuBaseCard>
               </li>
             </ul>
           </div>
-          <div class="col-span-1 justify-self-center">
+          <div class="w-1/3 justify-self-center">
             {{ pro.discount }}
           </div>
         </div>
-      </div>
+      
     </div>
   </div>
   <div v-if="isProModalOpen">
@@ -65,16 +71,15 @@
 </template>
 
 <script setup>
-import { ref ,onMounted} from "vue"
-import { getList } from "../lib/fetch";
+import { ref} from "vue"
 import PromoModal from "./PromoModal.vue"
 import MenuBaseCard from "./MenuBaseCard.vue"
 const isProModalOpen = ref(false)
 const props = defineProps({
-  promotions: {type: Array, require : false},
-  drinks: {type: Array, require : false}
+  promotions: { type: Array, require: false },
+  drinks: { type: Array, require: false },
+  hr: String,
 })
-
 
 // onMounted(async () => {
 //   const [promotionsRes] = await Promise.all([])
