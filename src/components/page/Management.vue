@@ -315,7 +315,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
             <!-- แสดงชื่อ category -->
             <h2
               name="cateSet"
-              class="w-full font-mono text-xl font-extrabold py-2"
+              class="w-full font-mono text-xl font-extrabold py-2 divider divider-start pr-4"
               v-text="propoty.category"
             ></h2>
             <!-- แสดง menu items ในแต่ละ category -->
