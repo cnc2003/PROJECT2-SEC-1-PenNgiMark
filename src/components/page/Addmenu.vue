@@ -12,6 +12,7 @@ const promotions = ref([])
 const discount = ref(0)
 const subtotalPrice = ref(0)
 const isShowOptionMenu = ref(false)
+const menusInCart = ref([])
 let selectedmenus = []
 
 async function fetchMenuData() {
@@ -46,34 +47,6 @@ function filterCategory(inputCategory) {
         }
     }
 }
-
-const mocDrinks = [
-    {
-        menu_name: "Espresso",
-        price: 75,
-        quantity: 1,
-        sweetnessLevel: 0,
-        isDineIn: true,
-        category: "Drinks",
-    },
-    {
-        menu_name: "Americano",
-        price: 75,
-        quantity: 3,
-        sweetnessLevel: 0,
-        isDineIn: false,
-        category: "Drinks",
-    },
-    {
-        menu_name: "Cappuccino",
-        price: 75,
-        quantity: 1,
-        sweetnessLevel: 0,
-        isDineIn: false,
-        category: "Drinks",
-    },
-]
-const menusInCart = ref(mocDrinks)
 
 const calculateDiscount = () => {
     let totalDiscount = 0
@@ -151,15 +124,17 @@ function confirmOption(item, propoty) {
         alert("Please select sweetness level")
     }
     selectedmenus[0].selected = false
+   
     let addToCart = {
         menu_name: item.menu_name,
         price: item.price,
+        quantity: 1,
         selected: item.selected,
         sweetnessLevel: item.sweetnessLevel,
         category: propoty.category,
     }
     fetchMenuData()
-    mocDrinks.push(addToCart)
+    menusInCart.value.push(addToCart)
     console.log("mocDrinks :", mocDrinks)
 }
 function cancelOption(item) {
