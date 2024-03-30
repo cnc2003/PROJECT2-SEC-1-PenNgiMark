@@ -139,7 +139,7 @@ const col = ref("font-semibold")
     <!-- main -->
     <div
       v-if="orderListData.length === 0"
-      class="h-[20%] w-11/12 shrink-0 p-4 flex justify-center items-center rounded-3xl bg-white border-solid border-slate-300 border-4 shadow-lg text-3xl"
+      class="h-[20%] w-11/12 shrink-0 p-4 flex mt-32 ml-12 first-letter:justify-center items-center rounded-3xl bg-white border-solid border-slate-300 border-4 shadow-lg text-3xl"
     >
       <p>No Order ?</p>
     </div>
