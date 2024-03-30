@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, computed, onMounted } from "vue"
 
-import { getList } from "../../lib/fetch.js"
+import { getList, PostMenu } from "../../lib/fetch.js"
 import CartList from "../CartList.vue"
 import JsxIconBase from "../JsxIconBase.vue"
 import MenuBaseCard from "../MenuBaseCard.vue"
@@ -90,7 +90,7 @@ const totalPrice = computed(() => {
 
 const paymentMethod = ref("")
 
-const placeOrder = () => {
+const placeOrder = async () => {
     console.log("Place Order")
     if (menusInCart.value.length === 0) {
         alert("Please add some items to cart")
@@ -100,13 +100,24 @@ const placeOrder = () => {
         alert("Please select payment method")
         return
     }
-    const order = {
-        orderNumber: Math.floor(Math.random() * 1000000),
-        menus: menusInCart.value,
-        paymentMethod: paymentMethod.value,
-        totalPrice: totalPrice.value,
+    const addOrderRes = await PostMenu(
+        {
+            order_number: Math.floor(Math.random() * 1000000),
+            menus: menusInCart.value,
+            paymentMethod: paymentMethod.value,
+            totalPrice: totalPrice.value,
+        },
+        "OrderLists"
+    )
+    console.log({addOrderRes})
+
+    if (addOrderRes !== 201) {
+        alert("Failed to place order")
+        return
     }
-    console.log(order)
+    // orderNumber.value++
+    menusInCart.value = []
+    paymentMethod.value = ""
 }
 function ToggleClick(item) {
     console.log(selectedmenus)
@@ -124,7 +135,7 @@ function confirmOption(item, propoty) {
         alert("Please select sweetness level")
     }
     selectedmenus[0].selected = false
-   
+
     let addToCart = {
         menu_name: item.menu_name,
         price: item.price,
@@ -135,7 +146,6 @@ function confirmOption(item, propoty) {
     }
     fetchMenuData()
     menusInCart.value.push(addToCart)
-    console.log("mocDrinks :", mocDrinks)
 }
 function cancelOption(item) {
     selectedmenus[0].selected = false

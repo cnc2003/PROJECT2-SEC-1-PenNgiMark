@@ -34,13 +34,15 @@ async function AddHistoryOrder(SelectedMenusWithTime, path) {
 
 async function PostMenu(filterResult, path) {
     try {
-        await fetch(`${url}${path}`, {
+        const addItemRes = await fetch(`${url}${path}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(filterResult),
         })
+        const addedItem = await addItemRes.json()
+        return addItemRes.status
     } catch (error) {
         console.error("Error posting menu:", error)
         throw error
