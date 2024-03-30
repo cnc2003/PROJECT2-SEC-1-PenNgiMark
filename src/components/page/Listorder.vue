@@ -41,12 +41,13 @@ function serveOrder(order) {
     // filter UnSelectedMenus
     const UnSelectedMenus = order.menus.filter((menu) => !menu.selected)
     if (UnSelectedMenus.length === 0) {
-        console.log("restMenus:", UnSelectedMenus.length)
+        console.log("restMenus:", UnSelectedMenus.length,order.id)
         DeleteOrder(order.id).then(() => {
-            //เปลี่ยน data ใน orderListDataให้ลบ order ที่ select ออก (fontend)
+            // เปลี่ยน data ใน orderListDataให้ลบ order ที่ select ออก (fontend)
             orderListData.value = orderListData.value.filter(
                 (item) => item.id !== order.id
             )
+            
         })
     } else {
         restMenus = {
@@ -84,6 +85,7 @@ function openModalConfirm(order) {
 function confirmServe(event) {
     if (event === true) {
         serveOrder(orderselects)
+        
     }
 }
 </script>
@@ -172,7 +174,7 @@ function confirmServe(event) {
                                 <input
                                     type="checkbox"
                                     v-model="order_menu.selected"
-                                    hidden
+                                    
                                 />
                             </div>
                         </div>

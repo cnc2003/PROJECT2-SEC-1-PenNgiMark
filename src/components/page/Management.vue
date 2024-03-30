@@ -74,7 +74,8 @@ function filterCategory(inputCategory) {
 let currEditOrigin = {}
 function menuModalHandle(input, category) {
   if (input == "clearModal") {
-    editingItem.value = ref(null)
+    fetchMenuData()
+    editingItem.value = currEditOrigin.menu
     isEditMode.value = false
     isMenuModal.value = false
   } else if (input == "addNewMenu") {
@@ -406,7 +407,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
           >
             <div
               name="formfield"
-              class="w-5/6"
+              class="w-3/6"
             >
               <form>
                 <label class="form-control w-full gap-1 max-w-sm">
@@ -446,7 +447,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                       <span class="label-text">New category</span>
                     </div>
                     <input
-                      type="text"
+                      type="text" 
                       placeholder="Type here"
                       class="input input-bordered w-full max-w-sm"
                       v-model="editingItem.new_category"
@@ -564,7 +565,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
           <!-- modal content -->
           <div
             name="modal"
-            class="fixed w-1/6 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
+            class="fixed w-auto h-auto bg-white rounded-xl flex flex-col items-center justify-center indicator p-6 pb-10"
             v-if="!isDeleting"
           >
             <svg

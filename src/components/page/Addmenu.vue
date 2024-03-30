@@ -139,19 +139,22 @@ const placeOrder = () => {
 function ToggleClick(item) {
   console.log(selectedmenus);
   if (selectedmenus.length > 0) {
-    selectedmenus[0].selected = false;
-    selectedmenus.shift();
+    selectedmenus[0].selected = false
+    // console.log(selectedmenus[0].selected)
+    selectedmenus.shift()
+    // console.log(selectedmenus)
   }
   item.selected = true;
   selectedmenus.push(item);
 }
 
 function confirmOption(item, propoty) {
-  console.log(propoty.value);
+  console.log(propoty.category);
   if (item.sweetnessLevel === undefined || item.sweetnessLevel === "") {
     alert("Please select sweetness level");
   }
-  selectedmenus[0].selected = false;
+  // selectedmenus[0].selected = false
+  
   let addToCart = {
     menu_name: item.menu_name,
     price: item.price,
@@ -163,9 +166,10 @@ function confirmOption(item, propoty) {
   mocDrinks.push(addToCart);
   console.log("mocDrinks :", mocDrinks);
 }
-function cancelOption(item) {
-  selectedmenus[0].selected = false;
-  fetchMenuData();
+function cancelOption() {
+  selectedmenus.selected = false
+  console.log(selectedmenus)
+  fetchMenuData()
 }
 </script>
 <template>
