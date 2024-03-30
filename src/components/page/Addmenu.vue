@@ -319,13 +319,13 @@ function cancelOption(item) {
                     <div class="flex w-full h-32 justify-around items-end">
                     <button
                       class="hover:bg-red-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-8 border border-gray-400 rounded shadow "
-                      @click="cancelOption(item)"
+                      @click.stop="cancelOption(item)"
                     >
                       Cancel
                     </button>
                     <button
                       class="hover:bg-green-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-10 border border-gray-400 rounded shadow"
-                      @click="confirmOption(item, propoty)"
+                      @click.stop="confirmOption(item, propoty)"
                     >
                       OK
                     </button>
