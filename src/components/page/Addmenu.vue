@@ -402,19 +402,19 @@ function cancelOption(item) {
                         class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
                         @click="paymentMethod = 'cash'"
                     >
-                        <JsxIconBase iconName="Cash" />
+                        <JsxIconBase iconName="Cash" />Cash
                     </button>
                     <button
                         class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
                         @click="paymentMethod = 'card'"
                     >
-                        <JsxIconBase iconName="Card" />
+                        <JsxIconBase iconName="Card" />Card
                     </button>
                     <button
                         class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
                         @click="paymentMethod = 'QR'"
                     >
-                        <JsxIconBase iconName="QR" />
+                        <JsxIconBase iconName="QR" />QR
                     </button>
                 </div>
             </div>
