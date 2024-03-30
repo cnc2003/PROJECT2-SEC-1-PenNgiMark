@@ -6,91 +6,68 @@ import { getList } from "../lib/fetch.js"
 let HistoryOrder = ref([])
 const emits = defineEmits(["close"])
 const props = defineProps({
-    data: Boolean,
+  data: Boolean,
 })
 let datas = ref(props.data)
 console.log(datas.value)
 
 async function fetchData() {
-    HistoryOrder.value = await getList("HistoryOrder")
-    HistoryOrder.value = HistoryOrder.value.slice().reverse()
+  HistoryOrder.value = await getList("HistoryOrder")
+  HistoryOrder.value = HistoryOrder.value.slice().reverse()
 }
 fetchData()
 
 watch(
-    () => props.data,
-    () => {
-        fetchData()
-        // console.log("HistoryOrder :" ,HistoryOrder.value);
-    }
+  () => props.data,
+  () => {
+    fetchData()
+    // console.log("HistoryOrder :" ,HistoryOrder.value);
+  }
 )
 </script>
 
 <template>
-    <div
-        class="fixed w-screen h-screen top-0 left-0 flex justify-center items-center"
-    >
-        <div
-            class="w-lvw h-lvh bg-black bg-opacity-50"
-            @click="emits('close')"
-        ></div>
-
-        <!-- modal content -->
-        <div
-            class="fixed w-2/4 h-2/4 bg-white rounded-xl flex flex-col items-center"
-        >
-            <div>
-                <div class="flex">
-                    <div class="flex justify-center text-xl font-bold mt-4 mb-8 ml-2">
-                        History Order
-                    </div>
-                    <!-- close button -->
-                    <img
-                        class="h- p-1 btn rounded-lg absolute top-2 right-2 hover:cursor-pointer bg-red-600"
-                        @click="emits('close',false)"
-                        src="/src/assets/icon/cross.png"
-                    />
-                </div>
-                
-                <table >
-                    <tr class=" sticky grid grid-cols-9 border-b-4">
-                        <th class="col-span-3">Time</th>
-                        <th>Order_Number</th>
-                        <th class="col-span-2">Menu</th>
-                        <th>Quantity</th>
-                        <th>Detail</th>
-                    </tr>
-                    <div v-if="HistoryOrder.length > 0" class="mt-3 h-48 flex flex-col overflow-y-scroll">
-                    <div
-                        
-                        v-for="(order, index) in HistoryOrder"
-                        :key="index"
-                        class="mt-4 "
-                    >
-                        <tr class="grid grid-cols-9 ">
-                            <td class="col-span-3 flex justify-center">{{ order.Time }}</td>
-                            <td class="flex justify-center">{{ order.order_number }}</td>
-                            <td class="col-span-2 flex justify-center">{{ order.menu_name }}</td>
-                            <td class="flex justify-center">{{ order.quantity }}</td>
-                            <td class="flex justify-center">{{ order.details }}</td>
-                        </tr>
-
-                        <!-- <p class="pl-3 pr-3">{{ order.Time }}</p>
-                    <p class="pl-3 pr-3">{{ order.order_id }}</p>
-                    <p class="pl-3 pr-3">{{ order.menu_name }}</p>
-                    <p class="pl-3 pr-3">{{ order.quantity }}</p>
-                    <p class="pl-3 pr-3">{{ order.details }}</p> -->
-                    </div>
-                    </div>
-                    <div v-else>
-                        <p class="flex justify-center text-base mt-48">
-                            Don't Have order ??
-                        </p>
-                    </div>
-                </table>
-            </div>
-        </div>
+    <div class="fixed w-full h-full top-0 left-0 flex justify-center items-center">
+      <div class="w-lvw h-lvh bg-black bg-opacity-50" @click="emits('close')"></div>
+  
+      <!-- modal content -->
+      <div class="fixed w-[50%] h-[80%] bg-white rounded-xl flex flex-col items-center">
+        <img
+          class="p-1 btn btn-error rounded-lg absolute top-2 right-2 hover:cursor-pointer"
+          @click="emits('close', false)"
+          src="/src/assets/icon/cross.png"
+        />
+  
+        <div class="text-3xl font-bold w-[80%] h-28 text-center flex items-center">History Order</div>
+        <!-- close button -->
+  
+        <table class="table table-auto table-zebra w-[80%] h-[70%]">
+          <thead class="text-xl">
+            <tr>
+              <th>Time</th>
+              <th>Order_Number</th>
+              <th>Menu</th>
+              <th>Quantity</th>
+              <th>Detail</th>
+            </tr>
+          </thead>
+          <tbody class="text-base overflow-hidden" style="overflow-y: auto;">
+            <tr v-show="HistoryOrder.length > 0" v-for="(order, index) in HistoryOrder" :key="index">
+              <td>{{ order.Time }}</td>
+              <td>{{ order.order_number }}</td>
+              <td>{{ order.menu_name }}</td>
+              <td>{{ order.quantity }}</td>
+              <td>{{ order.details }}</td>
+            </tr>
+          </tbody>
+          <tbody v-show="HistoryOrder.length == 0" class="mt">
+            <tr>
+              <td>Don't Have order ??</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-</template>
+  </template>
 
 <style scoped></style>
