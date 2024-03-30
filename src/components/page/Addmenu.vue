@@ -180,6 +180,8 @@ function cancelOption(item) {
       <div
         class="flex shrink-0 w-12/12 p-4 pt-2 rounded-3xl bg-white border-solid border-slate-300 border-4"
       >
+        
+        
         <div
           class="bg-slate-300 p-4 m-2 rounded-md btn btn-md hover:bg-blue-700 hover: hover:text-white text-gray-700 font-semibold"
           @click="filterCategory('All')"
@@ -227,6 +229,7 @@ function cancelOption(item) {
           </svg>
           {{ propoty.category }}
         </div>
+        
       </div>
 
       <!-- this must be menus list -->
@@ -240,6 +243,7 @@ function cancelOption(item) {
           :key="category"
           class="flex flex-wrap w-full h-auto gap-2"
         >
+        
           <!-- แสดงชื่อ category -->
           <h2
             class="w-full flex font-mono text-2xl font-semibold mt-10 text-blue-500 ml-11"
@@ -247,7 +251,9 @@ function cancelOption(item) {
             {{ propoty.category }} (
             <p class="text-gray-700">{{ propoty.menus.length }}</p>
             )
+            
           </h2>
+          <hr class="w-full mb-2 border-gray-400 border-2 rounded ml-4 mr-4 mb-5 mt-4"></hr>
           <!-- แสดง menu items ในแต่ละ category -->
           <div
             v-for="(item, key) in propoty.menus"
@@ -260,19 +266,24 @@ function cancelOption(item) {
                   #title
                   v-if="!item.selected"
                 >
+                <figure class="image-full min-h-44 max-h-32 w-70">
                   <img
                     :src="item.img_src"
                     alt="MenuImage"
-                    class="min-h-20 rounded-t-3xl"
+                    class="min-h-43 w-70 rounded-t-3xl"
                   />
+                </figure>
                   <div class="card-body gap-1">
                     <b>
-                      <p class="card-title">{{ item.menu_name }}</p></b
+                      <p class="card-title text-2xl font-bold">{{ item.menu_name }}</p></b
                     >
                     <p
                       v-text="item.price + ' ฿'"
                       class="font-bold text-lg"
                     ></p>
+                    <b>
+                      <p class="card-description">{{ item.description }}</p>
+                    </b>
                   </div>
                 </template>
 
@@ -280,11 +291,11 @@ function cancelOption(item) {
                   #modal
                   v-if="item.selected"
                 >
-                  <div class="flex flex-col items-center justify-center">
+                  <div class="flex flex-col items-center justify-center card w-80 h-96">
                     <p class="text-2xl font-bold text-pink-500 mt-10 mb-5">
                       Sweetness Level
                     </p>
-                    <div>
+                    <div class="text-xl">
                       <div class="mt-3">
                         <input
                           type="radio"
@@ -329,7 +340,7 @@ function cancelOption(item) {
                       </div>
                     </div>
                     <br />
-                    <div class="flex w-full h-32 justify-around items-end">
+                    <div class="flex w-full h-auto justify-around items-end">
                       <button
                         class="hover:bg-red-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-8 border border-gray-400 rounded shadow"
                         @click.stop="cancelOption(item)"
