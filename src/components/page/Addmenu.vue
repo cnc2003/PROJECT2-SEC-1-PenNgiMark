@@ -32,7 +32,6 @@ onMounted(async () => {
 
 function filterCategory(inputCategory) {
   console.log(inputCategory)
-  let t = null
   if (inputCategory === null || inputCategory === "All") {
     afterFilterResult.value = filterResult.value
   } else {
