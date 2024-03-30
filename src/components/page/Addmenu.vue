@@ -1,48 +1,48 @@
 <script setup>
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, computed, onMounted } from "vue"
 
-import { getList } from "../../lib/fetch.js";
-import CartList from "../CartList.vue";
-import JsxIconBase from "../JsxIconBase.vue";
-import MenuBaseCard from "../MenuBaseCard.vue";
+import { getList } from "../../lib/fetch.js"
+import CartList from "../CartList.vue"
+import JsxIconBase from "../JsxIconBase.vue"
+import MenuBaseCard from "../MenuBaseCard.vue"
 
-const filterResult = ref(null); //default data
-const afterFilterResult = ref(null); // default value
-const promotions = ref([]);
-const discount = ref(0);
-const subtotalPrice = ref(0);
-const isShowOptionMenu = ref(false);
-let selectedmenus = [];
+const filterResult = ref(null) //default data
+const afterFilterResult = ref(null) // default value
+const promotions = ref([])
+const discount = ref(0)
+const subtotalPrice = ref(0)
+const isShowOptionMenu = ref(false)
+let selectedmenus = []
 
 async function fetchMenuData() {
-  filterResult.value = await getList("Menus"); // is array
-  console.log(filterResult.value);
+  filterResult.value = await getList("Menus") // is array
+  console.log(filterResult.value)
 }
-fetchMenuData();
+fetchMenuData()
 
 onMounted(async () => {
   const [menusRes, promotionsRes] = await Promise.all([
     getList("Menus"),
     getList("Promotions"),
-  ]);
-  fetchMenuData();
-  promotions.value = promotionsRes;
+  ])
+  fetchMenuData()
+  promotions.value = promotionsRes
   // filterResult.value = menusRes
-});
+})
 
 function filterCategory(inputCategory) {
-  console.log(inputCategory);
-  let t = null;
+  console.log(inputCategory)
+  let t = null
   if (inputCategory === null || inputCategory === "All") {
-    afterFilterResult.value = filterResult.value;
+    afterFilterResult.value = filterResult.value
   } else {
     for (const data in filterResult.value) {
-      const categorykey = filterResult.value[data]; // category in menu
+      const categorykey = filterResult.value[data] // category in menu
       // console.log(categorykey.category)
 
       if (inputCategory === categorykey.category) {
-        console.log(categorykey);
-        afterFilterResult.value = [categorykey];
+        console.log(categorykey)
+        afterFilterResult.value = [categorykey]
       }
     }
   }
@@ -73,106 +73,109 @@ const mocDrinks = [
     isDineIn: false,
     category: "Drinks",
   },
-];
-const menusInCart = ref(mocDrinks);
+]
+const menusInCart = ref(mocDrinks)
 
 const calculateDiscount = () => {
-  let totalDiscount = 0;
+  let totalDiscount = 0
 
   for (const promotion of promotions.value) {
     if (
       promotion.menus.every((promoItem) => {
         const cartItem = menusInCart.value.find(
           (item) => item.menu_name === promoItem.menuName
-        );
-        return cartItem && cartItem.quantity >= promoItem.quantity;
+        )
+        return cartItem && cartItem.quantity >= promoItem.quantity
       })
     ) {
-      const discountAmount = promotion.discount;
-      totalDiscount += discountAmount;
+      const discountAmount = promotion.discount
+      totalDiscount += discountAmount
     }
   }
-  discount.value = totalDiscount;
+  discount.value = totalDiscount
   // return totalDiscount
-};
+}
 
 const getSubtotalPrice = () => {
-  let price = 0;
+  let price = 0
   menusInCart.value.forEach((item) => {
-    price += item.price * item.quantity;
-  });
-  subtotalPrice.value = price;
-};
+    price += item.price * item.quantity
+  })
+  subtotalPrice.value = price
+}
 watch(
   () => menusInCart,
   (newCart) => {
     // console.log(newCart.value)
-    calculateDiscount();
-    getSubtotalPrice();
+    calculateDiscount()
+    getSubtotalPrice()
   },
   { deep: true, immediate: true }
-);
+)
 const totalPrice = computed(() => {
-  return subtotalPrice.value - discount.value;
-});
+  return subtotalPrice.value - discount.value
+})
 
-const paymentMethod = ref("");
+const paymentMethod = ref("")
 
 const placeOrder = () => {
-  console.log("Place Order");
+  console.log("Place Order")
   if (menusInCart.value.length === 0) {
-    alert("Please add some items to cart");
-    return;
+    alert("Please add some items to cart")
+    return
   }
   if (paymentMethod.value === "") {
-    alert("Please select payment method");
-    return;
+    alert("Please select payment method")
+    return
   }
   const order = {
     orderNumber: Math.floor(Math.random() * 1000000),
     menus: menusInCart.value,
     paymentMethod: paymentMethod.value,
     totalPrice: totalPrice.value,
-  };
-  console.log(order);
-};
-function ToggleClick(item) {
-  console.log(selectedmenus);
-  if (selectedmenus.length > 0) {
-    selectedmenus[0].selected = false;
-    selectedmenus.shift();
   }
-  item.selected = true;
-  selectedmenus.push(item);
+  console.log(order)
+}
+function ToggleClick(item) {
+  console.log(selectedmenus)
+  if (selectedmenus.length > 0) {
+    selectedmenus[0].selected = false
+    selectedmenus.shift()
+  }
+  item.selected = true
+  selectedmenus.push(item)
 }
 
 function confirmOption(item, propoty) {
-  console.log(propoty.value);
+  console.log(propoty.value)
   if (item.sweetnessLevel === undefined || item.sweetnessLevel === "") {
-    alert("Please select sweetness level");
+    alert("Please select sweetness level")
   }
-  selectedmenus[0].selected = false;
+  selectedmenus[0].selected = false
   let addToCart = {
     menu_name: item.menu_name,
     price: item.price,
     selected: item.selected,
     sweetnessLevel: item.sweetnessLevel,
     category: propoty.category,
-  };
-  fetchMenuData();
-  mocDrinks.push(addToCart);
-  console.log("mocDrinks :", mocDrinks);
+  }
+  fetchMenuData()
+  mocDrinks.push(addToCart)
+  console.log("mocDrinks :", mocDrinks)
 }
 function cancelOption(item) {
-  selectedmenus[0].selected = false;
-  fetchMenuData();
+  selectedmenus[0].selected = false
+  fetchMenuData()
 }
 </script>
 <template>
   <div
     class="flex h-screen w-full shrink-0 p-4 rounded-3xl bg-white border-solid border-slate-300 border-4"
   >
-    <section class="border-2 border-white w-3/4" @click="closeModal">
+    <section
+      class="border-2 border-white w-3/4"
+      @click="closeModal"
+    >
       <!-- this must be category list -->
       <div
         class="flex shrink-0 w-12/12 p-4 pt-2 rounded-3xl bg-white border-solid border-slate-300 border-4"
@@ -202,6 +205,7 @@ function cancelOption(item) {
         </div>
         <div
           v-for="propoty in filterResult"
+          :key="propoty"
           class="bg-slate-300 p-4 m-2 rounded-md btn btn-md hover:bg-blue-700 hover: hover:text-white text-gray-700 font-semibold"
           @click="filterCategory(propoty.category)"
         >
@@ -249,89 +253,97 @@ function cancelOption(item) {
             v-for="(item, key) in propoty.menus"
             :key="key"
             name="menuContainer"
-            
           >
             <div @click="ToggleClick(item)">
               <MenuBaseCard>
-                <template #title v-if="!item.selected">
-                  <img :src="item.img_src" alt="MenuImage" class="min-h-20 rounded-t-3xl" />
+                <template
+                  #title
+                  v-if="!item.selected"
+                >
+                  <img
+                    :src="item.img_src"
+                    alt="MenuImage"
+                    class="min-h-20 rounded-t-3xl"
+                  />
                   <div class="card-body gap-1">
-                  <b>
-                    <p class="card-title">{{ item.menu_name }}</p></b
-                  >
-                  <p
-                    v-text=" item.price + ' ฿'"
-                    class="font-bold text-lg"
-                  ></p>
-                </div>
+                    <b>
+                      <p class="card-title">{{ item.menu_name }}</p></b
+                    >
+                    <p
+                      v-text="item.price + ' ฿'"
+                      class="font-bold text-lg"
+                    ></p>
+                  </div>
                 </template>
 
-                <template #modal v-if="item.selected">
-                  <div class="flex flex-col items-center justify-center ">
+                <template
+                  #modal
+                  v-if="item.selected"
+                >
+                  <div class="flex flex-col items-center justify-center">
                     <p class="text-2xl font-bold text-pink-500 mt-10 mb-5">
                       Sweetness Level
                     </p>
                     <div>
-                    <div class="mt-3">
-                      <input
-                        type="radio"
-                        id="light_sweet"
-                        name="sweetLevel"
-                        value="light_sweet"
-                        v-model="item.sweetnessLevel"
-                      />
-                      <label
-                        for="light_sweet"
-                        class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4"
-                        >Light Sweet</label
-                      >
+                      <div class="mt-3">
+                        <input
+                          type="radio"
+                          id="light_sweet"
+                          name="sweetLevel"
+                          value="light_sweet"
+                          v-model="item.sweetnessLevel"
+                        />
+                        <label
+                          for="light_sweet"
+                          class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4"
+                          >Light Sweet</label
+                        >
+                      </div>
+                      <div class="mt-3">
+                        <input
+                          type="radio"
+                          id="sweet"
+                          name="sweetLevel"
+                          value="sweet"
+                          v-model="item.sweetnessLevel"
+                        />
+                        <label
+                          for="sweet"
+                          class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4"
+                          >Sweet</label
+                        >
+                      </div>
+                      <div class="mt-3">
+                        <input
+                          type="radio"
+                          id="verySweet"
+                          name="sweetLevel"
+                          value="verySweet"
+                          v-model="item.sweetnessLevel"
+                        />
+                        <label
+                          for="verySweet"
+                          class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4"
+                          >Very Sweet</label
+                        >
+                      </div>
                     </div>
-                    <div class="mt-3">
-                      <input
-                        type="radio"
-                        id="sweet"
-                        name="sweetLevel"
-                        value="sweet"
-                        v-model="item.sweetnessLevel"
-                      />
-                      <label
-                        for="sweet"
-                        class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4 "
-                        >Sweet</label
-                      >
-                    </div>
-                    <div class="mt-3">
-                      <input
-                        type="radio"
-                        id="verySweet"
-                        name="sweetLevel"
-                        value="verySweet"
-                        v-model="item.sweetnessLevel"
-                      />
-                      <label
-                        for="verySweet"
-                        class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4"
-                        >Very Sweet</label
-                      >
-                    </div>
-                  </div>
                     <br />
                     <div class="flex w-full h-32 justify-around items-end">
-                    <button
-                      class="hover:bg-red-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-8 border border-gray-400 rounded shadow "
-                      @click="cancelOption(item)"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      class="hover:bg-green-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-10 border border-gray-400 rounded shadow"
-                      @click="confirmOption(item, propoty)"
-                    >
-                      OK
-                    </button>
+                      <button
+                        class="hover:bg-red-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-8 border border-gray-400 rounded shadow"
+                        @click="cancelOption(item)"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        class="hover:bg-green-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-10 border border-gray-400 rounded shadow"
+                        @click="confirmOption(item, propoty)"
+                      >
+                        OK
+                      </button>
+                    </div>
                   </div>
-                  </div>
-                  
                 </template>
               </MenuBaseCard>
             </div>
@@ -393,7 +405,10 @@ function cancelOption(item) {
           </button>
         </div>
       </div>
-      <button class="border-2 border-black h-20 m-2 mb-6" @click="placeOrder">
+      <button
+        class="border-2 border-black h-20 m-2 mb-6"
+        @click="placeOrder"
+      >
         Place Order
       </button>
     </section>
