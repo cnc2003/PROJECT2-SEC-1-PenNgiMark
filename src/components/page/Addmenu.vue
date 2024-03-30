@@ -5,6 +5,7 @@ import { getList, PostMenu } from "../../lib/fetch.js"
 import CartList from "../CartList.vue"
 import JsxIconBase from "../JsxIconBase.vue"
 import MenuBaseCard from "../MenuBaseCard.vue"
+import ModalConfirm from "../ModalConfirm.vue"
 
 const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
@@ -13,7 +14,10 @@ const discount = ref(0)
 const subtotalPrice = ref(0)
 const isShowOptionMenu = ref(false)
 const menusInCart = ref([])
+const paymentMethod = ref("")
 let selectedmenus = []
+const showModalConfirm = ref(false)
+const modalAction = ref("")
 
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
@@ -84,20 +88,26 @@ watch(
     },
     { deep: true, immediate: true }
 )
+
 const totalPrice = computed(() => {
     return subtotalPrice.value - discount.value
 })
 
-const paymentMethod = ref("")
+const openModal = (action) => {
+    if (!showModalConfirm.value) {
+        showModalConfirm.value = true
+    }
+    modalAction.value = action
+}
 
 const placeOrder = async () => {
     console.log("Place Order")
     if (menusInCart.value.length === 0) {
-        alert("Please add some items to cart")
+        openModal("EmptyCart")
         return
     }
     if (paymentMethod.value === "") {
-        alert("Please select payment method")
+        openModal("EmptyPayment")
         return
     }
     const addOrderRes = await PostMenu(
@@ -109,7 +119,7 @@ const placeOrder = async () => {
         },
         "OrderLists"
     )
-    console.log({addOrderRes})
+    console.log({ addOrderRes })
 
     if (addOrderRes !== 201) {
         alert("Failed to place order")
@@ -119,6 +129,7 @@ const placeOrder = async () => {
     menusInCart.value = []
     paymentMethod.value = ""
 }
+
 function ToggleClick(item) {
     console.log(selectedmenus)
     if (selectedmenus.length > 0) {
@@ -132,7 +143,8 @@ function ToggleClick(item) {
 function confirmOption(item, propoty) {
     console.log(propoty.value)
     if (item.sweetnessLevel === undefined || item.sweetnessLevel === "") {
-        alert("Please select sweetness level")
+        // alert("Please select sweetness level")
+        openModal("SweetnessLevel")
     }
     selectedmenus[0].selected = false
 
@@ -147,10 +159,12 @@ function confirmOption(item, propoty) {
     fetchMenuData()
     menusInCart.value.push(addToCart)
 }
+
 function cancelOption(item) {
     selectedmenus[0].selected = false
     fetchMenuData()
 }
+
 </script>
 <template>
     <div
@@ -420,10 +434,17 @@ function cancelOption(item) {
             </div>
             <button
                 class="border-2 border-black h-20 m-2 mb-6"
-                @click="placeOrder"
+                @click="openModal('placeOrder')"
             >
                 Place Order
             </button>
+            <div v-show="showModalConfirm">
+                <ModalConfirm
+                    :action="modalAction"
+                    @close="showModalConfirm = $event"
+                    @placeOrder="placeOrder"
+                />
+            </div>
         </section>
     </div>
 </template>
