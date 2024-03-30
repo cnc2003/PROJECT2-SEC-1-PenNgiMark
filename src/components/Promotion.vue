@@ -1,11 +1,15 @@
 <template>
   <div
-    class="h-[70%] shrink-0 w-11/12 p-4 my-10 rounded-3xl bg-white border-solid border-slate-300 border-4"
+    class="h-[70%] shrink-0 w-11/12 p-4 my-10 rounded-3xl bg-white border-solid border-slate-300 border-4 flex flex-col justify-start items-start"
   >
-    <div class="flex justify-between">
+    <div class="flex justify-between w-full">
       <div class="flex gap-2">
         <h1 class="text-2xl font-bold">Promotion</h1>
-        <span class=" flex justify-center content-center bg-slate-200 rounded-full size-8"> <p class="text-2xl font-bold">{{ promotions.length }}</p> </span>
+        <span
+          class="flex justify-center content-center bg-slate-200 rounded-full size-8"
+        >
+          <p class="text-2xl font-bold">{{ promotions.length }}</p>
+        </span>
       </div>
       <h1
         class="btn btn-sm"
@@ -13,31 +17,41 @@
       >
         Add New Promotion
         <img
-                  src="/src/assets/icon/plus.svg"
-                  alt="plus"
-                  class="size-4"
-                />
+          src="/src/assets/icon/plus.svg"
+          alt="plus"
+          class="size-4"
+        />
       </h1>
-    </div>
-    <hr :class="hr" class="my-2" />
-    <div class="flex flex-col justify-center ">
-      <div class="flex flex-row justify-around ">
-        <h2>Name</h2>
-        <h2>Drinks</h2>
-        <h2>Discount</h2>
-      </div>
       
-        <div
+    </div>
+    <hr
+      :class="hr"
+      class="my-2 w-full"
+    />
+    <div class="w-full">
+    <table class="table w-full table-zebra">
+      <thead class="text-xl">
+        <tr class="w-full">
+          <th></th>
+          <th class="w-[30%]">Name</th>
+          <th class="w-[30%]">Drinks</th>
+          <th class="w-[30%]">Discount Price</th>
+        </tr>
+      </thead>
+      <tbody >
+        
+        <tr
           v-for="pro in promotions"
           :key="pro.id"
-          class="flex flex-row justify-around items-center border w-full h-12 border-gray-300 rounded-md pointer hover:scale-105 transition-all "
+          class="hover hover:scale-[101%] hover:rounded-xl"
           @click="openPromoModal(pro)"
         >
-          <div class="justify-self-center w-[33%] pl-28">
+          <td class="text-center font-bold">{{ pro.id }}</td>
+          <td>
             {{ pro.name }}
-          </div>
-          <div class="w-[33%]">
-            <ul class="list-disc">
+          </td>
+          <td class="">
+            <ul class="list-disc pl-4">
               <li
                 v-for="(menu, index) in pro.menus"
                 :key="index"
@@ -52,13 +66,14 @@
                 </MenuBaseCard>
               </li>
             </ul>
-          </div>
-          <div class="w-1/3 justify-self-center">
-            {{ pro.discount }}
-          </div>
-        </div>
-      
-    </div>
+          </td>
+          <td class="text-lg font-semibold">
+            {{ pro.discount + " ฿" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   </div>
   <div v-if="isProModalOpen">
     <PromoModal
@@ -71,7 +86,7 @@
 </template>
 
 <script setup>
-import { ref} from "vue"
+import { ref } from "vue"
 import PromoModal from "./PromoModal.vue"
 import MenuBaseCard from "./MenuBaseCard.vue"
 const isProModalOpen = ref(false)
