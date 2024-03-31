@@ -25,17 +25,18 @@ const modalAction = ref("")
 const immutableMenus = ref(JSON.parse(JSON.stringify(menus)))
 
 const savePromotion = (action, result) => {
-    let arg
-    if (action === "Delete-Promotion") {
-        arg = props.promotion.id
-        
-    } else if (action = "Save-Promotion") {
-        arg = {
+    let arg = {
             id: id,
             name: name,
             menus: immutableMenus.value,
             discount: discount,
         }
+    if (action === "Delete-Promotion") {
+        arg = props.promotion.id
+        
+    }
+    if (props.promotion.id === undefined) {
+        action = "Add-Promotion"
     }
     emits("actionComfirm", action, arg)
     emits("closeModal", false)
