@@ -6,19 +6,23 @@ const props = defineProps({
     action: { type: String, require: true },
 })
 
-const emits = defineEmits(["close", "serve", "placeOrder"])
+const emits = defineEmits(["close", "serve", "placeOrder", "actionComfirm"])
 
 const cancelConfirmation = () => {
     emits("close", false)
 }
 
 const confirmAction = () => {
-    cancelConfirmation()
     if (props.action === "Serve") {
         emits("serve", true)
     } else if (props.action === "placeOrder") {
         emits("placeOrder", true)
+    }else if (props.action === 'Delete-Promotion') {
+        emits("actionComfirm", props.action, true)
+    }else {
+        emits("actionComfirm", props.action, true)
     }
+    cancelConfirmation()
 }
 </script>
 <template>
@@ -34,12 +38,21 @@ const confirmAction = () => {
             >
                 <div class="flex flex-col justify-center">
                     <!-- modal content -->
-                    <JsxIconBase
-                        iconName="Question-circle"
-                        w="24"
-                        h="24"
-                        class="flex justify-center"
-                    />
+                        <JsxIconBase
+                            v-if="props.action === 'Delete-Promotion'"
+                            iconName="Exclamation-triangle"
+                            :w="24"
+                            :h="24"
+                            color="red"
+                            class="flex justify-center"
+                        />
+                        <JsxIconBase
+                            v-else
+                            iconName="Question-circle"
+                            :w="24"
+                            :h="24"
+                            class="flex justify-center"
+                        />
                     <div class="text-2xl font-semibold m-4 flex justify-center">
                         {{
                             props.action === "EmptyCart"
@@ -48,7 +61,9 @@ const confirmAction = () => {
                                 ? "Please select payment method"
                                 : props.action === "SweetnessLevel"
                                 ? "Please select sweetness level"
-                                : "Confirmation"
+                                : props.action === "Delete-Promotion"
+                                ? "Do you want to delete this Promotion ?"
+                                : props.action === 'Save-Promotion' ? "Save this Promotion?":"Confirmation"
                         }}
                     </div>
                     <div
@@ -74,17 +89,27 @@ const confirmAction = () => {
                             cancel
                         </button>
                         <button
-                            class="btn btn-success"
+                            class="btn text-white"
+                            :class="
+                                props.action === 'Delete-Promotion'
+                                    ? 'btn-error'
+                                    : 'btn-success'
+                            "
                             @click="confirmAction"
                             v-if="
                                 props.action === 'Serve' ||
-                                props.action === 'placeOrder'
+                                props.action === 'placeOrder' ||
+                                props.action === 'Delete-Promotion' || 
+                                props.action === 'Save-Promotion' 
+
                             "
                         >
                             {{
                                 props.action === "Serve"
                                     ? "serve"
-                                    : "place order"
+                                    : props.action === "Delete-Promotion"
+                                    ? "Delete"
+                                    : props.action === 'Save-Promotion' ? "Save" : "place order"
                             }}
                         </button>
                     </div>

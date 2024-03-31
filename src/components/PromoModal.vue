@@ -3,7 +3,8 @@ import { ref, computed } from "vue"
 import CartCard from "./CartCard.vue"
 import JsxIconBase from "./JsxIconBase.vue"
 import SearchInput from "./SearchInput.vue"
-const emits = defineEmits(["closeModal", "savePromotion"])
+import ModalConfirm from "./ModalConfirm.vue"
+const emits = defineEmits(["closeModal", "savePromotion", "actionComfirm"])
 const props = defineProps({
     promotion: {
         type: Object,
@@ -21,16 +22,23 @@ const props = defineProps({
 
 let { id, name, menus, discount } = props.promotion
 console.log(menus)
+const showModalConfirm = ref(false)
+const modalAction = ref("")
 
-const savePromotion = () => {
-    console.log("savePromotion")
-
-    emits("savePromotion", {
-        id: id,
-        name: name,
-        menus: menus,
-        discount: discount,
-    })
+const savePromotion = (action, result) => {
+    let arg
+    if (action === "Delete-Promotion") {
+        arg = props.promotion.id
+        
+    } else if (action = "Save-Promotion") {
+        arg = {
+            id: id,
+            name: name,
+            menus: menus,
+            discount: discount,
+        }
+    }
+    emits("actionComfirm", action, arg)
     emits("closeModal", false)
 }
 
@@ -45,11 +53,17 @@ const removeMenu = (index) => {
     }
     menus.splice(index, 1)
 }
+
+const openModal = (action) => {
+    modalAction.value = action
+    showModalConfirm.value = true
+}
+
 </script>
 
 <template>
     <div
-        class="fixed flex justify-center items-center gap-4 z-10 inset-0 bg-gray-500 bg-opacity-60 w-screen"
+        class="fixed flex justify-center items-center z-10 inset-0 bg-gray-500 bg-opacity-60 w-screen"
         @click="$emit('closeModal', false), $event"
     >
         <div
@@ -57,20 +71,7 @@ const removeMenu = (index) => {
             @click="$event.stopPropagation()"
         >
             <div class="mb-3 flex flex-row gap-4 items-center">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="size-12"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
-                    />
-                </svg>
+                <JsxIconBase icon-name="Gift" :w="12" :h="12" />
 
                 <div class="flex flex-col">
                     <h1 class="font-bold text-3xl">Update menu easily</h1>
@@ -90,7 +91,7 @@ const removeMenu = (index) => {
                 </div>
                 <div name="drinks " class="w-full flex flex-col">
                     <div class="label">
-                        <span class="">Promotion Name </span>
+                        <span class="">Drinks</span>
                     </div>
                     <div
                         name="drinks container"
@@ -102,11 +103,6 @@ const removeMenu = (index) => {
                             class="flex justify-center items-center pb-2"
                         >
                             <template #drinkName>
-                                <!-- <input
-                type="text"
-                v-model.trim="menu.menuName"
-                class="p-0.5 border border-gray-300 rounded-lg outline-none"
-            /> -->
                                 <SearchInput
                                     :drinks="props.drinks"
                                     :editingMenu="menu"
@@ -116,43 +112,21 @@ const removeMenu = (index) => {
                             <template #quantity>
                                 <!-- <button @click="removeMenu(index)">X</button> -->
                                 <div class="flex flex-row gap-2">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="w-6 h-6 hover:scale-[105%]"
+                                    <JsxIconBase
+                                        iconName="Minus-circle"
+                                        class="hover:scale-[105%]"
                                         @click="
                                             menu.quantity <= 1
                                                 ? null
                                                 : menu.quantity--
                                         "
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                        />
-                                    </svg>
-
+                                    />
                                     <p>{{ menu.quantity }}</p>
-
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="w-6 h-6 hover:scale-[105%]"
+                                    <JsxIconBase
+                                        iconName="Plus-circle"
+                                        class="hover:scale-[105%]"
                                         @click="menu.quantity++"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                        />
-                                    </svg>
+                                    />
                                 </div>
                             </template>
                         </CartCard>
@@ -183,7 +157,7 @@ const removeMenu = (index) => {
             </div>
             <div class="flex flex-col gap-2 justify-center items-center">
                 <button
-                    @click="savePromotion"
+                    @click="openModal('Save-Promotion')"
                     class="btn btn-sm bg-green-500 hover:bg-green-600 w-[80%]"
                 >
                     Save
@@ -195,7 +169,18 @@ const removeMenu = (index) => {
                     CloseModal
                 </button>
             </div>
-            <JsxIconBase iconName="Trash" color="red" />
+            <JsxIconBase
+                iconName="Trash"
+                color="red"
+                @click="openModal('Delete-Promotion')"
+            />
+        </div>
+        <div v-show="showModalConfirm">
+            <ModalConfirm
+                :action="modalAction"
+                @close="showModalConfirm = $event"
+                @actionComfirm="savePromotion"
+            />
         </div>
     </div>
 </template>

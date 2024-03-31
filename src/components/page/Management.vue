@@ -388,7 +388,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
             <!-- Management Modal -->
             <div
                 v-show="isMenuModal"
-                class="z-10 fixed w-screen h-screen top-0 left-0 flex justify-center items-center"
+                class="fixed w-screen h-screen top-0 left-0 flex justify-center items-center"
             >
                 <div
                     class="w-lvw h-lvh bg-black bg-opacity-50"
@@ -639,7 +639,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                     </div>
                     <div
                         name="modal"
-                        class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
+                        class="z-10 fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
                         v-if="isDeleting"
                     >
                         <h1 class="text-2xl font-semibold mb-4">

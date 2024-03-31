@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue"
+import { deleteItemById, editItem } from "../lib/fetch.js"
 import PromoModal from "./PromoModal.vue"
-import MenuBaseCard from "./MenuBaseCard.vue"
 const isProModalOpen = ref(false)
 const props = defineProps({
     promotions: { type: Array, require: false },
@@ -38,7 +38,6 @@ const openPromoModal = (promo) => {
 }
 
 const updatePromo = (newPromo) => {
-    ////console.log(newPromo)
     if (newPromo.id === undefined) {
         newPromo.id = promotions.value.length
         promotions.value.push(newPromo)
@@ -47,6 +46,23 @@ const updatePromo = (newPromo) => {
             (promo) => promo.id === newPromo.id
         )
         promotions.value[index] = newPromo
+    }
+}
+
+const actionPromotion = async (action, body) => {
+    if (action === "Delete-Promotion") {
+        const deleteRes = await deleteItemById("Promotions", body)
+        if (deleteRes === 200) {
+            const idx = props.promotions.findIndex((pro) => pro.id === body)
+            props.promotions.splice(idx, 1)
+        }
+    }
+    if (action === "Save-Promotion") {
+        const updateRes = await editItem("Promotions", body.id, body)
+        if (updateRes){
+            const idx = props.promotions.findIndex((pro) => pro.id === updateRes.id)
+            props.promotions[idx] = updateRes
+        }
     }
 }
 </script>
@@ -73,10 +89,10 @@ const updatePromo = (newPromo) => {
                 />
             </h1>
         </div>
-        <hr :class="hr" class="my-2 w-full" />
+        <hr :class="hr" class="z-0 my-6 w-full" />
         <div class="w-full">
             <table class="table w-full table-zebra">
-                <thead class="text-xl">
+                <thead class="text-2xl">
                     <tr class="w-full">
                         <th></th>
                         <th class="w-[30%]">Name</th>
@@ -84,7 +100,7 @@ const updatePromo = (newPromo) => {
                         <th class="w-[30%]">Discount Price</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-xl">
                     <tr
                         v-for="pro in promotions"
                         :key="pro.id"
@@ -101,14 +117,8 @@ const updatePromo = (newPromo) => {
                                     v-for="(menu, index) in pro.menus"
                                     :key="index"
                                 >
-                                    <MenuBaseCard variant="promotion">
-                                        <template #title>
-                                            <b>{{ menu.menuName }}</b>
-                                        </template>
-                                        <template #price>
-                                            <p>&nbsp; x {{ menu.quantity }}</p>
-                                        </template>
-                                    </MenuBaseCard>
+                                    {{ menu.menuName }} x
+                                    {{ menu.quantity }}
                                 </li>
                             </ul>
                         </td>
@@ -124,6 +134,7 @@ const updatePromo = (newPromo) => {
         <PromoModal
             @closeModal="colsePromoModal"
             @savePromotion="updatePromo"
+            @actionComfirm="actionPromotion"
             :drinks="drinks"
             :promotion="editingPromo"
         />
