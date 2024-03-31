@@ -18,12 +18,11 @@ const props = defineProps({
     drinks: { type: Array, required: true },
 })
 
-// if (!props.promotion){}
-
 let { id, name, menus, discount } = props.promotion
 console.log(menus)
 const showModalConfirm = ref(false)
 const modalAction = ref("")
+const immutableMenus = ref(JSON.parse(JSON.stringify(menus)))
 
 const savePromotion = (action, result) => {
     let arg
@@ -34,7 +33,7 @@ const savePromotion = (action, result) => {
         arg = {
             id: id,
             name: name,
-            menus: menus,
+            menus: immutableMenus.value,
             discount: discount,
         }
     }
@@ -43,15 +42,7 @@ const savePromotion = (action, result) => {
 }
 
 const addMenu = () => {
-    menus.push({ menuName: "", quantity: 1 })
-}
-
-const removeMenu = (index) => {
-    if (menus[index].menuName.length > 0) {
-        alert("Cannot remove menu")
-        return
-    }
-    menus.splice(index, 1)
+    immutableMenus.value.push({ menuName: "", quantity: 1 })
 }
 
 const openModal = (action) => {
@@ -98,7 +89,7 @@ const openModal = (action) => {
                         class="border border-gray-300 rounded-md p-4"
                     >
                         <CartCard
-                            v-for="(menu, index) in menus"
+                            v-for="(menu, index) in immutableMenus"
                             :key="index"
                             class="flex justify-center items-center pb-2"
                         >
