@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue"
-import { deleteItemById, editItem } from "../lib/fetch.js"
+import { addItem, deleteItemById, editItem } from "../lib/fetch.js"
 import PromoModal from "./PromoModal.vue"
 const isProModalOpen = ref(false)
 const props = defineProps({
@@ -59,9 +59,18 @@ const actionPromotion = async (action, body) => {
     }
     if (action === "Save-Promotion") {
         const updateRes = await editItem("Promotions", body.id, body)
-        if (updateRes){
-            const idx = props.promotions.findIndex((pro) => pro.id === updateRes.id)
+        if (updateRes) {
+            const idx = props.promotions.findIndex(
+                (pro) => pro.id === updateRes.id
+            )
             props.promotions[idx] = updateRes
+        }
+    }
+    if (action === "Add-Promotion") {
+        const addRes = await addItem("Promotions", body)
+        console.log(addRes)
+        if (addRes) {
+            props.promotions.push(addRes)
         }
     }
 }

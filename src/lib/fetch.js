@@ -196,6 +196,24 @@ async function editItem(path, id, editItem) {
     }
 }
 
+async function addItem(path, newItem) {
+    try {
+        const res = await fetch(`${url}${path}`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                ...newItem,
+            }),
+        })
+        const addedItem = await res.json()
+        return addedItem
+    } catch (error) {
+        console.log(`error: ${error}`)
+    }
+}
+
 export {
     getList,
     AddHistoryOrder,
@@ -208,4 +226,5 @@ export {
     DeleteCate,
     deleteItemById,
     editItem,
+    addItem,
 }

@@ -18,47 +18,37 @@ const props = defineProps({
     drinks: { type: Array, required: true },
 })
 
-// if (!props.promotion){}
-
 let { id, name, menus, discount } = props.promotion
 console.log(menus)
 const showModalConfirm = ref(false)
 const modalAction = ref("")
+const immutableMenus = ref(JSON.parse(JSON.stringify(menus)))
 
 const savePromotion = (action, result) => {
-    let arg
+    let arg = {
+        id: id,
+        name: name,
+        menus: immutableMenus.value,
+        discount: discount,
+    }
     if (action === "Delete-Promotion") {
         arg = props.promotion.id
-        
-    } else if (action = "Save-Promotion") {
-        arg = {
-            id: id,
-            name: name,
-            menus: menus,
-            discount: discount,
-        }
+    }
+    if (props.promotion.id === undefined) {
+        action = "Add-Promotion"
     }
     emits("actionComfirm", action, arg)
     emits("closeModal", false)
 }
 
 const addMenu = () => {
-    menus.push({ menuName: "", quantity: 1 })
-}
-
-const removeMenu = (index) => {
-    if (menus[index].menuName.length > 0) {
-        alert("Cannot remove menu")
-        return
-    }
-    menus.splice(index, 1)
+    immutableMenus.value.push({ menuName: "", quantity: 1 })
 }
 
 const openModal = (action) => {
     modalAction.value = action
     showModalConfirm.value = true
 }
-
 </script>
 
 <template>
@@ -98,7 +88,7 @@ const openModal = (action) => {
                         class="border border-gray-300 rounded-md p-4"
                     >
                         <CartCard
-                            v-for="(menu, index) in menus"
+                            v-for="(menu, index) in immutableMenus"
                             :key="index"
                             class="flex justify-center items-center pb-2"
                         >
@@ -173,6 +163,7 @@ const openModal = (action) => {
                 iconName="Trash"
                 color="red"
                 @click="openModal('Delete-Promotion')"
+                class="cursor-pointer text-red-500"
             />
         </div>
         <div v-show="showModalConfirm">
