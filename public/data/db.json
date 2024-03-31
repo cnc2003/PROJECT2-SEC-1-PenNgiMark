@@ -23,12 +23,6 @@
           "img_src": "https://img.freepik.com/free-photo/aromatic-frappuccino-table_23-2148900674.jpg?w=740"
         },
         {
-          "menu_name": "Americano",
-          "price": 90,
-          "description": "A coffee drink prepared by diluting an espresso with hot water.",
-          "img_src": "https://img.freepik.com/free-photo/glass-with-iced-coffee-table_23-2148937324.jpg?t=st=1711771730~exp=1711775330~hmac=f988610726cbfe6a0c791df55f8cab43182ace02c6a0b2f44fb0f3987d3713c7&w=740"
-        },
-        {
           "menu_name": "Iced Coffee",
           "price": 110,
           "description": "Cold coffee served over ice cubes.",
@@ -39,6 +33,12 @@
           "price": 75,
           "description": "A strong black coffee made by forcing steam through finely-ground coffee beans.",
           "img_src": "https://img.freepik.com/free-photo/glass-with-iced-coffee-table_23-2148937326.jpg?t=st=1711771645~exp=1711775245~hmac=cd29faf95b5d3874ceed53c80ec181da9c1193182b18a611c904eaec5b540b7a&w=740"
+        },
+        {
+          "menu_name": "Americano",
+          "price": 90,
+          "description": "A coffee drink prepared by diluting an espresso with hot water.",
+          "img_src": "https://img.freepik.com/free-photo/glass-with-iced-coffee-table_23-2148937324.jpg?t=st=1711771730~exp=1711775330~hmac=f988610726cbfe6a0c791df55f8cab43182ace02c6a0b2f44fb0f3987d3713c7&w=740"
         }
       ]
     },

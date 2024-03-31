@@ -9,7 +9,7 @@ const props = defineProps({
   data: Boolean,
 })
 let datas = ref(props.data)
-console.log(datas.value)
+// console.log(datas.value)
 
 async function fetchData() {
   HistoryOrder.value = await getList("HistoryOrder")
@@ -21,7 +21,7 @@ watch(
   () => props.data,
   () => {
     fetchData()
-    // console.log("HistoryOrder :" ,HistoryOrder.value);
+    // // console.log("HistoryOrder :" ,HistoryOrder.value);
   }
 )
 </script>

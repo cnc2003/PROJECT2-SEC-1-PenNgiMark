@@ -19,7 +19,7 @@ let orderselects = null
 let restMenus = {}
 async function fetchData() {
   orderListData.value = await getList("OrderLists")
-  console.log(orderListData.value)
+  // console.log(orderListData.value)
 }
 onMounted(fetchData)
 
@@ -36,13 +36,13 @@ function serveOrder(order) {
             order_number: order_Number,
         }))
     for (const key of SelectedMenusWithTime) {
-        console.log("AddMenuHistory:", key)
+        // console.log("AddMenuHistory:", key)
         AddHistoryOrder(key, "HistoryOrder")
     }
     // filter UnSelectedMenus
     const UnSelectedMenus = order.menus.filter((menu) => !menu.selected)
     if (UnSelectedMenus.length === 0) {
-        console.log("restMenus:", UnSelectedMenus.length)
+        // console.log("restMenus:", UnSelectedMenus.length)
         DeleteOrder(order.id).then(() => {
             //เปลี่ยน data ใน orderListDataให้ลบ order ที่ select ออก (fontend)
             orderListData.value = orderListData.value.filter(
@@ -55,15 +55,15 @@ function serveOrder(order) {
             menus: UnSelectedMenus,
             id: order.id,
         }
-        console.log(UnSelectedMenus, order.id)
-        console.log("restMenus:", restMenus)
+        // console.log(UnSelectedMenus, order.id)
+        // console.log("restMenus:", restMenus)
         DeleteMenuInOrder(restMenus, order.id).then(() => {
             const updatedOrderIndex = orderListData.value.findIndex(
                 (item) => item.id === order.id
             )
             //เปลี่ยน data ใน orderListDataให้ลบ menu ที่selectออก และเอาmenuที่เหลือใส่แทน (fontend)
             if (updatedOrderIndex !== -1) {
-                console.log(updatedOrderIndex)
+                // console.log(updatedOrderIndex)
                 orderListData.value[updatedOrderIndex].menus = UnSelectedMenus
             }
         })
@@ -77,8 +77,8 @@ function tuggleSelection(order_menu) {
 
 function openModalConfirm(order) {
   showModalConfirm.value = true
-  console.log(order)
-  console.log(showModalConfirm.value)
+  // console.log(order)
+  // console.log(showModalConfirm.value)
   orderselects = order
 }
 

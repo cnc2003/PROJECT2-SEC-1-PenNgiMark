@@ -65,7 +65,7 @@ async function addNewCategory(categoryData) {
             throw new Error("Failed to add new category")
         }
         const jsonResponse = await response.json()
-        console.log("New category added successfully:", jsonResponse)
+        // console.log("New category added successfully:", jsonResponse)
         return jsonResponse // Return the response if needed
     } catch (error) {
         console.error("Error adding new category:", error.message)
@@ -86,7 +86,7 @@ async function addNewMenu(categoryId, newMenuData) {
             throw new Error("Failed to add new menu")
         }
         const jsonResponse = await response.json()
-        console.log("New menu added successfully:", jsonResponse)
+        // console.log("New menu added successfully:", jsonResponse)
         return jsonResponse // Return the response if needed
     } catch (error) {
         console.error("Error adding new menu:", error.message)
@@ -107,7 +107,7 @@ async function DeleteMenu(categoryId, editedMenuData) {
             throw new Error("Failed to delete menu")
         }
         const jsonResponse = await response.json()
-        console.log("Menu deleted successfully", jsonResponse)
+        // console.log("Menu deleted successfully", jsonResponse)
         // Optionally, you can return some data indicating success
         return { success: true }
     } catch (error) {
@@ -126,7 +126,7 @@ async function DeleteCate(categoryId) {
             throw new Error("Failed to delete category")
         }
         const jsonResponse = await response.json()
-        console.log("Category deleted successfully", jsonResponse)
+        // console.log("Category deleted successfully", jsonResponse)
         // Optionally, you can return some data indicating success
         return { success: true }
     } catch (error) {
@@ -175,7 +175,7 @@ async function deleteItemById(path, id) {
         })
         return res.status
     } catch (error) {
-        console.log(`error: ${error}`)
+        // console.log(`error: ${error}`)
     }
 }
 async function editItem(path, id, editItem) {
@@ -192,7 +192,7 @@ async function editItem(path, id, editItem) {
         const editedItem = await res.json()
         return editedItem
     } catch (error) {
-        console.log(`error: ${error}`)
+        // console.log(`error: ${error}`)
     }
 }
 
