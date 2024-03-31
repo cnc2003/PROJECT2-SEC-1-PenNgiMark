@@ -98,25 +98,26 @@ const actionPromotion = async (action, body) => {
                 />
             </h1>
         </div>
-        <hr :class="hr" class="z-0 my-6 w-full" />
-        <div class="w-full">
-            <table class="table w-full table-zebra">
+        <hr class="my-6 w-full border-2 border-slate" />
+        <div class="w-full overflow-auto">
+            <table class="w-full">
                 <thead class="text-2xl">
                     <tr class="w-full">
                         <th></th>
-                        <th class="w-[30%]">Name</th>
-                        <th class="w-[30%]">Drinks</th>
-                        <th class="w-[30%]">Discount Price</th>
+                        <th class="w-[30%] text-start">Name</th>
+                        <th class="w-[30%] text-start">Drinks</th>
+                        <th class="w-[30%] text-start">Discount Price</th>
                     </tr>
                 </thead>
                 <tbody class="text-xl">
                     <tr
-                        v-for="pro in promotions"
+                        v-for="(pro, index) in promotions"
                         :key="pro.id"
-                        class="hover hover:scale-[101%] hover:rounded-xl"
+                        :class="pro.id % 2 === 0 ? 'bg-slate-200' : ''"
+                        class=" border h-10 cursor-pointer hover:scale-[102%] transition-all duration-300 ease-in-out"
                         @click="openPromoModal(pro)"
                     >
-                        <td class="text-center font-bold">{{ pro.id }}</td>
+                        <td class="text-center font-bold">{{ index + 1 }}</td>
                         <td>
                             {{ pro.name }}
                         </td>
