@@ -12,7 +12,6 @@ const afterFilterResult = ref(null) // default value
 const promotions = ref([])
 const discount = ref(0)
 const subtotalPrice = ref(0)
-const isShowOptionMenu = ref(false)
 const menusInCart = ref([])
 const paymentMethod = ref("")
 let selectedmenus = []
@@ -145,6 +144,7 @@ function confirmOption(item, propoty) {
     if (item.sweetnessLevel === undefined || item.sweetnessLevel === "") {
         // alert("Please select sweetness level")
         openModal("SweetnessLevel")
+        return
     }
     selectedmenus[0].selected = false
 
@@ -158,6 +158,7 @@ function confirmOption(item, propoty) {
     }
     fetchMenuData()
     menusInCart.value.push(addToCart)
+    
 }
 
 function cancelOption(item) {
