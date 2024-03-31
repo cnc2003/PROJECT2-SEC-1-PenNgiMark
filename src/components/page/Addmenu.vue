@@ -18,6 +18,7 @@ const paymentMethod = ref("")
 let selectedmenus = []
 const showModalConfirm = ref(false)
 const modalAction = ref("")
+const allSelected = ref(true)
 
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
@@ -165,6 +166,29 @@ function cancelOption(item) {
     fetchMenuData()
 }
 
+function selectedCategory(category) {
+  for (const data in filterResult.value) {
+    const categorykey = filterResult.value[data]
+    if (category === "All" || category === categorykey.category) {
+      categorykey.selected = true
+      allSelected === false
+    } else {
+      categorykey.selected = false
+      allSelected === true
+    }
+  }
+}
+
+function closeOtherButtons() {
+  for (const data in filterResult.value) {
+    const categorykey = filterResult.value[data]
+    categorykey.selected = false
+  }
+}
+
+
+
+
 </script>
 <template>
     <div
@@ -175,10 +199,12 @@ function cancelOption(item) {
             <div
                 class="flex shrink-0 w-12/12 p-4 pt-2 rounded-3xl bg-white border-solid border-slate-300 border-4"
             >
-                <div
-                    class="bg-slate-300 p-4 m-2 rounded-md btn btn-md hover:bg-blue-700 hover: hover:text-white text-gray-700 font-semibold"
-                    @click="filterCategory('All')"
-                >
+            <div
+                  :class="{'bg-blue-700 text-white': allSelected, 'bg-slate-300 text-gray-700': !allSelected}"
+                   class="p-4 m-2 rounded-md btn btn-md font-semibold"
+                   @click="filterCategory('All'); selectedCategory('All'); allSelected = true; closeOtherButtons()"
+
+>
                     <svg
                         class="w-5 h-5 text-gray-800 dark:text-grey-400"
                         aria-hidden="true"
@@ -203,8 +229,10 @@ function cancelOption(item) {
                 <div
                     v-for="propoty in filterResult"
                     :key="propoty"
-                    class="bg-slate-300 p-4 m-2 rounded-md btn btn-md hover:bg-blue-700 hover: hover:text-white text-gray-700 font-semibold"
-                    @click="filterCategory(propoty.category)"
+                    class="bg-slate-300 p-4 m-2 rounded-md btn btn-md hover:bg-blue-500 hover: hover:text-white text-gray-700 font-semibold"
+                    @click="filterCategory(propoty.category); selectedCategory(propoty.category) ;allSelected = false"
+                    :style="propoty.selected ? 'background-color: blue; color: white' : 'background-color: slate-300; color: gray'"
+
                 >
                     <svg
                         class="w-6 h-6 text-gray-800 dark:text-grey-400"
@@ -448,3 +476,10 @@ function cancelOption(item) {
         </section>
     </div>
 </template>
+
+<style>
+                    .selected {
+                      background-color: blue;
+                      color: white;
+                    }
+</style>
