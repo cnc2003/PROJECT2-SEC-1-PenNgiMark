@@ -5,12 +5,6 @@
       "category": "Coffee",
       "menus": [
         {
-          "menu_name": "Espresso",
-          "price": 75,
-          "description": "A strong black coffee made by forcing steam through finely-ground coffee beans.",
-          "img_src": "https://img.freepik.com/free-photo/glass-with-iced-coffee-table_23-2148937326.jpg?t=st=1711771645~exp=1711775245~hmac=cd29faf95b5d3874ceed53c80ec181da9c1193182b18a611c904eaec5b540b7a&w=740"
-        },
-        {
           "menu_name": "Cappuccino",
           "price": 105,
           "description": "An espresso-based coffee drink that is typically prepared with equal parts double espresso, steamed milk, and milk foam.",
@@ -29,16 +23,22 @@
           "img_src": "https://img.freepik.com/free-photo/aromatic-frappuccino-table_23-2148900674.jpg?w=740"
         },
         {
-          "menu_name": "Americano",
-          "price": 90,
-          "description": "A coffee drink prepared by diluting an espresso with hot water.",
-          "img_src": "https://img.freepik.com/free-photo/glass-with-iced-coffee-table_23-2148937324.jpg?t=st=1711771730~exp=1711775330~hmac=f988610726cbfe6a0c791df55f8cab43182ace02c6a0b2f44fb0f3987d3713c7&w=740"
-        },
-        {
           "menu_name": "Iced Coffee",
           "price": 110,
           "description": "Cold coffee served over ice cubes.",
           "img_src": "https://img.freepik.com/free-photo/caffee-latte-with-whipped-cream_123827-26336.jpg?t=st=1711771759~exp=1711775359~hmac=f3f20402aa8e32c77c7b29fda7445d8463f3d6c68aa0cb77fb00d3fcd01a6845&w=900"
+        },
+        {
+          "menu_name": "Espresso",
+          "price": 75,
+          "description": "A strong black coffee made by forcing steam through finely-ground coffee beans.",
+          "img_src": "https://img.freepik.com/free-photo/glass-with-iced-coffee-table_23-2148937326.jpg?t=st=1711771645~exp=1711775245~hmac=cd29faf95b5d3874ceed53c80ec181da9c1193182b18a611c904eaec5b540b7a&w=740"
+        },
+        {
+          "menu_name": "Americano",
+          "price": 90,
+          "description": "A coffee drink prepared by diluting an espresso with hot water.",
+          "img_src": "https://img.freepik.com/free-photo/glass-with-iced-coffee-table_23-2148937324.jpg?t=st=1711771730~exp=1711775330~hmac=f988610726cbfe6a0c791df55f8cab43182ace02c6a0b2f44fb0f3987d3713c7&w=740"
         }
       ]
     },
@@ -171,13 +171,13 @@
           "menu_name": "Cappuccino",
           "quantity": 1,
           "price": 105,
-          "details": "Lightly sweet"
+          "sweetnessLevel": "Lightly sweet"
         },
         {
           "menu_name": "Americano",
           "quantity": 1,
           "price": 90,
-          "details": "Very sweet"
+          "sweetnessLevel": "Very sweet"
         }
       ],
       "id": "4aac"
@@ -189,13 +189,13 @@
           "menu_name": "Cappuccino",
           "quantity": 1,
           "price": 105,
-          "details": "Lightly sweet"
+          "sweetnessLevel": "Lightly sweet"
         },
         {
           "menu_name": "Americano",
           "quantity": 1,
           "price": 90,
-          "details": "Very sweet"
+          "sweetnessLevel": "Very sweet"
         }
       ],
       "id": "af28"
@@ -204,12 +204,11 @@
       "order_number": "012004",
       "payment": "Cash",
       "menus": [
-
         {
           "menu_name": "Americano",
           "quantity": 3,
           "price": 270,
-          "details": "Extra sweet"
+          "sweetnessLevel": "Extra sweet"
         }
       ],
       "id": "af29"
@@ -218,24 +217,23 @@
       "order_number": "012005",
       "payment": "Cash",
       "menus": [
-        
         {
           "menu_name": "Americano",
           "quantity": 1,
           "price": 90,
-          "details": "Very sweet"
+          "sweetnessLevel": "Very sweet"
         },
         {
           "menu_name": "Americano",
           "quantity": 4,
           "price": 360,
-          "details": "sweet"
+          "sweetnessLevel": "sweet"
         },
         {
           "menu_name": "Americano",
           "quantity": 3,
           "price": 270,
-          "details": "Extra sweet"
+          "sweetnessLevel": "Extra sweet"
         }
       ],
       "id": "af30"
@@ -248,16 +246,124 @@
           "menu_name": "Cappuccino",
           "quantity": 1,
           "price": 105,
-          "details": "Lightly sweet"
+          "sweetnessLevel": "Lightly sweet"
         },
         {
           "menu_name": "Americano",
           "quantity": 1,
           "price": 90,
-          "details": "Very sweet"
+          "sweetnessLevel": "Very sweet"
         }
       ],
       "id": "af31"
+    },
+    {
+      "id": "b340",
+      "order_number": 719893,
+      "menus": [
+        {
+          "menu_name": "Latte",
+          "price": 120,
+          "quantity": 1,
+          "selected": false,
+          "sweetnessLevel": "verySweet",
+          "category": "Coffee"
+        }
+      ],
+      "paymentMethod": "QR",
+      "totalPrice": 120
+    },
+    {
+      "order_number": 982792,
+      "menus": [
+        {
+          "menu_name": "Latte",
+          "price": 120,
+          "quantity": 1,
+          "selected": false,
+          "sweetnessLevel": "verySweet",
+          "category": "Coffee"
+        }
+      ],
+      "id": "afe3"
+    },
+    {
+      "id": "484b",
+      "order_number": 959488,
+      "menus": [
+        {
+          "menu_name": "Cappuccino",
+          "price": 105,
+          "quantity": 2,
+          "selected": false,
+          "sweetnessLevel": "verySweet",
+          "category": "Coffee"
+        }
+      ],
+      "paymentMethod": "QR",
+      "totalPrice": 202
+    },
+    {
+      "id": "4ced",
+      "order_number": 73133,
+      "menus": [
+        {
+          "menu_name": "Latte",
+          "price": 120,
+          "quantity": 1,
+          "selected": false,
+          "sweetnessLevel": "verySweet",
+          "category": "Coffee"
+        },
+        {
+          "menu_name": "Cappuccino",
+          "price": 105,
+          "quantity": 1,
+          "selected": false,
+          "category": "Coffee"
+        },
+        {
+          "menu_name": "Cappuccino",
+          "price": 105,
+          "quantity": 1,
+          "selected": false,
+          "category": "Coffee"
+        }
+      ],
+      "paymentMethod": "card",
+      "totalPrice": 322
+    },
+    {
+      "id": "4be0",
+      "order_number": 487224,
+      "menus": [
+        {
+          "menu_name": "Cappuccino",
+          "price": 105,
+          "quantity": 1,
+          "selected": false,
+          "sweetnessLevel": "sweet",
+          "category": "Coffee"
+        }
+      ],
+      "paymentMethod": "card",
+      "totalPrice": 97
+    },
+    {
+      "id": "cd3a",
+      "order_number": 861156,
+      "menus": [
+        {
+          "menu_name": "Cappuccino",
+          "price": 105,
+          "quantity": 1,
+          "selected": false,
+          "sweetnessLevel": "verySweet",
+          "category": "Coffee"
+        }
+      ],
+      "paymentMethod": "QR",
+      "totalPrice": 97
     }
   ],
   "HistoryOrder": [
@@ -266,7 +372,7 @@
       "menu_name": "Espresso",
       "quantity": 1,
       "price": 75,
-      "details": "Unsweet",
+      "sweetnessLevel": "Unsweet",
       "selected": true,
       "Time": "3/21/2024 9:19:00 PM",
       "order_number": "012003"
@@ -276,10 +382,21 @@
       "menu_name": "Latte",
       "quantity": 2,
       "price": 240,
-      "details": "Sweetened",
+      "sweetnessLevel": "Sweetened",
       "selected": true,
       "Time": "3/21/2024 9:19:18 PM",
       "order_number": "012003"
+    },
+    {
+      "id": "6ff6",
+      "menu_name": "Latte",
+      "price": 120,
+      "quantity": 1,
+      "selected": true,
+      "sweetnessLevel": "verySweet",
+      "category": "Coffee",
+      "Time": "3/31/2024 1:37:47 PM",
+      "order_number": 982792
     }
   ],
   "Management": [

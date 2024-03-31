@@ -65,7 +65,7 @@ function filterCategory(inputCategory) {
             //console.log(categorykey.category)
 
             if (inputCategory === categorykey.category) {
-                ////console.log(categorykey)
+                //console.log(categorykey)
                 afterFilterResult.value = [categorykey]
             }
         }
@@ -76,7 +76,7 @@ function filterCategory(inputCategory) {
 let currEditOrigin = {}
 function menuModalHandle(input, category) {
     if (input == "clearModal") {
-        editingItem.value = currEditOrigin.menu
+        editingItem.value = {}
         isEditMode.value = false
         isMenuModal.value = false
         fetchMenuData()
@@ -145,25 +145,25 @@ function confirmModalHandle(input) {
         editingItem.value = {}
     }
     if (input == "addMenu") {
-        console.log("add")
+        //console.log("add")
         if (!editingItem.value.category) {
             return alert("put si")
         }
 
         // EDIT MODE CASE MODULE
         if (isEditMode.value) {
-            console.log("case1")
+            //console.log("case1")
             // console.log(editingItem.value)
             // console.log(editingItem.value.category)
 
             filterCateForEdit(currEditOrigin.category)
             // console.log(editSpace);
             findEditIndex(editingItem.value.menu_name)
-            console.log(editSpace.category)
-            console.log(currEditOrigin.category)
+            //console.log(editSpace.category)
+            //console.log(currEditOrigin.category)
             //add new category case
             if (editingItem.value.new_category) {
-                console.log("case1-A")
+                //console.log("case1-A")
                 const object = {
                     category: editingItem.value.new_category,
                     menus: [
@@ -179,13 +179,13 @@ function confirmModalHandle(input) {
                 findEditIndex(currEditOrigin.menu.menu_name)
                 addNewCategory(object)
                 editSpace.menus.splice(index, 1)
-                console.log(editSpace.id)
+                //console.log(editSpace.id)
                 DeleteMenu(editSpace.id, editSpace).then(() => fetchMenuData())
             } else {
-                console.log("case1-B")
+                //console.log("case1-B")
                 //NOT add new category case
-                console.log(editSpace.category)
-                console.log(currEditOrigin.category)
+                //console.log(editSpace.category)
+                //console.log(currEditOrigin.category)
                 if (editingItem.value.category == currEditOrigin.category) {
                     console.log("//Edit data case ")
                     editSpace.menus[index] = {
@@ -198,7 +198,7 @@ function confirmModalHandle(input) {
                         fetchMenuData()
                     )
                 } else {
-                    console.log("//change category")
+                    //console.log("//change category")
                     filterCateForEdit(currEditOrigin.category)
                     findEditIndex(currEditOrigin.menu.menu_name)
                     editSpace.menus.splice(index, 1)
@@ -211,7 +211,7 @@ function confirmModalHandle(input) {
                         description: editingItem.value.description,
                         img_src: editingItem.value.img_src,
                     })
-                    console.log("dofetch")
+                    //console.log("dofetch")
                     addNewMenu(editSpace.id, editSpace).then(() =>
                         fetchMenuData()
                     )
@@ -220,10 +220,10 @@ function confirmModalHandle(input) {
         }
         // CREATE NEW MENU MODE
         if (!isEditMode.value) {
-            console.log("case2")
-            console.log("newMenuuuuu")
+            //console.log("case2")
+            //console.log("newMenuuuuu")
             if (editingItem.value.new_category) {
-                console.log("case2-A")
+                //console.log("case2-A")
                 const object = {
                     category: editingItem.value.new_category,
                     menus: [
@@ -238,7 +238,7 @@ function confirmModalHandle(input) {
                 addNewCategory(object).then(() => fetchMenuData())
             }
             if (!editingItem.value.new_category) {
-                console.log("case2-B")
+                //console.log("case2-B")
                 filterCateForEdit(editingItem.value.category)
                 findEditIndex(editingItem.value.menu_name)
                 editSpace.menus.push({
@@ -255,7 +255,7 @@ function confirmModalHandle(input) {
         isConfirming.value = false
         isAddComplete.value = true
         editingItem.value = {}
-        console.log("end")
+        //console.log("end")
     }
 }
 

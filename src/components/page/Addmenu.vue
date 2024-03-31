@@ -12,7 +12,6 @@ const afterFilterResult = ref(null) // default value
 const promotions = ref([])
 const discount = ref(0)
 const subtotalPrice = ref(0)
-const isShowOptionMenu = ref(false)
 const menusInCart = ref([])
 const paymentMethod = ref("")
 let selectedmenus = []
@@ -21,7 +20,7 @@ const modalAction = ref("")
 
 async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
-    console.log(filterResult.value)
+    // console.log(filterResult.value)
 }
 fetchMenuData()
 
@@ -36,16 +35,16 @@ onMounted(async () => {
 })
 
 function filterCategory(inputCategory) {
-    console.log(inputCategory)
+    // console.log(inputCategory)
     if (inputCategory === null || inputCategory === "All") {
         afterFilterResult.value = filterResult.value
     } else {
         for (const data in filterResult.value) {
             const categorykey = filterResult.value[data] // category in menu
-            // console.log(categorykey.category)
+            // // console.log(categorykey.category)
 
             if (inputCategory === categorykey.category) {
-                console.log(categorykey)
+                // console.log(categorykey)
                 afterFilterResult.value = [categorykey]
             }
         }
@@ -82,7 +81,7 @@ const getSubtotalPrice = () => {
 watch(
     () => menusInCart,
     (newCart) => {
-        // console.log(newCart.value)
+        // // console.log(newCart.value)
         calculateDiscount()
         getSubtotalPrice()
     },
@@ -101,7 +100,7 @@ const openModal = (action) => {
 }
 
 const placeOrder = async () => {
-    console.log("Place Order")
+    // console.log("Place Order")
     if (menusInCart.value.length === 0) {
         openModal("EmptyCart")
         return
@@ -119,7 +118,7 @@ const placeOrder = async () => {
         },
         "OrderLists"
     )
-    console.log({ addOrderRes })
+    // console.log({ addOrderRes })
 
     if (addOrderRes !== 201) {
         alert("Failed to place order")
@@ -131,7 +130,7 @@ const placeOrder = async () => {
 }
 
 function ToggleClick(item) {
-    console.log(selectedmenus)
+    // console.log(selectedmenus)
     if (selectedmenus.length > 0) {
         selectedmenus[0].selected = false
         selectedmenus.shift()
@@ -141,10 +140,11 @@ function ToggleClick(item) {
 }
 
 function confirmOption(item, propoty) {
-    console.log(propoty.value)
+    // console.log(propoty.value)
     if (item.sweetnessLevel === undefined || item.sweetnessLevel === "") {
         // alert("Please select sweetness level")
         openModal("SweetnessLevel")
+        return
     }
     selectedmenus[0].selected = false
 
@@ -158,6 +158,7 @@ function confirmOption(item, propoty) {
     }
     fetchMenuData()
     menusInCart.value.push(addToCart)
+    
 }
 
 function cancelOption(item) {
