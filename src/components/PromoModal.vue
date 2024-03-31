@@ -26,14 +26,13 @@ const immutableMenus = ref(JSON.parse(JSON.stringify(menus)))
 
 const savePromotion = (action, result) => {
     let arg = {
-            id: id,
-            name: name,
-            menus: immutableMenus.value,
-            discount: discount,
-        }
+        id: id,
+        name: name,
+        menus: immutableMenus.value,
+        discount: discount,
+    }
     if (action === "Delete-Promotion") {
         arg = props.promotion.id
-        
     }
     if (props.promotion.id === undefined) {
         action = "Add-Promotion"
@@ -50,7 +49,6 @@ const openModal = (action) => {
     modalAction.value = action
     showModalConfirm.value = true
 }
-
 </script>
 
 <template>
@@ -165,6 +163,7 @@ const openModal = (action) => {
                 iconName="Trash"
                 color="red"
                 @click="openModal('Delete-Promotion')"
+                class="cursor-pointer text-red-500"
             />
         </div>
         <div v-show="showModalConfirm">
