@@ -1,5 +1,9 @@
 <script setup>
-import { ref } from "vue"
+import JsxIconBase from "./JsxIconBase.vue"
+
+const props = defineProps({
+    action: { type: String, require: true },
+})
 
 const emits = defineEmits(["close", "serve"])
 

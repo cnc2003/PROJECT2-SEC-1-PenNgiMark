@@ -1,47 +1,52 @@
 <script setup>
-import { ref, watch, computed, onMounted } from "vue"
+import { ref, watch, computed, onMounted } from "vue";
 
-import { getList } from "../../lib/fetch.js"
-import CartList from "../CartList.vue"
-import JsxIconBase from "../JsxIconBase.vue"
-import MenuBaseCard from "../MenuBaseCard.vue"
+import { getList, PostMenu } from "../../lib/fetch.js";
+import CartList from "../CartList.vue";
+import JsxIconBase from "../JsxIconBase.vue";
+import MenuBaseCard from "../MenuBaseCard.vue";
+import ModalConfirm from "../ModalConfirm.vue";
 
-const filterResult = ref(null) //default data
-const afterFilterResult = ref(null) // default value
-const promotions = ref([])
-const discount = ref(0)
-const subtotalPrice = ref(0)
-const isShowOptionMenu = ref(false)
-let selectedmenus = []
+const filterResult = ref(null); //default data
+const afterFilterResult = ref(null); // default value
+const promotions = ref([]);
+const discount = ref(0);
+const subtotalPrice = ref(0);
+const menusInCart = ref([]);
+const paymentMethod = ref("");
+let selectedmenus = [];
+const showModalConfirm = ref(false);
+const modalAction = ref("");
+const allSelected = ref(true);
 
 async function fetchMenuData() {
-  filterResult.value = await getList("Menus") // is array
-  console.log(filterResult.value)
+  filterResult.value = await getList("Menus"); // is array
+  // console.log(filterResult.value)
 }
-fetchMenuData()
+fetchMenuData();
 
 onMounted(async () => {
   const [menusRes, promotionsRes] = await Promise.all([
     getList("Menus"),
     getList("Promotions"),
-  ])
-  fetchMenuData()
-  promotions.value = promotionsRes
+  ]);
+  fetchMenuData();
+  promotions.value = promotionsRes;
   // filterResult.value = menusRes
-})
+});
 
 function filterCategory(inputCategory) {
-  console.log(inputCategory)
+  // console.log(inputCategory)
   if (inputCategory === null || inputCategory === "All") {
-    afterFilterResult.value = filterResult.value
+    afterFilterResult.value = filterResult.value;
   } else {
     for (const data in filterResult.value) {
-      const categorykey = filterResult.value[data] // category in menu
-      // console.log(categorykey.category)
+      const categorykey = filterResult.value[data]; // category in menu
+      // // console.log(categorykey.category)
 
       if (inputCategory === categorykey.category) {
-        console.log(categorykey)
-        afterFilterResult.value = [categorykey]
+        // console.log(categorykey)
+        afterFilterResult.value = [categorykey];
       }
     }
   }
@@ -76,163 +81,193 @@ const mocDrinks = [
 const menusInCart = ref(mocDrinks)
 
 const calculateDiscount = () => {
-  let totalDiscount = 0
+  let totalDiscount = 0;
 
   for (const promotion of promotions.value) {
     if (
       promotion.menus.every((promoItem) => {
         const cartItem = menusInCart.value.find(
           (item) => item.menu_name === promoItem.menuName
-        )
-        return cartItem && cartItem.quantity >= promoItem.quantity
+        );
+        return cartItem && cartItem.quantity >= promoItem.quantity;
       })
     ) {
-      const discountAmount = promotion.discount
-      totalDiscount += discountAmount
+      const discountAmount = promotion.discount;
+      totalDiscount += discountAmount;
     }
   }
-  discount.value = totalDiscount
+  discount.value = totalDiscount;
   // return totalDiscount
-}
+};
 
 const getSubtotalPrice = () => {
-  let price = 0
+  let price = 0;
   menusInCart.value.forEach((item) => {
-    price += item.price * item.quantity
-  })
-  subtotalPrice.value = price
-}
+    price += item.price * item.quantity;
+  });
+  subtotalPrice.value = price;
+};
 watch(
   () => menusInCart,
   (newCart) => {
-    // console.log(newCart.value)
-    calculateDiscount()
-    getSubtotalPrice()
+    // // console.log(newCart.value)
+    calculateDiscount();
+    getSubtotalPrice();
   },
   { deep: true, immediate: true }
-)
+);
+
 const totalPrice = computed(() => {
-  return subtotalPrice.value - discount.value
-})
+  return subtotalPrice.value - discount.value;
+});
 
-const paymentMethod = ref("")
+const openModal = (action) => {
+  if (!showModalConfirm.value) {
+    showModalConfirm.value = true;
+  }
+  modalAction.value = action;
+};
 
-const placeOrder = () => {
-  console.log("Place Order")
+const placeOrder = async () => {
+  // console.log("Place Order")
   if (menusInCart.value.length === 0) {
-    alert("Please add some items to cart")
-    return
+    openModal("EmptyCart");
+    return;
   }
   if (paymentMethod.value === "") {
-    alert("Please select payment method")
-    return
+    openModal("EmptyPayment");
+    return;
   }
-  const order = {
-    orderNumber: Math.floor(Math.random() * 1000000),
-    menus: menusInCart.value,
-    paymentMethod: paymentMethod.value,
-    totalPrice: totalPrice.value,
+  const addOrderRes = await PostMenu(
+    {
+      order_number: Math.floor(Math.random() * 1000000),
+      menus: menusInCart.value,
+      paymentMethod: paymentMethod.value,
+      totalPrice: totalPrice.value,
+    },
+    "OrderLists"
+  );
+  // console.log({ addOrderRes })
+
+  if (addOrderRes !== 201) {
+    alert("Failed to place order");
+    return;
   }
-  console.log(order)
-}
+  // orderNumber.value++
+  menusInCart.value = [];
+  paymentMethod.value = "";
+};
+
 function ToggleClick(item) {
-  console.log(selectedmenus)
+  // console.log(selectedmenus)
   if (selectedmenus.length > 0) {
     selectedmenus[0].selected = false;
     selectedmenus.shift();
   }
-  item.selected = true
-  selectedmenus.push(item)
+  item.selected = true;
+  selectedmenus.push(item);
 }
 
 function confirmOption(item, propoty) {
-  console.log(propoty.value);
+  // console.log(propoty.value)
   if (item.sweetnessLevel === undefined || item.sweetnessLevel === "") {
-    alert("Please select sweetness level")
+    // alert("Please select sweetness level")
+    openModal("SweetnessLevel");
+    return;
   }
   selectedmenus[0].selected = false;
+
   let addToCart = {
     menu_name: item.menu_name,
     price: item.price,
+    quantity: 1,
     selected: item.selected,
     sweetnessLevel: item.sweetnessLevel,
     category: propoty.category,
-  }
-  fetchMenuData()
-  mocDrinks.push(addToCart)
-  console.log("mocDrinks :", mocDrinks)
+  };
+  fetchMenuData();
+  menusInCart.value.push(addToCart);
 }
 function cancelOption(item) {
   selectedmenus[0].selected = false;
   fetchMenuData();
 }
+
+function selectedCategory(category) {
+  for (const data in filterResult.value) {
+    const categorykey = filterResult.value[data];
+    if (category === "All" || category === categorykey.category) {
+      categorykey.selected = true;
+      allSelected === false;
+    } else {
+      categorykey.selected = false;
+      allSelected === true;
+    }
+  }
+}
+
+function closeOtherButtons() {
+  for (const data in filterResult.value) {
+    const categorykey = filterResult.value[data];
+    categorykey.selected = false;
+  }
+}
+
+const sweetBtn = ref(
+  "py-2 w-[25%] text-black rounded-2xl border border-1 cursor-pointer text-sm text-center font-semibold hover:scale-105 transition duration-300 hover:bg-pink-100 hover:border-pink-500"
+);
 </script>
 <template>
-  <div
-    class="flex h-screen w-full shrink-0 p-4 rounded-3xl bg-white border-solid border-slate-300 border-4"
-  >
-    <section
-      class="border-2 border-white w-3/4"
-      @click="closeModal"
-    >
+  <div class="flex h-full w-full shrink-0">
+    <section class="border-2 border-white w-3/4 h-full p-4" @click="closeModal">
       <!-- this must be category list -->
-      <div
-        class="flex shrink-0 w-12/12 p-4 pt-2 rounded-3xl bg-white border-solid border-slate-300 border-4"
-      >
-        
-        
-        <div
-          class="bg-slate-300 p-4 m-2 rounded-md btn btn-md hover:bg-blue-700 hover: hover:text-white text-gray-700 font-semibold"
-          @click="filterCategory('All')"
-        >
-          <svg
-            class="w-5 h-5 text-gray-800 dark:text-grey-400"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            viewBox="0 0 24 24"
+      <div name="category" class="flex flex-col w-full p-4">
+        <h1 class="text-3xl font-bold mb-4">Categories</h1>
+        <div name="categoryContainer" class="flex flex-row flex-wrap">
+          <div
+            :class="{
+              'bg-blue-700 text-white': allSelected,
+              'bg-slate-300 text-gray-700': !allSelected,
+            }"
+            class="p-6 px-8 m-2 rounded-xl btn btn-md font-semibold text-lg flex content-center"
+            @click="
+              () => {
+                filterCategory('All');
+                selectedCategory('All');
+                allSelected = true;
+                closeOtherButtons();
+              }
+            "
           >
-            <path
-              fill-rule="evenodd"
-              d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1Z"
-              clip-rule="evenodd"
-            />
-            <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z" />
-          </svg>
-
-          All
-        </div>
-        <div
-          v-for="propoty in filterResult"
-          :key="propoty"
-          class="bg-slate-300 p-4 m-2 rounded-md btn btn-md hover:bg-blue-700 hover: hover:text-white text-gray-700 font-semibold"
-          @click="filterCategory(propoty.category)"
-        >
-          <svg
-            class="w-6 h-6 text-gray-800 dark:text-grey-400"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            viewBox="0 0 24 24"
+            All
+          </div>
+          <div
+            v-for="propoty in filterResult"
+            :key="propoty"
+            class="p-4 px-6 m-2 rounded-xl btn btn-md font-semibold text-lg flex content-center"
+            @click="
+              () => {
+                filterCategory(propoty.category);
+                selectedCategory(propoty.category);
+                allSelected = false;
+              }
+            "
+            :style="
+              propoty.selected
+                ? 'background-color: blue; color: white'
+                : 'background-color: slate-300; color: gray'
+            "
           >
-            <path
-              fill-rule="evenodd"
-              d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1Z"
-              clip-rule="evenodd"
-            />
-            <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z" />
-          </svg>
-          {{ propoty.category }}
+            {{ propoty.category }}
+          </div>
         </div>
-        
+        <h1 class="text-2xl font-bold mt-8 divider divider-start">
+          Select Drink Menu
+        </h1>
       </div>
 
       <!-- this must be menus list -->
-      <div class="h-full overflow-y-scroll">
+      <div class="h-[78%] w-full overflow-y-scroll">
         <!-- loop category -->
 
         <div
@@ -240,19 +275,13 @@ function cancelOption(item) {
             ? filterResult
             : afterFilterResult"
           :key="category"
-          class="flex flex-wrap w-full h-auto gap-2"
+          class="flex flex-wrap w-full h-auto gap-2 px-4 mb-4"
         >
-        
           <!-- แสดงชื่อ category -->
-          <h2
-            class="w-full flex font-mono text-2xl font-semibold mt-10 text-blue-500 ml-11"
-          >
-            {{ propoty.category }} (
-            <p class="text-gray-700">{{ propoty.menus.length }}</p>
-            )
-            
-          </h2>
-          <hr class="w-full mb-2 border-gray-400 border-2 rounded ml-4 mr-4 mb-5 mt-4"></hr>
+          <hr
+            v-show="category !== 0"
+            class="w-full h-px bg-gray-200 border-2"
+          />
           <!-- แสดง menu items ในแต่ละ category -->
           <div
             v-for="(item, key) in propoty.menus"
@@ -261,93 +290,98 @@ function cancelOption(item) {
           >
             <div @click="ToggleClick(item)">
               <MenuBaseCard>
-                <template
-                  #title
-                  v-if="!item.selected"
-                >
-                <figure class="image-full min-h-44 max-h-32 w-70">
-                  <img
-                    :src="item.img_src"
-                    alt="MenuImage"
-                    class="min-h-43 w-70 rounded-t-3xl"
-                  />
-                </figure>
-                  <div class="card-body gap-1">
-                    <b>
-                      <p class="card-title text-2xl font-bold">{{ item.menu_name }}</p></b
-                    >
-                    <p
-                      v-text="item.price + ' ฿'"
-                      class="font-bold text-lg"
-                    ></p>
-                    <b>
-                      <p class="card-description">{{ item.description }}</p>
-                    </b>
+                <template #title v-if="!item.selected">
+                  <figure class="image-full min-h-44 max-h-32 w-70">
+                    <img
+                      :src="item.img_src"
+                      alt="MenuImage"
+                      class="min-h-43 w-70 rounded-t-3xl"
+                    />
+                  </figure>
+                  <div class="card-body gap-1 h-48">
+                    <div class="card-title w-full">
+                      <p class="text-2xl font-bold">
+                        {{ item.menu_name }}
+                      </p>
+                      <p
+                        v-text="item.price + ' ฿'"
+                        class="font-bold text-end"
+                      ></p>
+                    </div>
+
+                    <p class="card-description h-auto overflow-hidden">
+                      {{ item.description }}
+                    </p>
                   </div>
                 </template>
 
-                <template
-                  #modal
-                  v-if="item.selected"
-                >
-                  <div class="flex flex-col items-center justify-center card w-80 h-96">
-                    <p class="text-2xl font-bold text-pink-500 mt-10 mb-5">
-                      Sweetness Level
-                    </p>
-                    <div class="text-xl">
-                      <div class="mt-3">
-                        <input
-                          type="radio"
-                          id="light_sweet"
-                          name="sweetLevel"
-                          value="light_sweet"
-                          v-model="item.sweetnessLevel"
-                        />
-                        <label
-                          for="light_sweet"
-                          class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4"
-                          >Light Sweet</label
+                <template #modal v-if="item.selected">
+                  <div
+                    class="flex flex-col items-center justify-center card w-80 h-96 bg-[url(item.img_src)]"
+                  >
+                    <!-- <img :src="item.img_src" alt="img" class="absolute opacity-80"> -->
+
+                    <img src="/src/assets/icon/sugar-pink.png" alt="sugar" class="size-20">
+                   <div class="flex justify-center w-full ">
+                    <p class="text-2xl font-bold text-pink-500 my-4 divider divider-secondary w-[90%]">Sugar Level</p>
+                  </div>
+                    <div
+                      class="text-xl w-full border-opacity-50 flex flex-row gap-2 justify-center my-4"
+                    >
+                      <input
+                        type="radio"
+                        id="no_sugar"
+                        name="sweetLevel"
+                        value="no_sugar"
+                        v-model="item.sweetnessLevel"
+                        class="hidden peer/no_sugar"
+                      /><label
+                        for="no_sugar"
+                        class="peer-checked/no_sugar:bg-pink-200 hover:text-pink-400 "
+                        :class="sweetBtn"
                         >
-                      </div>
-                      <div class="mt-3">
-                        <input
-                          type="radio"
-                          id="sweet"
-                          name="sweetLevel"
-                          value="sweet"
-                          v-model="item.sweetnessLevel"
-                        />
-                        <label
-                          for="sweet"
-                          class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4"
-                          >Sweet</label
-                        >
-                      </div>
-                      <div class="mt-3">
-                        <input
-                          type="radio"
-                          id="verySweet"
-                          name="sweetLevel"
-                          value="verySweet"
-                          v-model="item.sweetnessLevel"
-                        />
-                        <label
-                          for="verySweet"
-                          class="text-black cursor-pointer hover:text-pink-400 text-nm font-semibold m-4"
-                          >Very Sweet</label
-                        >
-                      </div>
+                        No Sugar</label
+                      >
+                      <input
+                        type="radio"
+                        id="low_sugar"
+                        name="sweetLevel"
+                        value="low_sugar"
+                        v-model="item.sweetnessLevel"
+                        class="hidden peer/low_sugar"
+                      />
+                      <label
+                        for="low_sugar"
+                        class="peer-checked/low_sugar:bg-pink-400 hover:text-pink-600"
+                        :class="sweetBtn"
+                        >low Sugar</label
+                      >
+
+                      <input
+                        type="radio"
+                        id="normal"
+                        name="sweetLevel"
+                        value="normal"
+                        v-model="item.sweetnessLevel"
+                        class="hidden peer/normal"
+                      />
+                      <label
+                        for="normal"
+                        class="peer-checked/normal:bg-pink-600 hover:text-pink-800"
+                        :class="sweetBtn"
+                        >Normal</label
+                      >
                     </div>
                     <br />
-                    <div class="flex w-full h-auto justify-around items-end">
+                    <div class="flex w-full h-auto justify-center items-end gap-2">
                       <button
-                        class="hover:bg-red-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-8 border border-gray-400 rounded shadow"
+                        class="hover:bg-yellow-400 cursor-pointer bg-yellow-100 text-slate-900 font-semibold py-2 px-8 border border-yellow-500 rounded-xl shadow hover:underline hover:transition hover:duration-300 underline-offset-4"
                         @click.stop="cancelOption(item)"
                       >
                         Cancel
                       </button>
                       <button
-                        class="hover:bg-green-400 cursor-pointer bg-gray-200 text-gray-700 font-semibold py-2 px-10 border border-gray-400 rounded shadow"
+                        class="hover:bg-green-400 hover:border-green-400 cursor-pointer bg-green-500 text-slate-900 font-semibold py-2 px-10 border border-green-400 rounded-xl shadow hover:underline hover:transition hover:duration-300 underline-offset-4"
                         @click.stop="confirmOption(item, propoty)"
                       >
                         OK
@@ -361,13 +395,13 @@ function cancelOption(item) {
         </div>
       </div>
     </section>
-
-    <section class="flex flex-col border-2 border-black h-dvh w-1/4 ml-2">
-      <div class="flex justify-evenly border-2 border-black my-1 mx-2 h-20 p-1">
-        <button class="border-2 border-black rounded-md h-full">Dine in</button>
-        <button class="border-2 border-black rounded-md h-full">
-          Take away
-        </button>
+    <!-----------------------------------
+     ---------- Cart section ------------
+     ------------------------------------>
+    <section class="flex flex-col gap-2 bg-base-200 h-full w-1/4 p-4 justify-center">
+      <div class="join join-horizontal rounded-2xl bg-white h-20 w-full justify-center py-2">
+        <button class="join-item btn rounded-sm h-full w-[48%]">Dine in</button>
+        <button class="join-item btn rounded-sm h-full w-[48%]">Take away</button>
       </div>
       <CartList :menusInCart="menusInCart" />
       <div class="border-2 border-black m-2 h-1/5">
@@ -394,33 +428,47 @@ function cancelOption(item) {
         class="flex flex-col justify-evenly border-2 border-black h-28 mx-2 px-2 pb-2"
       >
         Payment Method
-        <div class="flex justify-evenly mt-3 h-12">
+        <div class="flex justify-evenly h-12">
           <button
             class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
             @click="paymentMethod = 'cash'"
           >
-            <JsxIconBase iconName="Cash" />
+            <JsxIconBase iconName="Cash" />Cash
           </button>
           <button
             class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
             @click="paymentMethod = 'card'"
           >
-            <JsxIconBase iconName="Card" />
+            <JsxIconBase iconName="Card" />Card
           </button>
           <button
             class="flex justify-center items-center border-2 border-black rounded-md h-full w-16"
             @click="paymentMethod = 'QR'"
           >
-            <JsxIconBase iconName="QR" />
+            <JsxIconBase iconName="QR" />QR
           </button>
         </div>
       </div>
       <button
         class="border-2 border-black h-20 m-2 mb-6"
-        @click="placeOrder"
+        @click="openModal('placeOrder')"
       >
         Place Order
       </button>
+      <div v-show="showModalConfirm">
+        <ModalConfirm
+          :action="modalAction"
+          @close="showModalConfirm = $event"
+          @placeOrder="placeOrder"
+        />
+      </div>
     </section>
   </div>
 </template>
+
+<style>
+.selected {
+  background-color: blue;
+  color: white;
+}
+</style>
