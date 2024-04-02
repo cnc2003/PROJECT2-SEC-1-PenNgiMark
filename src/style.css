@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.menu-fade-enter-active,
+.menu-fade-leave-active {
+    transition: opacity 0.3s, transform 1s;
+}
+.menu-fade-enter,
+.menu-fade-leave-to {
+    opacity: 0;
+    transform: translateY(-100px);
+}
