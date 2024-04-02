@@ -9,7 +9,7 @@ const menuCart = computed(() => props.menusInCart)
 </script>
 
 <template>
-    <div class="border-2 border-black m-2 h-full">
+    <div class="bg-white h-full rounded-2xl p-3">
         <h2>Total Items ( {{ menusInCart.length }} )</h2>
         <div v-for="(menu, index) in menuCart">
             <CartCard>
