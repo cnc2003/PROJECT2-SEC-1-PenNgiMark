@@ -6,7 +6,7 @@ import { getList } from "../lib/fetch.js"
 let HistoryOrder = ref([])
 const emits = defineEmits(["close"])
 const props = defineProps({
-  data: Boolean,
+  data: Boolean
 })
 let datas = ref(props.data)
 // console.log(datas.value)

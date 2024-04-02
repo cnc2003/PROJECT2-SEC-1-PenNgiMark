@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from "vue"
 import JsxIconBase from "./JsxIconBase.vue"
 
 const props = defineProps({
