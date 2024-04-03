@@ -156,7 +156,18 @@ function confirmOption(item, propoty) {
         sweetnessLevel: item.sweetnessLevel,
         category: propoty.category,
     }
-    // fetchMenuData()
+
+    for (const data in menusInCart.value) {
+        const cartItem = menusInCart.value[data]
+        if (
+            cartItem.menu_name === addToCart.menu_name &&
+            cartItem.sweetnessLevel === addToCart.sweetnessLevel
+        ) {
+            cartItem.quantity++
+            return
+        }
+    }
+    
     menusInCart.value.push(addToCart)
 }
 function cancelOption(item) {

@@ -2,6 +2,7 @@
 import { ref, computed } from "vue"
 import CartCard from "./CartCard.vue"
 import JsxIconBase from "./JsxIconBase.vue"
+import ModalConfirm from "./ModalConfirm.vue"
 const props = defineProps({
     menusInCart: Array,
 })
@@ -11,6 +12,13 @@ const menuCart = computed(() => props.menusInCart)
 const totalDrinks = computed(() => {
     return menuCart.value.reduce((acc, curr) => acc + curr.quantity, 0)
 })
+
+const removeDrink = (removeDrink) => {
+    console.log(removeDrink)
+    const idx = menuCart.value.findIndex((menu) => menu.menu_name === removeDrink.menu_name && menu.sweetnessLevel === removeDrink.sweetnessLevel)
+    menuCart.value.splice(idx, 1)
+}
+
 </script>
 
 <template>
@@ -30,7 +38,7 @@ const totalDrinks = computed(() => {
                         <JsxIconBase
                             iconName="Minus-circle"
                             class="hover:scale-[105%] w-6 h-6"
-                            @click="menu.quantity <= 1 ? null : menu.quantity--"
+                            @click="menu.quantity <= 1 ? removeDrink(menu) : menu.quantity--"
                         />
                         <p class="text-center font-semibold text-2xl w-[33%]">
                             {{ menu.quantity }}
