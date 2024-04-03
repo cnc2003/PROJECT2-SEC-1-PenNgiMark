@@ -23,7 +23,10 @@ async function fetchMenuData() {
     filterResult.value = await getList("Menus") // is array
     // console.log(filterResult.value)
 }
-fetchMenuData()
+
+watch(paymentMethod, (newVal) => {
+    console.log("paymentMethod" + newVal)
+})
 
 onMounted(async () => {
     const [menusRes, promotionsRes] = await Promise.all([
@@ -145,29 +148,18 @@ const placeOrder = async () => {
         totalPrice: totalPrice.value,
     }
 
-    const [resToOrderList, resToManage] = await Promise.all([
-        addItem("OrderLists", orderMenu),
-        addItem("Management", orderMenu),
-    ])
-    console.log(resToOrderList.resCode)
-    console.log({ resToManage })
+    // const [resToOrderList, resToManage] = await Promise.all([
+    //     addItem("OrderLists", orderMenu),
+    //     addItem("Management", orderMenu),
+    // ])
+    // console.log(resToOrderList.resCode)
+    // console.log({ resToManage })
 
-    if (resToOrderList.resCode !== 201 && resToManage.resCode !== 201) {
-        alert("Failed to place order")
-        return
-    }
-
-    // const addOrderRes_toListOrder = await addItem(
-    //   "OrderLists",object)
-    // const addOrderRes_toManagement = await addItem(
-    //     "Management",object)
-    // console.log({ addOrderRes })
-
-    // if (addOrderRes_toListOrder !== 201) {
-    //   alert("Failed to place order");
-    //   return;
+    // if (resToOrderList.resCode !== 201 && resToManage.resCode !== 201) {
+    //     alert("Failed to place order")
+    //     return
     // }
-    // orderNumber.value++
+
     menusInCart.value = []
     paymentMethod.value = ""
 }
@@ -445,7 +437,6 @@ const sweetBtn = ref(
                     for="dine_in"
                     class="peer-checked/dine_in:bg-orange-400 text-pink-800 font-semibold text-xl flex justify-center gap-2 items-center rounded-md h-full w-[50%] px-4 m-1 transition duration-300 ease-linear"
                     :class="sweetBtn"
-                    @click="paymentMethod = 'cash'"
                 >
                     Dine in</label
                 >
@@ -478,9 +469,8 @@ const sweetBtn = ref(
                 </button> -->
             </div>
             <CartList :menusInCart="menusInCart" class="h-[60%]" />
-            <div class="bg-white h-[16%] w-full py-2 px-2 rounded-2xl text-lg">
+            <div class="bg-white h-[16%] min-h-[150px] w-full py-2 px-2 rounded-2xl text-lg">
                 <span class="font-semibold">Payment Summary</span>
-                <span class="divider my-[1px]"></span>
                 <div class="flex justify-between">
                     <p>Subtotal</p>
                     <p>{{ subtotalPrice }} ฿</p>
@@ -491,8 +481,8 @@ const sweetBtn = ref(
                 </div>
                 <span class="divider my-[1px]"></span>
                 <div class="flex justify-between">
-                    <p>Total Price</p>
-                    <p>{{ totalPrice }} ฿</p>
+                    <b>Total Price</b>
+                    <b>{{ totalPrice }} ฿</b>
                 </div>
             </div>
             <div
@@ -503,32 +493,31 @@ const sweetBtn = ref(
                     <input
                         type="radio"
                         id="cash"
-                        name="paymentMethod"
                         value="cash"
+                        v-model="paymentMethod"
                         class="hidden peer/cash"
                     />
 
                     <label
                         for="cash"
-                        class="peer-checked/cash:bg-green-400 transition duration-300 ease-linear hover:text-pink-800 flex justify-center gap-2 items-center rounded-md h-full w-[28%] px-4"
+                        class="peer-checked/cash:bg-blue-600 peer-checked/cash:text-white transition duration-300 ease-linear hover:text-pink-800 flex justify-center gap-2 items-center rounded-md h-full w-[28%] px-4"
                         :class="sweetBtn"
-                        @click="paymentMethod = 'cash'"
                     >
-                        <JsxIconBase iconName="Cash" />Cash</label
-                    >
+                        <JsxIconBase iconName="Cash" />
+                        Cash
+                    </label>
                     <input
                         type="radio"
                         id="card"
-                        name="paymentMethod"
                         value="card"
+                        v-model="paymentMethod"
                         class="hidden peer/card"
                     />
 
                     <label
                         for="card"
-                        class="peer-checked/card:bg-yellow-400 hover:text-pink-800 flex justify-center gap-2 items-center rounded-md h-full w-[28%] px-4"
+                        class="peer-checked/card:bg-blue-600 peer-checked/card:text-white hover:text-pink-800 flex justify-center gap-2 items-center rounded-md h-full w-[28%] px-4"
                         :class="sweetBtn"
-                        @click="paymentMethod = 'card'"
                     >
                         <JsxIconBase iconName="Card" />
                         Card
@@ -536,45 +525,24 @@ const sweetBtn = ref(
                     <input
                         type="radio"
                         id="QR"
-                        name="paymentMethod"
                         value="QR"
+                        v-model="paymentMethod"
                         class="hidden peer/QR"
                     />
 
                     <label
                         for="QR"
-                        class="peer-checked/QR:bg-sky-400 transition duration-300 ease-linear hover:text-pink-800 flex justify-center gap-2 items-center rounded-md h-full w-[28%] px-4"
+                        class="peer-checked/QR:bg-blue-600 peer-checked/QR:text-white transition duration-300 ease-linear hover:text-pink-800 flex justify-center gap-2 items-center rounded-md h-full w-[28%] px-4"
                         :class="sweetBtn"
-                        @click="paymentMethod = 'QR'"
                     >
-                        <JsxIconBase iconName="QR" />QR</label
-                    >
-
-                    <!-- <button
-            class="flex justify-center gap-2 items-center rounded-md h-full w-[28%] px-4 hover:bg-green-400 transition duration-300 ease-linear"
-            @click="paymentMethod = 'cash'"
-          >
-            <JsxIconBase iconName="Cash" />Cash
-          </button>
-          <div class="divider divider-horizontal mx-[2px]"></div>
-          <button
-            class="flex justify-center gap-2 items-center rounded-md h-full w-[28%] px-4 hover:bg-yellow-400 transition duration-300 ease-linear"
-            @click="paymentMethod = 'card'"
-          >
-            <JsxIconBase iconName="Card" />Card
-          </button>
-          <div class="divider divider-horizontal mx-[2px]"></div>
-          <button
-            class="flex justify-center gap-2 items-center rounded-md h-full w-[28%] px-4 hover:bg-sky-400 transition duration-300 ease-linear"
-            @click="paymentMethod = 'QR'"
-          >
-            <JsxIconBase iconName="QR" />QR
-          </button> -->
+                        <JsxIconBase iconName="QR" />
+                        QR
+                    </label>
                 </div>
             </div>
 
             <button
-                class="h-[5%] w-full bg-amber-500 rounded-2xl font-semibold text-xl hover:bg-orange-600 hover:scale-95 transition duration-300 ease-linear"
+                class="h-[5%] w-full bg-blue-600 text-white rounded-2xl font-semibold text-xl hover:bg-blue-500 hover:scale-95 transition duration-300 ease-linear"
                 @click="openModal('placeOrder')"
             >
                 Place Order
