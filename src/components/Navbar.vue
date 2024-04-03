@@ -9,9 +9,30 @@ const action = ref(
     "transition ease-in-out duration-300 bg-white text-gray-800 scale-[103%] shadow-md "
 )
 const svg = ref("size-8")
+const isLoading = ref(false)
+import routers from "../router/router.js"
+function loading() {
+    isLoading.value = true
+    setTimeout(() => {
+        isLoading.value = false
+    }, 2000)
+}
+
+routers.beforeEach((to, from, next) => {
+    loading()
+    setTimeout(() => {
+        next()
+    }, 1000)
+    // next()
+})
 </script>
 
 <template>
+    <div v-show="isLoading" 
+    class="loader">
+            <img src="/public/loader/Coffee.gif" alt="loader" class="loader-bg"/>
+            <h1 class="loader-text">Loading . . .</h1>
+    </div>
     <div
         class="flex flex-col p-4 gap-2 w-full h-screen bg-base-200 text-base-content"
     >

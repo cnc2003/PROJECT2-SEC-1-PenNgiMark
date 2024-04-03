@@ -8,6 +8,7 @@ import {
 } from "../../lib/fetch.js"
 import ModalHistory from "../ModalHistory.vue"
 import ModalConfirm from "../ModalConfirm.vue"
+import JsxIconBase from "../JsxIconBase.vue"
 
 // define variable
 let orderListData = ref([])
