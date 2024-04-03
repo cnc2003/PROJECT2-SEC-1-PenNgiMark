@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "backend": "json-server --watch ./public/data/db.json --port 5000"
+    "backend": "json-server --watch ./public/data/db.json --host penngi-pos2.vercel.app --port 5000"
   },
   "dependencies": {
     "@flaticon/flaticon-uicons": "^3.1.0",
