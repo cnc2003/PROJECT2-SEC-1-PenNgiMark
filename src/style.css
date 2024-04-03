@@ -18,7 +18,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     animation: fadeInOut 2s ease-in-out;
-    width: 30rem;
+    width: 8rem;
     opacity: 0;
 }
 
