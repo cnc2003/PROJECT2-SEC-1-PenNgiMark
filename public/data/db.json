@@ -214,156 +214,28 @@
       "id": "af29"
     },
     {
-      "order_number": "012005",
-      "payment": "Cash",
+      "id": "8cef",
+      "order_number": 222166,
       "menus": [
         {
-          "menu_name": "Americano",
-          "quantity": 1,
-          "price": 90,
-          "sweetnessLevel": "Very sweet"
-        },
-        {
-          "menu_name": "Americano",
-          "quantity": 4,
-          "price": 360,
-          "sweetnessLevel": "sweet"
-        },
-        {
-          "menu_name": "Americano",
-          "quantity": 3,
-          "price": 270,
-          "sweetnessLevel": "Extra sweet"
-        }
-      ],
-      "id": "af30"
-    },
-    {
-      "order_number": "012006",
-      "payment": "Cash",
-      "menus": [
-        {
-          "menu_name": "Cappuccino",
-          "quantity": 1,
-          "price": 105,
-          "sweetnessLevel": "Lightly sweet"
-        },
-        {
-          "menu_name": "Americano",
-          "quantity": 1,
-          "price": 90,
-          "sweetnessLevel": "Very sweet"
-        }
-      ],
-      "id": "af31"
-    },
-    {
-      "id": "b340",
-      "order_number": 719893,
-      "menus": [
-        {
-          "menu_name": "Latte",
-          "price": 120,
+          "menu_name": "Iced Coffee",
+          "price": 110,
           "quantity": 1,
           "selected": false,
-          "sweetnessLevel": "verySweet",
-          "category": "Coffee"
-        }
-      ],
-      "paymentMethod": "QR",
-      "totalPrice": 120
-    },
-    {
-      "order_number": 982792,
-      "menus": [
-        {
-          "menu_name": "Latte",
-          "price": 120,
-          "quantity": 1,
-          "selected": false,
-          "sweetnessLevel": "verySweet",
-          "category": "Coffee"
-        }
-      ],
-      "id": "afe3"
-    },
-    {
-      "id": "484b",
-      "order_number": 959488,
-      "menus": [
-        {
-          "menu_name": "Cappuccino",
-          "price": 105,
-          "quantity": 2,
-          "selected": false,
-          "sweetnessLevel": "verySweet",
-          "category": "Coffee"
-        }
-      ],
-      "paymentMethod": "QR",
-      "totalPrice": 202
-    },
-    {
-      "id": "4ced",
-      "order_number": 73133,
-      "menus": [
-        {
-          "menu_name": "Latte",
-          "price": 120,
-          "quantity": 1,
-          "selected": false,
-          "sweetnessLevel": "verySweet",
+          "sweetnessLevel": "normal",
           "category": "Coffee"
         },
         {
-          "menu_name": "Cappuccino",
-          "price": 105,
+          "menu_name": "Water",
+          "price": 20,
           "quantity": 1,
           "selected": false,
-          "category": "Coffee"
-        },
-        {
-          "menu_name": "Cappuccino",
-          "price": 105,
-          "quantity": 1,
-          "selected": false,
-          "category": "Coffee"
+          "sweetnessLevel": "normal",
+          "category": "General"
         }
       ],
       "paymentMethod": "card",
-      "totalPrice": 322
-    },
-    {
-      "id": "4be0",
-      "order_number": 487224,
-      "menus": [
-        {
-          "menu_name": "Cappuccino",
-          "price": 105,
-          "quantity": 1,
-          "selected": false,
-          "sweetnessLevel": "sweet",
-          "category": "Coffee"
-        }
-      ],
-      "paymentMethod": "card",
-      "totalPrice": 97
-    },
-    {
-      "id": "cd3a",
-      "order_number": 861156,
-      "menus": [
-        {
-          "menu_name": "Cappuccino",
-          "price": 105,
-          "quantity": 1,
-          "selected": false,
-          "sweetnessLevel": "verySweet",
-          "category": "Coffee"
-        }
-      ],
-      "paymentMethod": "QR",
-      "totalPrice": 97
+      "totalPrice": 130
     }
   ],
   "HistoryOrder": [
@@ -397,82 +269,108 @@
       "category": "Coffee",
       "Time": "3/31/2024 1:37:47 PM",
       "order_number": 982792
+    },
+    {
+      "id": "634a",
+      "menu_name": "Iced Coffee",
+      "price": 110,
+      "quantity": 1,
+      "selected": true,
+      "sweetnessLevel": "normal",
+      "category": "Coffee",
+      "Time": "4/3/2024 8:15:42 PM",
+      "order_number": 509290
     }
   ],
   "Management": [
     {
-      "order_id": "012001",
-      "payment": "QR",
-      "orders": [
-        {
-          "menu_name": "Espresso",
-          "quantity": 1,
-          "price": 75,
-          "details": "Unsweet"
-        },
+      "order_number": "012001",
+      "menus": [
         {
           "menu_name": "Cappuccino",
           "quantity": 1,
           "price": 105,
-          "details": "Lightly sweet"
-        },
-        {
-          "menu_name": "Latte",
-          "quantity": 2,
-          "price": 240,
-          "details": "Sweetened"
-        }
-      ],
-      "id": "4aac"
-    },
-    {
-      "order_id": "012002",
-      "payment": "Cash",
-      "orders": [
-        {
-          "menu_name": "Espresso",
-          "quantity": 1,
-          "price": 75,
-          "details": "Unsweet"
-        },
-        {
-          "menu_name": "Cappuccino",
-          "quantity": 1,
-          "price": 105,
-          "details": "Lightly sweet"
-        },
-        {
-          "menu_name": "Latte",
-          "quantity": 2,
-          "price": 240,
-          "details": "Sweetened"
-        },
-        {
-          "menu_name": "Mocha",
-          "quantity": 1,
-          "price": 135,
-          "details": "Extra sweet"
+          "sweetnessLevel": "Lightly sweet"
         },
         {
           "menu_name": "Americano",
           "quantity": 1,
           "price": 90,
-          "details": "Very sweet"
+          "sweetnessLevel": "Very sweet"
+        }
+      ],
+      "id": "4aac"
+    },
+    {
+      "order_number": "012002",
+      "menus": [
+        {
+          "menu_name": "Cappuccino",
+          "quantity": 1,
+          "price": 105,
+          "sweetnessLevel": "Lightly sweet"
         },
         {
           "menu_name": "Americano",
-          "quantity": 4,
-          "price": 360,
-          "details": "sweet"
-        },
+          "quantity": 1,
+          "price": 90,
+          "sweetnessLevel": "Very sweet"
+        }
+      ],
+      "id": "af28"
+    },
+    {
+      "order_number": "012004",
+      "payment": "Cash",
+      "menus": [
         {
           "menu_name": "Americano",
           "quantity": 3,
           "price": 270,
-          "details": "Extra sweet"
+          "sweetnessLevel": "Extra sweet"
         }
       ],
-      "id": "2000"
+      "id": "af29"
+    },
+    {
+      "id": "6978",
+      "order_number": 222166,
+      "menus": [
+        {
+          "menu_name": "Iced Coffee",
+          "price": 110,
+          "quantity": 1,
+          "selected": false,
+          "sweetnessLevel": "normal",
+          "category": "Coffee"
+        },
+        {
+          "menu_name": "Water",
+          "price": 20,
+          "quantity": 1,
+          "selected": false,
+          "sweetnessLevel": "normal",
+          "category": "General"
+        }
+      ],
+      "paymentMethod": "card",
+      "totalPrice": 130
+    },
+    {
+      "id": "e2db",
+      "order_number": 509290,
+      "menus": [
+        {
+          "menu_name": "Iced Coffee",
+          "price": 110,
+          "quantity": 1,
+          "selected": false,
+          "sweetnessLevel": "normal",
+          "category": "Coffee"
+        }
+      ],
+      "paymentMethod": "QR",
+      "totalPrice": 110
     }
   ],
   "Promotions": [

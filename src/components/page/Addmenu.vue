@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, computed, onMounted } from "vue"
 
-import { getList, PostMenu } from "../../lib/fetch.js"
+import { getList, addItem } from "../../lib/fetch.js"
 import CartList from "../CartList.vue"
 import JsxIconBase from "../JsxIconBase.vue"
 import MenuBaseCard from "../MenuBaseCard.vue"
@@ -138,27 +138,33 @@ const placeOrder = async () => {
         openModal("EmptyPayment")
         return
     }
-    const addOrderRes_toListOrder = await PostMenu(
-        {
+    let orderMenu= {
             order_number: Math.floor(Math.random() * 1000000),
             menus: menusInCart.value,
             paymentMethod: paymentMethod.value,
             totalPrice: totalPrice.value,
-        },
-        "OrderLists"
-    )
-    const addOrderRes_toManagement = await PostMenu(
-        {
-            order_number: Math.floor(Math.random() * 1000000),
-            menus: menusInCart.value,
-            paymentMethod: paymentMethod.value,
-            totalPrice: totalPrice.value,
-        },
-        "Management"
-    )
+        }
+
+    const [resToOrderList, resToManage] = await Promise.all([
+        addItem("OrderLists",orderMenu),
+        addItem("Management", orderMenu),
+    ])
+    console.log(resToOrderList.resCode)
+    console.log({resToManage})
+
+    if (resToOrderList.resCode !== 201 && resToManage.resCode !== 201) {
+      alert("Failed to place order");
+      return;
+    }
+    
+
+    // const addOrderRes_toListOrder = await addItem(
+    //   "OrderLists",object)
+    // const addOrderRes_toManagement = await addItem(
+    //     "Management",object)
     // console.log({ addOrderRes })
 
-    // if (addOrderRes !== 201) {
+    // if (addOrderRes_toListOrder !== 201) {
     //   alert("Failed to place order");
     //   return;
     // }
