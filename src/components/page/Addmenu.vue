@@ -10,6 +10,7 @@ import ModalConfirm from "../ModalConfirm.vue"
 const filterResult = ref(null) //default data
 const afterFilterResult = ref(null) // default value
 const promotions = ref([])
+const orderNo = ref(0)
 const discount = ref(0)
 const subtotalPrice = ref(0)
 const menusInCart = ref([])
@@ -24,16 +25,13 @@ async function fetchMenuData() {
     // console.log(filterResult.value)
 }
 
-watch(paymentMethod, (newVal) => {
-    console.log("paymentMethod" + newVal)
-})
-
 onMounted(async () => {
     const [menusRes, promotionsRes] = await Promise.all([
         getList("Menus"),
         getList("Promotions"),
     ])
     fetchMenuData()
+    newOrderNo()
     promotions.value = promotionsRes
     // filterResult.value = menusRes
 })
@@ -55,33 +53,9 @@ function filterCategory(inputCategory) {
     }
 }
 
-const mocDrinks = [
-    {
-        menu_name: "Espresso",
-        price: 75,
-        quantity: 1,
-        sweetnessLevel: 0,
-        isDineIn: true,
-        category: "Drinks",
-    },
-    {
-        menu_name: "Americano",
-        price: 75,
-        quantity: 3,
-        sweetnessLevel: 0,
-        isDineIn: false,
-        category: "Drinks",
-    },
-    {
-        menu_name: "Cappuccino",
-        price: 75,
-        quantity: 1,
-        sweetnessLevel: 0,
-        isDineIn: false,
-        category: "Drinks",
-    },
-]
-// const menusInCart = ref(mocDrinks)
+const newOrderNo = () => {
+    orderNo.value = Math.floor(Math.random() * 1000000)
+}
 
 const calculateDiscount = () => {
     let totalDiscount = 0
@@ -132,7 +106,6 @@ const openModal = (action) => {
 }
 
 const placeOrder = async () => {
-    // console.log("Place Order")
     if (menusInCart.value.length === 0) {
         openModal("EmptyCart")
         return
@@ -142,26 +115,25 @@ const placeOrder = async () => {
         return
     }
     let orderMenu = {
-        order_number: Math.floor(Math.random() * 1000000),
+        order_number: orderNo.value,
         menus: menusInCart.value,
         paymentMethod: paymentMethod.value,
         totalPrice: totalPrice.value,
     }
 
-    // const [resToOrderList, resToManage] = await Promise.all([
-    //     addItem("OrderLists", orderMenu),
-    //     addItem("Management", orderMenu),
-    // ])
-    // console.log(resToOrderList.resCode)
-    // console.log({ resToManage })
+    const [resToOrderList, resToManage] = await Promise.all([
+        addItem("OrderLists", orderMenu),
+        addItem("Management", orderMenu),
+    ])
 
-    // if (resToOrderList.resCode !== 201 && resToManage.resCode !== 201) {
-    //     alert("Failed to place order")
-    //     return
-    // }
+    if (resToOrderList.resCode !== 201 && resToManage.resCode !== 201) {
+        alert("Failed to place order")
+        return
+    }
 
     menusInCart.value = []
     paymentMethod.value = ""
+    newOrderNo()
 }
 
 function ToggleClick(item) {
@@ -423,53 +395,15 @@ const sweetBtn = ref(
             class="flex flex-col gap-2 bg-base-200 h-full w-1/4 p-4 justify-center"
         >
             <div
-                class="flex items-center justify-around bg-white h-[8%] w-full py-2 px-2 rounded-2xl"
+                class="bg-white h-[8%] w-full p-2 rounded-2xl"
             >
-                <input
-                    type="radio"
-                    id="dine_in"
-                    name="type"
-                    value="dine_in"
-                    class="hidden peer/dine_in"
-                />
-
-                <label
-                    for="dine_in"
-                    class="peer-checked/dine_in:bg-orange-400 text-pink-800 font-semibold text-xl flex justify-center gap-2 items-center rounded-md h-full w-[50%] px-4 m-1 transition duration-300 ease-linear"
-                    :class="sweetBtn"
-                >
-                    Dine in</label
-                >
-                <input
-                    type="radio"
-                    id="take_away"
-                    name="type"
-                    value="take_away"
-                    class="hidden peer/take_away"
-                />
-
-                <label
-                    for="take_away"
-                    class="peer-checked/take_away:bg-yellow-400 text-pink-800 font-semibold text-xl flex justify-center gap-2 items-center rounded-md h-full w-[50%] px-4 m-1"
-                    :class="sweetBtn"
-                >
-                    Take away
-                </label>
-
-                <!-- <button
-                    class="grid h-14 flex-grow card bg-orange-500 rounded-xl place-items-center w-auto font-semibold text-xl text-white hover:scale-95 hover:bg-orange-300 hover:underline underline-offset-4 transition duration-300 ease-linear"
-                >
-                    Dine in
-                </button>
-                <div class="divider divider-horizontal mx-2"></div>
-                <button
-                    class="grid h-14 flex-grow card bg-yellow-400 rounded-box place-items-center w-auto font-semibold text-xl text-white hover:scale-95 hover:bg-yellow-300 hover:underline underline-offset-4 transition duration-300 ease-linear"
-                >
-                    Take away
-                </button> -->
+                <span class="font-bold text-md">Order No.</span>
+                <span class="text-blue-600 text-4xl ml-12">{{ orderNo }}</span>
             </div>
             <CartList :menusInCart="menusInCart" class="h-[60%]" />
-            <div class="bg-white h-[16%] min-h-[150px] w-full py-2 px-2 rounded-2xl text-lg">
+            <div
+                class="bg-white h-[16%] min-h-[150px] w-full py-2 px-2 rounded-2xl text-lg"
+            >
                 <span class="font-semibold">Payment Summary</span>
                 <div class="flex justify-between">
                     <p>Subtotal</p>

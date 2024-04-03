@@ -10,7 +10,7 @@ const menuCart = computed(() => props.menusInCart)
 
 <template>
     <div class="bg-white h-full rounded-2xl p-3">
-        <h2 class="font-bold text-2xl">Total Menu {{ menusInCart.length }}</h2>
+        <h2 class="font-bold text-2xl">Total Menu ({{ menusInCart.length }})</h2>
         <span class="divider my-[1px]"></span>
         <div class="overflow-auto w-full h-[92%]">
             <CartCard v-for="(menu, index) in menuCart" :key="index">
