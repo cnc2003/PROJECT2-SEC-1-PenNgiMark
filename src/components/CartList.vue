@@ -15,9 +15,7 @@ const totalDrinks = computed(() => {
 
 <template>
     <div class="bg-white h-full rounded-2xl p-3">
-        <h2 class="font-bold text-2xl">
-            Total Menu ({{ totalDrinks }})
-        </h2>
+        <h2 class="font-bold text-2xl">Total Menu ({{ totalDrinks }})</h2>
         <span class="divider my-[1px]"></span>
         <div class="overflow-auto w-full h-[92%]">
             <div v-for="(menu, index) in menuCart" :key="index">
@@ -31,7 +29,7 @@ const totalDrinks = computed(() => {
                     <template #quantity>
                         <JsxIconBase
                             iconName="Minus-circle"
-                            class="hover:scale-[105%]"
+                            class="hover:scale-[105%] w-6 h-6"
                             @click="menu.quantity <= 1 ? null : menu.quantity--"
                         />
                         <p class="text-center font-semibold text-2xl w-[33%]">
@@ -39,7 +37,7 @@ const totalDrinks = computed(() => {
                         </p>
                         <JsxIconBase
                             iconName="Plus-circle"
-                            class="hover:scale-[105%]"
+                            class="hover:scale-[105%] w-6 h-6"
                             @click="menu.quantity++"
                         />
                     </template>
