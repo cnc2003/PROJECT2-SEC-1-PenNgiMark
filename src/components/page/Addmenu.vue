@@ -138,7 +138,7 @@ const placeOrder = async () => {
     openModal("EmptyPayment");
     return;
   }
-  const addOrderRes = await PostMenu(
+  const addOrderRes_toListOrder = await PostMenu(
     {
       order_number: Math.floor(Math.random() * 1000000),
       menus: menusInCart.value,
@@ -146,13 +146,22 @@ const placeOrder = async () => {
       totalPrice: totalPrice.value,
     },
     "OrderLists"
+  )
+  const addOrderRes_toManagement = await PostMenu(
+    {
+      order_number: Math.floor(Math.random() * 1000000),
+      menus: menusInCart.value,
+      paymentMethod: paymentMethod.value,
+      totalPrice: totalPrice.value,
+    },
+    "Management"
   );
   // console.log({ addOrderRes })
 
-  if (addOrderRes !== 201) {
-    alert("Failed to place order");
-    return;
-  }
+  // if (addOrderRes !== 201) {
+  //   alert("Failed to place order");
+  //   return;
+  // }
   // orderNumber.value++
   menusInCart.value = [];
   paymentMethod.value = "";
