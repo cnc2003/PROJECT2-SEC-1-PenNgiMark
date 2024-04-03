@@ -4,7 +4,6 @@ import { ref, watch, computed, onMounted } from "vue"
 import { getList, addItem } from "../../lib/fetch.js"
 import CartList from "../CartList.vue"
 import JsxIconBase from "../JsxIconBase.vue"
-import MenuBaseCard from "../MenuBaseCard.vue"
 import ModalConfirm from "../ModalConfirm.vue"
 
 const filterResult = ref(null) //default data
@@ -266,8 +265,10 @@ const sweetBtn = ref(
                     <!-- แสดง menu items ในแต่ละ category -->
                     <div v-for="(item, key) in propoty.menus" :key="key">
                         <div @click="ToggleClick(item)">
-                            <MenuBaseCard>
-                                <template #title v-if="!item.selected">
+                            <div
+                                class="text-gray-800 shadow-lg card w-80 h-auto m-3 cursor-pointer hover:scale-105 transition-all"
+                            >
+                                <div v-if="!item.selected">
                                     <figure
                                         class="image-full min-h-44 max-h-32 w-70"
                                     >
@@ -294,9 +295,9 @@ const sweetBtn = ref(
                                             {{ item.description }}
                                         </p>
                                     </div>
-                                </template>
+                                </div>
 
-                                <template #modal v-if="item.selected">
+                                <div v-if="item.selected">
                                     <div
                                         class="flex flex-col items-center justify-center card w-80 h-96 bg-[url(item.img_src)]"
                                     >
@@ -381,8 +382,8 @@ const sweetBtn = ref(
                                             </button>
                                         </div>
                                     </div>
-                                </template>
-                            </MenuBaseCard>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -394,9 +395,7 @@ const sweetBtn = ref(
         <section
             class="flex flex-col gap-2 bg-base-200 h-full w-1/4 p-4 justify-center"
         >
-            <div
-                class="bg-white h-[8%] w-full p-2 rounded-2xl"
-            >
+            <div class="bg-white h-[8%] w-full p-2 rounded-2xl">
                 <span class="font-bold text-md">Order No.</span>
                 <span class="text-blue-600 text-4xl ml-12">{{ orderNo }}</span>
             </div>
