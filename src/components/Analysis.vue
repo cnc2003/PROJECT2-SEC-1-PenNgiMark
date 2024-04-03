@@ -116,7 +116,7 @@ async function fetchOrderData() {
 
 function calTotalOrder() {
   const orderQuantities = managementData.value.map((order) => {
-    const totalQuantity = order.orders.reduce(
+    const totalQuantity = order.menus.reduce(
       (acc, curr) => acc + curr.quantity,
       0
     )
@@ -130,8 +130,9 @@ async function fetchMenagementData() {
   managementData.value = await getList("Management")
   for (const cate in managementData.value) {
     // cate [ex index = 0,1,2,3,4,5]
-    const category = managementData.value[cate] // {id: '236e', takoyaki: Array(1)}
-    totalSold.value += category.orders.length
+    const category = managementData.value[cate]
+    totalSold.value += category.menus.length
+    // console.log(totalSold.value);
   }
 }
 fetchMenagementData()

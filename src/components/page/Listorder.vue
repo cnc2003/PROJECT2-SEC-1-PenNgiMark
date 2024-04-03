@@ -2,8 +2,8 @@
 import { ref, onMounted } from "vue"
 import {
     DeleteMenuInOrder,
-    DeleteOrder,
-    AddHistoryOrder,
+    deleteItemById,
+    addItem,
     getList,
 } from "../../lib/fetch.js"
 import ModalHistory from "../ModalHistory.vue"
@@ -39,7 +39,7 @@ function serveOrder(order) {
         }))
     for (const key of SelectedMenusWithTime) {
         // console.log("AddMenuHistory:", key)
-        AddHistoryOrder(key, "HistoryOrder")
+        addItem("HistoryOrder",key )
     }
     // filter UnSelectedMenus
     const UnSelectedMenus = order.menus.filter((menu) => !menu.selected)
@@ -48,7 +48,7 @@ function serveOrder(order) {
 
     if (UnSelectedMenus.length === 0) {
         // console.log("restMenus:", UnSelectedMenus.length)
-        DeleteOrder(order.id).then(() => {
+        deleteItemById("OrderLists",order.id).then(() => {
             //เปลี่ยน data ใน orderListDataให้ลบ order ที่ select ออก (fontend)
             setTimeout(() => {
                 orderListData.value = orderListData.value.filter(

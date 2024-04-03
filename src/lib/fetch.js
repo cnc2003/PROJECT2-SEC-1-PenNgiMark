@@ -17,35 +17,8 @@ async function getList(path) {
 }
 
 // AddHistory (ListOrder Page)
-async function AddHistoryOrder(SelectedMenusWithTime, path) {
-  try {
-    await fetch(`${url}${path}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(SelectedMenusWithTime),
-    })
-  } catch (error) {
-    console.error("Error posting history order:", error)
-    throw error
-  }
-}
 
-async function PostMenu(filterResult, path) {
-  try {
-    await fetch(`${url}${path}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(filterResult),
-    })
-  } catch (error) {
-    console.error("Error posting menu:", error)
-    throw error
-  }
-}
+
 
 // =========================================
 //               Menu mangement
@@ -141,7 +114,7 @@ async function DeleteCate(categoryId) {
 async function DeleteMenuInOrder(restMenu, id) {
   try {
     await fetch(`${url}OrderLists/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -153,17 +126,6 @@ async function DeleteMenuInOrder(restMenu, id) {
   }
 }
 
-// DeleteOrder (ListOrder Page)
-async function DeleteOrder(id) {
-  try {
-    await fetch(`${url}OrderLists/${id}`, {
-      method: "DELETE",
-    })
-  } catch (error) {
-    console.error("Error deleting order:", error)
-    throw error
-  }
-}
 
 async function deleteItemById(path, id) {
 
@@ -206,7 +168,8 @@ async function addItem(path, newItem) {
             }),
         })
         const addedItem = await res.json()
-        return addedItem
+        return {resCode: res.status,
+                data: addedItem}
     } catch (error) {
         console.log(`error: ${error}`)
     }
@@ -214,10 +177,7 @@ async function addItem(path, newItem) {
 
 export {
     getList,
-    AddHistoryOrder,
     DeleteMenuInOrder,
-    DeleteOrder,
-    PostMenu,
     addNewCategory,
     addNewMenu,
     DeleteMenu,
