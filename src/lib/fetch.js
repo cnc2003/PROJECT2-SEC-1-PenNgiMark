@@ -3,50 +3,48 @@ const url = import.meta.env.VITE_BASE_URL
 
 // GetData (All page)
 async function getList(path) {
-    try {
-        const res = await fetch(`${url}${path}`)
-        if (!res.ok) {
-            throw new Error("Failed to fetch data")
-        }
-        const data = await res.json()
-        return data
-    } catch (error) {
-        console.error("Error fetching data:", error)
-        throw error
+  try {
+    const res = await fetch(`${url}${path}`)
+    if (!res.ok) {
+      throw new Error("Failed to fetch data")
     }
+    const data = await res.json()
+    return data
+  } catch (error) {
+    console.error("Error fetching data:", error)
+    throw error
+  }
 }
 
 // AddHistory (ListOrder Page)
 async function AddHistoryOrder(SelectedMenusWithTime, path) {
-    try {
-        await fetch(`${url}${path}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(SelectedMenusWithTime),
-        })
-    } catch (error) {
-        console.error("Error posting history order:", error)
-        throw error
-    }
+  try {
+    await fetch(`${url}${path}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(SelectedMenusWithTime),
+    })
+  } catch (error) {
+    console.error("Error posting history order:", error)
+    throw error
+  }
 }
 
 async function PostMenu(filterResult, path) {
-    try {
-        const addItemRes = await fetch(`${url}${path}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(filterResult),
-        })
-        const addedItem = await addItemRes.json()
-        return addItemRes.status
-    } catch (error) {
-        console.error("Error posting menu:", error)
-        throw error
-    }
+  try {
+    await fetch(`${url}${path}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filterResult),
+    })
+  } catch (error) {
+    console.error("Error posting menu:", error)
+    throw error
+  }
 }
 
 // =========================================
@@ -141,30 +139,30 @@ async function DeleteCate(categoryId) {
 // =========================================
 // DeleteMenuInOrder (ListOrder Page)
 async function DeleteMenuInOrder(restMenu, id) {
-    try {
-        await fetch(`${url}OrderLists/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(restMenu),
-        })
-    } catch (error) {
-        console.error("Error deleting menu in order:", error)
-        throw error
-    }
+  try {
+    await fetch(`${url}OrderLists/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(restMenu),
+    })
+  } catch (error) {
+    console.error("Error deleting menu in order:", error)
+    throw error
+  }
 }
 
 // DeleteOrder (ListOrder Page)
 async function DeleteOrder(id) {
-    try {
-        await fetch(`${url}OrderLists/${id}`, {
-            method: "DELETE",
-        })
-    } catch (error) {
-        console.error("Error deleting order:", error)
-        throw error
-    }
+  try {
+    await fetch(`${url}OrderLists/${id}`, {
+      method: "DELETE",
+    })
+  } catch (error) {
+    console.error("Error deleting order:", error)
+    throw error
+  }
 }
 
 async function deleteItemById(path, id) {

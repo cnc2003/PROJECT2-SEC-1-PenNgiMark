@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from "vue"
-
 import JsxIconBase from "./JsxIconBase.vue"
 
 const li = ref(
@@ -10,36 +9,9 @@ const action = ref(
     "transition ease-in-out duration-300 bg-white text-gray-800 scale-[103%] shadow-md "
 )
 const svg = ref("size-8")
-
-import routers from '../router/router.js'
-const isLoading = ref(false)
-
-function loading() {
-        isLoading.value = true
-        setTimeout(()=>{
-            isLoading.value = false
-        },2000)
-}
-
-routers.beforeEach((to, from, next) => {
-    loading()
-    setTimeout(() => {
-        next() 
-    }, 1000)
-    // next()
-})
 </script>
 
 <template>
-    <div v-show="isLoading">
-    <div  class="loader-bg">
-        <img src="/public/loader/Coffee.gif" alt="loader">
-        
-    </div>
-    <div class="loader-text">
-        <h1 >Loding . . .</h1>
-    </div>
-    </div>
     <div
         class="flex flex-col p-4 gap-2 w-full h-screen bg-base-200 text-base-content"
     >
@@ -51,7 +23,6 @@ routers.beforeEach((to, from, next) => {
             :class="li"
             :active-class="action"
             :hover="action"
-
         >
             <JsxIconBase iconName="AddMenu" :w="10" :h="10" />
             <h1>Order menu</h1>
@@ -61,7 +32,6 @@ routers.beforeEach((to, from, next) => {
             class="hover:bg-gray-200 hover:text-gray-800 hover:shadow-sm"
             :class="li"
             :active-class="action"
-
         >
             <JsxIconBase iconName="Copy" :w="10" :h="10" />
             <h1>Listorder</h1>
@@ -71,7 +41,6 @@ routers.beforeEach((to, from, next) => {
             class="hover:bg-gray-200 hover:text-gray-800 hover:shadow-sm"
             :class="li"
             :active-class="action"
-
         >
             <JsxIconBase iconName="Manage" :w="10" :h="10" />
             <h1>Management</h1>

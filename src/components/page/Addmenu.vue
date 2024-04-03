@@ -52,6 +52,34 @@ function filterCategory(inputCategory) {
   }
 }
 
+const mocDrinks = [
+  {
+    menu_name: "Espresso",
+    price: 75,
+    quantity: 1,
+    sweetnessLevel: 0,
+    isDineIn: true,
+    category: "Drinks",
+  },
+  {
+    menu_name: "Americano",
+    price: 75,
+    quantity: 3,
+    sweetnessLevel: 0,
+    isDineIn: false,
+    category: "Drinks",
+  },
+  {
+    menu_name: "Cappuccino",
+    price: 75,
+    quantity: 1,
+    sweetnessLevel: 0,
+    isDineIn: false,
+    category: "Drinks",
+  },
+]
+// const menusInCart = ref(mocDrinks)
+
 const calculateDiscount = () => {
   let totalDiscount = 0;
 
@@ -160,7 +188,6 @@ function confirmOption(item, propoty) {
   fetchMenuData();
   menusInCart.value.push(addToCart);
 }
-
 function cancelOption(item) {
   selectedmenus[0].selected = false;
   fetchMenuData();
