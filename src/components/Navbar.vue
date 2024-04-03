@@ -28,18 +28,20 @@ routers.beforeEach((to, from, next) => {
 </script>
 
 <template>
-    <div v-show="isLoading" 
-    class="loader">
-            <img src="/public/loader/Coffee.gif" alt="loader" class="loader-bg"/>
-            <h1 class="loader-text font-semibold">Loading . . .</h1>
+    <div v-show="isLoading" class="loader">
+        <img src="/public/loader/Coffee.gif" alt="loader" class="loader-bg" />
+        <h1 class="loader-text font-semibold">Loading . . .</h1>
     </div>
     <div
         class="flex flex-col p-4 gap-2 w-full h-screen bg-base-200 text-base-content"
     >
         <!-- Sidebar content here -->
         <div class="avatar">
-            <img src="/public/logo/CoolCup Café V1.png" alt="CoolCup Café"
-            class="rounded-md">
+            <img
+                src="/public/logo/CoolCup Café V1.png"
+                alt="CoolCup Café"
+                class="rounded-md"
+            />
         </div>
         <router-link
             to="/"

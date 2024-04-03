@@ -69,8 +69,8 @@ const actionPromotion = async (action, body) => {
     if (action === "Add-Promotion") {
         const addRes = await addItem("Promotions", body)
         console.log(addRes)
-        if (addRes) {
-            props.promotions.push(addRes)
+        if (addRes.resCode === 201) {
+            props.promotions.push(addRes.data)
         }
     }
 }
@@ -113,8 +113,8 @@ const actionPromotion = async (action, body) => {
                     <tr
                         v-for="(pro, index) in promotions"
                         :key="pro.id"
-                        :class="pro.id % 2 === 0 ? 'bg-slate-200' : ''"
-                        class=" border h-10 cursor-pointer hover:scale-[102%] transition-all duration-300 ease-in-out"
+                        :class="index % 2 === 0 ? 'bg-slate-200' : ''"
+                        class="border h-10 cursor-pointer hover:scale-[102%] transition-all duration-300 ease-in-out"
                         @click="openPromoModal(pro)"
                     >
                         <td class="text-center font-bold">{{ index + 1 }}</td>

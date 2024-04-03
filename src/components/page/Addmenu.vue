@@ -138,25 +138,24 @@ const placeOrder = async () => {
         openModal("EmptyPayment")
         return
     }
-    let orderMenu= {
-            order_number: Math.floor(Math.random() * 1000000),
-            menus: menusInCart.value,
-            paymentMethod: paymentMethod.value,
-            totalPrice: totalPrice.value,
-        }
+    let orderMenu = {
+        order_number: Math.floor(Math.random() * 1000000),
+        menus: menusInCart.value,
+        paymentMethod: paymentMethod.value,
+        totalPrice: totalPrice.value,
+    }
 
     const [resToOrderList, resToManage] = await Promise.all([
-        addItem("OrderLists",orderMenu),
+        addItem("OrderLists", orderMenu),
         addItem("Management", orderMenu),
     ])
     console.log(resToOrderList.resCode)
-    console.log({resToManage})
+    console.log({ resToManage })
 
     if (resToOrderList.resCode !== 201 && resToManage.resCode !== 201) {
-      alert("Failed to place order");
-      return;
+        alert("Failed to place order")
+        return
     }
-    
 
     // const addOrderRes_toListOrder = await addItem(
     //   "OrderLists",object)
@@ -460,7 +459,7 @@ const sweetBtn = ref(
 
                 <label
                     for="take_away"
-                    class="peer-checked/take_away:bg-yellow-400  text-pink-800 font-semibold text-xl flex justify-center gap-2 items-center rounded-md h-full w-[50%] px-4 m-1"
+                    class="peer-checked/take_away:bg-yellow-400 text-pink-800 font-semibold text-xl flex justify-center gap-2 items-center rounded-md h-full w-[50%] px-4 m-1"
                     :class="sweetBtn"
                 >
                     Take away
@@ -477,7 +476,6 @@ const sweetBtn = ref(
                 >
                     Take away
                 </button> -->
-
             </div>
             <CartList :menusInCart="menusInCart" class="h-[60%]" />
             <div class="bg-white h-[16%] w-full py-2 px-2 rounded-2xl text-lg">
@@ -572,7 +570,6 @@ const sweetBtn = ref(
           >
             <JsxIconBase iconName="QR" />QR
           </button> -->
-          
                 </div>
             </div>
 

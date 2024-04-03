@@ -15,9 +15,7 @@ const props = defineProps({
                 : 'flex'
         "
     >
-        <slot name="modal">
-            
-        </slot>
+        <slot name="modal"> </slot>
         <slot name="title"></slot>
     </div>
 </template>
