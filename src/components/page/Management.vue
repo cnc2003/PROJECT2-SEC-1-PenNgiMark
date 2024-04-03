@@ -30,7 +30,8 @@ let afterFilterResult = ref(null) // default value
 
 //fetch GET menulist
 async function fetchMenuData() {
-    filterResult.value = await getList("Menus") // is array
+    const res = await getList("Menus")
+    filterResult.value = res.data
     totalMenu.value = 0
     for (const cate in filterResult.value) {
         // cate [ex index = 0,1,2,3,4,5]
@@ -45,13 +46,9 @@ async function fetchMenuData() {
 
 const promotions = ref([])
 onMounted(async () => {
-    const [menusRes, promotionsRes] = await Promise.all([
-        getList("Menus"),
-        getList("Promotions"),
-    ])
+    const promotionsRes = await getList("Promotions")
+    promotions.value = promotionsRes.data
     fetchMenuData()
-    promotions.value = promotionsRes
-    filterResult.value = menusRes
 })
 
 // Function to filter categories

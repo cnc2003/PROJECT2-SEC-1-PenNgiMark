@@ -19,20 +19,14 @@ const showModalConfirm = ref(false)
 const modalAction = ref("")
 const allSelected = ref(true)
 
-async function fetchMenuData() {
-    filterResult.value = await getList("Menus") // is array
-    // console.log(filterResult.value)
-}
-
 onMounted(async () => {
     const [menusRes, promotionsRes] = await Promise.all([
         getList("Menus"),
         getList("Promotions"),
     ])
-    fetchMenuData()
     newOrderNo()
-    promotions.value = promotionsRes
-    // filterResult.value = menusRes
+    promotions.value = promotionsRes.data
+    filterResult.value = menusRes.data
 })
 
 function filterCategory(inputCategory) {
@@ -162,12 +156,12 @@ function confirmOption(item, propoty) {
         sweetnessLevel: item.sweetnessLevel,
         category: propoty.category,
     }
-    fetchMenuData()
+    // fetchMenuData()
     menusInCart.value.push(addToCart)
 }
 function cancelOption(item) {
     selectedmenus[0].selected = false
-    fetchMenuData()
+    // fetchMenuData()
 }
 
 function selectedCategory(category) {

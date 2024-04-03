@@ -17,12 +17,6 @@ const props = defineProps({
     hr: String,
 })
 
-async function fetchOrderData() {
-    orderData.value = await getList("Management")
-    totalOrder.value = orderData.value.length
-    calTotalOrder()
-}
-
 function calTotalOrder() {
     const orderQuantities = managementData.value.map((order) => {
         const totalQuantity = order.menus.reduce(
@@ -36,16 +30,19 @@ function calTotalOrder() {
     //console.log(totalSold.value)
 }
 async function fetchMenagementData() {
-    managementData.value = await getList("Management")
+    const res = await getList("Management")
+    managementData.value = res.data
+    totalOrder.value = managementData.value.length
     for (const cate in managementData.value) {
         // cate [ex index = 0,1,2,3,4,5]
         const category = managementData.value[cate]
         totalSold.value += category.menus.length
         // console.log(totalSold.value);
     }
+    calTotalOrder()
 }
 fetchMenagementData()
-fetchOrderData()
+
 </script>
 
 <template>

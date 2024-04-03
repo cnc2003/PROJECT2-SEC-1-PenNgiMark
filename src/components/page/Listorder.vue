@@ -19,11 +19,10 @@ let orderselects = null
 let restMenus = {}
 let animetion_transition = ref(false)
 
-async function fetchData() {
-    orderListData.value = await getList("OrderLists")
-    // console.log(orderListData.value)
-}
-onMounted(fetchData)
+onMounted(async () => {
+    const resOrderList = await getList("OrderLists")
+    orderListData.value = resOrderList.data
+})
 
 function serveOrder(order) {
     const order_Number = order.order_number
@@ -109,10 +108,7 @@ const col = ref("font-semibold")
                 <h1 class="text-4xl font-bold">List Orders</h1>
                 <button
                     class="btn btn-error text-xl flex flex-row justify-around items-center gap-4 w-auto rounded-2xl mr-14"
-                    @click="
-                        ;(showModalHistory = true),
-                            (ReloadHistory = !ReloadHistory)
-                    "
+                    @click="showModalHistory = true"
                 >
                     <JsxIconBase iconName="Copy" :w="10" :h="10" />
                     <h2 class="text-black text-xl font-semibold">History</h2>
@@ -121,7 +117,7 @@ const col = ref("font-semibold")
             </div>
         </div>
         <!-- ModalHistory -->
-        <div v-show="showModalHistory">
+        <div v-if="showModalHistory">
             <ModalHistory
                 :data="ReloadHistory"
                 @close="showModalHistory = $event"

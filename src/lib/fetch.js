@@ -3,22 +3,20 @@ const url = import.meta.env.VITE_BASE_URL
 
 // GetData (All page)
 async function getList(path) {
-  try {
-    const res = await fetch(`${url}${path}`)
-    if (!res.ok) {
-      throw new Error("Failed to fetch data")
+    try {
+        const res = await fetch(`${url}${path}`)
+        if (!res.ok) {
+            throw new Error("Failed to fetch data")
+        }
+        const data = await res.json()
+        return { resCode: res.status, data: data }
+    } catch (error) {
+        console.error("Error fetching data:", error)
+        throw error
     }
-    const data = await res.json()
-    return data
-  } catch (error) {
-    console.error("Error fetching data:", error)
-    throw error
-  }
 }
 
 // AddHistory (ListOrder Page)
-
-
 
 // =========================================
 //               Menu mangement
@@ -112,23 +110,21 @@ async function DeleteCate(categoryId) {
 // =========================================
 // DeleteMenuInOrder (ListOrder Page)
 async function DeleteMenuInOrder(restMenu, id) {
-  try {
-    await fetch(`${url}OrderLists/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(restMenu),
-    })
-  } catch (error) {
-    console.error("Error deleting menu in order:", error)
-    throw error
-  }
+    try {
+        await fetch(`${url}OrderLists/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(restMenu),
+        })
+    } catch (error) {
+        console.error("Error deleting menu in order:", error)
+        throw error
+    }
 }
 
-
 async function deleteItemById(path, id) {
-
     try {
         const res = await fetch(`${url}${path}/${id}`, {
             method: "DELETE",
@@ -168,8 +164,7 @@ async function addItem(path, newItem) {
             }),
         })
         const addedItem = await res.json()
-        return {resCode: res.status,
-                data: addedItem}
+        return { resCode: res.status, data: addedItem }
     } catch (error) {
         console.log(`error: ${error}`)
     }
