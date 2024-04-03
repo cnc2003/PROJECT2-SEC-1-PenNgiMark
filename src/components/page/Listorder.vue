@@ -44,14 +44,17 @@ function serveOrder(order) {
     // filter UnSelectedMenus
     const UnSelectedMenus = order.menus.filter((menu) => !menu.selected)
     animetion_transition.value = !animetion_transition.value
+    
+
     if (UnSelectedMenus.length === 0) {
         // console.log("restMenus:", UnSelectedMenus.length)
         DeleteOrder(order.id).then(() => {
             //เปลี่ยน data ใน orderListDataให้ลบ order ที่ select ออก (fontend)
             setTimeout(() => {
                 orderListData.value = orderListData.value.filter(
-                    (item) => item.id !== order.id
+                    (item) => item.id !== order.id              
                 )
+                animetion_transition.value = !animetion_transition.value
             }, 300)
         })
     } else {

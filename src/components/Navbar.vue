@@ -15,14 +15,14 @@ function loading() {
     isLoading.value = true
     setTimeout(() => {
         isLoading.value = false
-    }, 4000)
+    }, 2000)
 }
 
 routers.beforeEach((to, from, next) => {
     loading()
     setTimeout(() => {
         next()
-    }, 4000)
+    }, 2000)
     // next()
 })
 </script>
