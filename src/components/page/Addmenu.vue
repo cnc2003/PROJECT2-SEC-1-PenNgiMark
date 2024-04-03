@@ -469,7 +469,7 @@ const sweetBtn = ref(
             </div>
 
             <button
-                class="h-[5%] w-full bg-blue-600 text-white rounded-2xl font-semibold text-xl hover:bg-blue-500 hover:scale-95 transition duration-300 ease-linear"
+                class="h-[10%] w-full bg-blue-600 text-white rounded-2xl font-semibold text-xl hover:bg-blue-500 hover:scale-95 transition duration-300 ease-linear"
                 @click="openModal('placeOrder')"
             >
                 Place Order
