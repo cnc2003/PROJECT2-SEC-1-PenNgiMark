@@ -78,7 +78,7 @@ const mocDrinks = [
     category: "Drinks",
   },
 ]
-const menusInCart = ref(mocDrinks)
+// const menusInCart = ref(mocDrinks)
 
 const calculateDiscount = () => {
   let totalDiscount = 0;
