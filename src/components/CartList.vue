@@ -39,10 +39,10 @@ const menuCart = computed(() => props.menusInCart)
           </button>
         </template>
       </CartCard>
-      <div
+      <!-- <div
         v-show="index + 1 !== menusInCart.length"
         class="divider divider-horizontal mx-[2px]"
-      ></div>
+      ></div> -->
     </div>
   </div>
 </template>
