@@ -12,7 +12,8 @@
 Order POS is a comprehensive food management system, handles everything from ordering to queue management. 
 Built using Vue.js, Tailwind CSS, and DaisyUI, it offers a user-friendly website interface for seamless operations.<br>
 
-![Order Management-AddOrder.gif](https://github.com/Tako-C/Phakphum/blob/master/Photo/Order%20Managemen-AddOrder.gif?raw=true)
+## คู่มือการใช้งานแอปพลิเคชั่นสําหรับผู้ใช้งาน :page_with_curl:  [วีดีโอการใช้งาน](https://youtu.be/DrhMo9TSlt8) 
+[![Videoคู่มือการใช้งานแอปพลิเคชั่น](https://github.com/Tako-C/Phakphum/blob/master/Photo/CoolCup%20Cafe'.gif)](https://youtu.be/DrhMo9TSlt8)
 
 ### Main Feature :pushpin:
 | **PAGE** | **FEATURES** |
@@ -20,9 +21,6 @@ Built using Vue.js, Tailwind CSS, and DaisyUI, it offers a user-friendly website
 | OrderMenu<br> |<li>List เเสดงรายการเมนูทั้งหมด <li>เลือกเมนูและดูรายละเอียดของเมนู <li>เพิ่มจำนวนและเลือกระดับความหวาน <li>เพิ่มรายการเมนูลงในตะกร้า <li>ลบรายการเมนูที่ต้องการจากตะกร้า <li>สามารถเลือกได้ว่าจะ Dine or Take away <li>เลือกช่องทางการชำระเงิน  <li>ยกเลิกรายการทั้งหมดในตะกร้า <li>Popup แจ้งเตือนแสดงการยืนยันการสั่งซื้อ |
 | ListOrder<br>  |<li>List แสดงรายการOrderทั้งหมด <li>แสดงข้อมูลของOrder เช่น OrderNumber เมนู จำนวน ระดับความหวาน <li>เลือกเมนูในเเต่ละ Order เพื่อยืนยันว่าเมนูพร้อมเสิร์ฟ <li>แสดงประวัติรายการ Order ที่เสิร์ฟไปแล้ว                    |
 | Management<br>  |<li>List เเสดงรายการเมนูทั้งหมด <li>แสดงข้อมูลของเมนู <li>แสดงจำนวนเมนูทั้งหมดที่มี <li>แสดงจำนวน orderทั้งหมดที่ลูกค้าสั่ง <li>แสดงจำนวนเมนูทั้งหมดที่ขายแล้ว(แก้ว) <li>แก้ไข (เพิ่ม,ลบ,อัพเดท)เมนูที่ต้องการ <li>แสดงข้อมูล Promotion <li>แก้ไข (เพิ่ม,ลบ,อัพเดท)Promotionที่ต้องการ                |
-
-## คู่มือการใช้งานแอปพลิเคชั่นสําหรับผู้ใช้งาน :page_with_curl:  [วีดีโอการใช้งาน](https://youtu.be/h0S6aHVk9F0) 
-[![Videoคู่มือการใช้งานแอปพลิเคชั่น](https://img.youtube.com/vi/h0S6aHVk9F0/0.jpg)](https://www.youtube.com/watch?v=h0S6aHVk9F0)
 
  * OrderMenu Page :raising_hand:
  1. เพิ่มรายการเมนูที่ต้องการ : เลือกรายการเมนู เลือกระดับความหวาน
@@ -45,7 +43,7 @@ Built using Vue.js, Tailwind CSS, and DaisyUI, it offers a user-friendly website
 ## Member List :bust_in_silhouette:
 |    **ID**   |       **NAME**      | **PERCENTAGE** |       **RESPONSIBILITY**       |
 |:-----------:|:-------------------:|:--------------:|:-----------------------------|
-| 65130500014 | Chanachai Mainoy    |        25    | <li>Create modal interface & function <li>Cart buttom <li>Refactor code <li>Decorate Webpage <li>Responsive design |
-| 65130500024 | Taspol Thuanchamnan |       24     | <li>Cancel element in cart menu and menulist <li>Delete cart function <li>Menu focus function and prototype <li>Complete order element <li>Description readme|
-| 65130500043 | Pannawat Sripa      |       26     | <li>Draft order page prototype <li>Navigation bar <li>Menu list <li>Refactor code <li>Event state handler function|
-| 65130500058 | Phakphum Prajrern   |        25    | <li>Current order part <li>Order list table prototype <li>Adjust table list component <li>Responsive design |
+| 65130500014 | Chanachai Mainoy    |        25    | <li>Navigation bar <li>management & function <li>UI element <li>Refactor code|
+| 65130500024 | Taspol Thuanchamnan |       24     | <li>Function filter category <li>sweetness Card <li> button element|
+| 65130500043 | Pannawat Sripa      |       26     | <li>Cart  <li>Modal Confirm <li>Promotion & Discount function <li>SearchInput function <li>Event state handler function |
+| 65130500058 | Phakphum Prajrern   |        25    | <li>Order list Card prototype <li>modal History serve Table <li>Draft fetch funtions  <li> Loading page |
