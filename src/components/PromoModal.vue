@@ -19,7 +19,6 @@ const props = defineProps({
 })
 
 let { id, name, menus, discount } = props.promotion
-console.log(menus)
 const showModalConfirm = ref(false)
 const modalAction = ref("")
 const immutableMenus = ref(JSON.parse(JSON.stringify(menus)))

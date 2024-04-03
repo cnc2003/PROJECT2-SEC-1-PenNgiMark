@@ -184,7 +184,6 @@ function confirmModalHandle(input) {
                 //console.log(editSpace.category)
                 //console.log(currEditOrigin.category)
                 if (editingItem.value.category == currEditOrigin.category) {
-                    console.log("//Edit data case ")
                     editSpace.menus[index] = {
                         menu_name: editingItem.value.menu_name,
                         price: editingItem.value.price,
@@ -604,7 +603,11 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                         class="fixed w-auto h-auto bg-white rounded-xl flex flex-col items-center justify-center indicator p-6 pb-10"
                         v-if="!isDeleting"
                     >
-                        <JsxIconBase icon-name="Question-circle" :w="28" :h="28"/>
+                        <JsxIconBase
+                            icon-name="Question-circle"
+                            :w="28"
+                            :h="28"
+                        />
                         <h1 class="text-2xl font-semibold mb-4">
                             Confirmation
                         </h1>
@@ -669,7 +672,11 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                         name="modal"
                         class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
                     >
-                        <JsxIconBase icon-name="Question-circle" :w="28" :h="28"/>
+                        <JsxIconBase
+                            icon-name="Question-circle"
+                            :w="28"
+                            :h="28"
+                        />
 
                         <h1 class="text-2xl font-semibold mb-4">Complete</h1>
                         <p class="text-lg mb-4">Have a good day :D</p>
