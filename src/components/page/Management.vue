@@ -12,6 +12,7 @@ import {
 
 import Analysis from "../Analysis.vue"
 import Promotion from "../Promotion.vue"
+import JsxIconBase from "../JsxIconBase.vue"
 // Define reactive variables
 const totalMenu = ref(0)
 // Edit variable - Modal
@@ -402,20 +403,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                         class="btn btn-square absolute top-2 right-2"
                         @click="menuModalHandle(`clearModal`)"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
+                        <JsxIconBase icon-name="X-mark" :w="10" :h="10"/>
                     </button>
                     <h1
                         name="Header"
@@ -619,21 +607,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                         class="fixed w-auto h-auto bg-white rounded-xl flex flex-col items-center justify-center indicator p-6 pb-10"
                         v-if="!isDeleting"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-28 h-28 my-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
-                            />
-                        </svg>
-
+                        <JsxIconBase icon-name="Question-circle" :w="28" :h="28"/>
                         <h1 class="text-2xl font-semibold mb-4">
                             Confirmation
                         </h1>
@@ -698,20 +672,7 @@ const hr = ref("mb-2 border-gray-300 border-2 rounded")
                         name="modal"
                         class="fixed w-1/4 h-3/6 bg-white rounded-xl flex flex-col items-center justify-center indicator"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-24 h-24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                            />
-                        </svg>
+                        <JsxIconBase icon-name="Question-circle" :w="28" :h="28"/>
 
                         <h1 class="text-2xl font-semibold mb-4">Complete</h1>
                         <p class="text-lg mb-4">Have a good day :D</p>
