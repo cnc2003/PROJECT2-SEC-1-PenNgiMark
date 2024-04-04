@@ -37,7 +37,6 @@ function serveOrder(order) {
             order_number: order_Number,
         }))
     for (const key of SelectedMenusWithTime) {
-        // console.log("AddMenuHistory:", key)
         addItem("HistoryOrder",key )
     }
     // filter UnSelectedMenus
@@ -46,7 +45,6 @@ function serveOrder(order) {
     
 
     if (UnSelectedMenus.length === 0) {
-        // console.log("restMenus:", UnSelectedMenus.length)
         deleteItemById("OrderLists",order.id).then(() => {
             //เปลี่ยน data ใน orderListDataให้ลบ order ที่ select ออก (fontend)
             setTimeout(() => {
@@ -62,8 +60,6 @@ function serveOrder(order) {
             menus: UnSelectedMenus,
             id: order.id,
         }
-        // console.log(UnSelectedMenus, order.id)
-        // console.log("restMenus:", restMenus)
         DeleteMenuInOrder(restMenus, order.id).then(() => {
             const updatedOrderIndex = orderListData.value.findIndex(
                 (item) => item.id === order.id
@@ -86,8 +82,6 @@ function tuggleSelection(order_menu) {
 
 function openModalConfirm(order) {
     showModalConfirm.value = true
-    // console.log(order)
-    // console.log(showModalConfirm.value)
     orderselects = order
 }
 
