@@ -27,7 +27,6 @@ function calTotalOrder() {
     })
     const totalQuantities = [...orderQuantities]
     totalSold.value = totalQuantities.reduce((acc, curr) => acc + curr, 0)
-    //console.log(totalSold.value)
 }
 async function fetchMenagementData() {
     const res = await getList("Management")
@@ -37,7 +36,6 @@ async function fetchMenagementData() {
         // cate [ex index = 0,1,2,3,4,5]
         const category = managementData.value[cate]
         totalSold.value += category.menus.length
-        // console.log(totalSold.value);
     }
     calTotalOrder()
 }
