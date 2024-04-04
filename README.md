@@ -13,7 +13,7 @@ Order POS is a comprehensive food management system, handles everything from ord
 Built using Vue.js, Tailwind CSS, and DaisyUI, it offers a user-friendly website interface for seamless operations.<br>
 
 ## คู่มือการใช้งานแอปพลิเคชั่นสําหรับผู้ใช้งาน :page_with_curl:  [วีดีโอการใช้งาน](https://youtu.be/DrhMo9TSlt8) 
-[![Videoคู่มือการใช้งานแอปพลิเคชั่น](https://github.com/Tako-C/Phakphum/blob/master/Photo/CoolCup%20Cafe'.gif)](https://youtu.be/DrhMo9TSlt8)
+[![Videoคู่มือการใช้งานแอปพลิเคชั่น](https://github.com/Tako-C/Phakphum/blob/master/Photo/CoolCup%20Cafe'.gif)](https://youtu.be/V_d7mH53HHo)
 
 ### Main Feature :pushpin:
 | **PAGE** | **FEATURES** |
