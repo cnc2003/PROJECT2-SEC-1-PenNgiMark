@@ -15,6 +15,10 @@ const routes = [
   {
     path: "/manegement",
     component: Management,
+  },
+  {
+    path: "/:catchAll(.*)",
+    redirect: "/"
   }
 ]
 
