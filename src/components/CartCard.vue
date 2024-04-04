@@ -1,21 +1,6 @@
 <script setup>
 import { ref, computed } from "vue"
 
-// const props = defineProps({
-//     menu_name: String,
-//     price: Number,
-//     quantity: Number,
-//     sweetnessLevel: {
-//         type: String,
-//         validator: (value) => ["0", "25", "50", "100"].includes(value),
-//     },
-//     // isDineIn: Boolean,
-//     // category: String,
-// })
-
-// const totalQuantity = computed(() => {
-//     return props.cart.reduce((acc, item) => acc + item.quantity, 0)
-// })
 </script>
 
 <template>
