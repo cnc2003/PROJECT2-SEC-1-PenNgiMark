@@ -130,7 +130,6 @@ const placeOrder = async () => {
 }
 
 function ToggleClick(item) {
-    // console.log(selectedmenus)
     if (selectedmenus.length > 0) {
         selectedmenus[0].selected = false
         selectedmenus.shift()
@@ -140,7 +139,6 @@ function ToggleClick(item) {
 }
 
 function confirmOption(item, propoty) {
-    // console.log(propoty.value)
     if (item.sweetnessLevel === undefined || item.sweetnessLevel === "") {
         // alert("Please select sweetness level")
         openModal("SweetnessLevel")
@@ -172,7 +170,6 @@ function confirmOption(item, propoty) {
 }
 function cancelOption(item) {
     selectedmenus[0].selected = false
-    // fetchMenuData()
 }
 
 function selectedCategory(category) {
