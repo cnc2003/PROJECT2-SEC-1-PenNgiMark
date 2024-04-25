@@ -17,9 +17,7 @@ async function fetchData() {
 }
 fetchData()
 
-watch(
-  () => props.data,
-  () => {
+watch(() => props.data,() => {
     fetchData()
     // // console.log("HistoryOrder :" ,HistoryOrder.value);
   }
